@@ -809,6 +809,7 @@ Mappings.insertFunctions = (function() {
     },
     deleteToEnd: function() {
       modify('extend', 'right', 'lineboundary');
+      Clipboard.copy(selection.toString());
       deleteSelection();
       modify('move', 'right', 'lineboundary');
     },

@@ -532,7 +532,7 @@ Command.execute = function(value, repeats) {
     isURL: false,
     isLink: false,
     pinned: false,
-    tabbed: false,
+    tabbed: true,
     incognito: false,
   };
   (value.match(/^[^\s&$!*=?|]*([&$!*=?|]+)/) || [])

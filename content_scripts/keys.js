@@ -619,6 +619,11 @@ if (HAS_EVENT_KEY_SUPPORT) {
 
 var KeyHandler = {
   down: function(key, event) {
+
+    if (event.which == 229) {
+      return;
+    }
+
     if (HAS_EVENT_KEY_SUPPORT) {
       if (Hints.active) {
         event.preventDefault();
@@ -762,11 +767,21 @@ var KeyHandler = {
         return;
       case '<Up>': // Command history navigation/search
       case '<Down>':
+       if (Command.type === 'action' && settings.cncpcompletion) {
+         event.preventDefault();
+         if (key === '<Up>') {
+           Mappings.actions.previousCompletionResult();
+         }
+         else  {
+           Mappings.actions.nextCompletionResult();
+         }
+         return;
+       }
         event.preventDefault();
         Command.history.cycle(Command.type, (key === '<Up>'));
         break;
       case '<Enter>':
-      case '<C-Enter>':
+      //case '<C-Enter>':
         event.preventDefault();
         document.activeElement.blur();
         if (!(Command.history[Command.type].length > 0 &&
