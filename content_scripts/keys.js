@@ -765,6 +765,12 @@ var KeyHandler = {
           Mappings.actions.previousCompletionResult();
         }
         return;
+      case '<C-n>':
+        if (Command.type === 'action' && settings.cncpcompletion) {
+          event.preventDefault();
+          Mappings.actions.nextCompletionResult();
+        }
+        return;
       case '<Up>': // Command history navigation/search
       case '<Down>':
        if (Command.type === 'action' && settings.cncpcompletion) {
