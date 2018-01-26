@@ -162,6 +162,12 @@ Actions = (function() {
   };
 
   _.closeTab = function(o) {
+
+    if (o.sender.tab.pinned)
+    {
+      return;
+    }
+
     chrome.tabs.query({currentWindow: true}, function(tabs) {
       var sortedIds = tabs.map(function(e) { return e.id; });
       var base = o.sender.tab.index;
@@ -171,6 +177,12 @@ Actions = (function() {
       if (base < 0) {
         base = 0;
       }
+
+      if (tabs.length == 1)
+      {
+        chrome.tabs.create({ url: "about:blank" });
+      }
+
       chrome.tabs.remove(sortedIds.slice(base, base + o.request.repeats));
     });
   };
