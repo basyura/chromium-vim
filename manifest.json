@@ -100,6 +100,7 @@
         "content_scripts/hints.js",
         "content_scripts/bookmarks.js",
         "content_scripts/command.js",
+        "content_scripts/command_execute.js",
         "content_scripts/keys.js",
         "content_scripts/clipboard.js",
         "content_scripts/complete.js",
