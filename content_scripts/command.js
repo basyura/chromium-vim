@@ -1029,7 +1029,7 @@ Command.show = function (search, value, complete) {
       }
       // End temp fix
     }.bind(this),
-    0
+    100
   );
 };
 
