@@ -1,13 +1,12 @@
-var getTabOrderIndex = (function() {
-
+var getTabOrderIndex = (function () {
   var tabCreationOrder = {},
-      lastActiveTabId = null;
+    lastActiveTabId = null;
 
-  chrome.tabs.onActivated.addListener(function(activeInfo) {
+  chrome.tabs.onActivated.addListener(function (activeInfo) {
     lastActiveTabId = activeInfo.tabId;
   });
 
-  chrome.tabs.onCreated.addListener(function(tab) {
+  chrome.tabs.onCreated.addListener(function (tab) {
     tabCreationOrder[tab.id] = [];
     if (lastActiveTabId !== null) {
       if (tabCreationOrder[lastActiveTabId] === void 0)
@@ -16,22 +15,20 @@ var getTabOrderIndex = (function() {
     }
   });
 
-  chrome.tabs.onRemoved.addListener(function(tabId) {
+  chrome.tabs.onRemoved.addListener(function (tabId) {
     if (tabCreationOrder[tabId] !== void 0) {
-      Object.keys(tabCreationOrder).forEach(function(tab) {
+      Object.keys(tabCreationOrder).forEach(function (tab) {
         var index = tabCreationOrder[tab].indexOf(tabId);
-        if (index !== -1)
-          tabCreationOrder[tab].splice(index, 1);
+        if (index !== -1) tabCreationOrder[tab].splice(index, 1);
       });
       delete tabCreationOrder[tabId];
     }
   });
 
-  return function(tab) {
+  return function (tab) {
     if (settings.nativelinkorder && tabCreationOrder[tab.id]) {
       return tab.index + tabCreationOrder[tab.id].length + 1;
     }
     return tab.index + 1;
   };
-
 })();
