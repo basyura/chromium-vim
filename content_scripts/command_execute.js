@@ -239,6 +239,8 @@ Command.execute = function (value, repeats) {
 
   CommandExecuter.execute(value, repeats, tab);
 
+  return;
+
   //for (const [key, cmd] of Object.entries(CommandExecuter)) {
   //  try {
   //    if (cmd.match(value)) {
