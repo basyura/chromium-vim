@@ -56,7 +56,7 @@ CommandExecuter.add("settings", "", {
   },
 });
 
-CommandExecuter.add("Dookmarks", "Search through your bookmarks", {
+CommandExecuter.add("bookmarks", "Search through your bookmarks", {
   match: function (value) {
     return /^bookmarks +/.test(value) && !/^\S+\s*$/.test(value);
   },
