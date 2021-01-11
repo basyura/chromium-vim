@@ -1,43 +1,65 @@
-CommandExecuter = {};
-
-Command.descriptions.push(["hoge", "hoge fuga"]);
-CommandExecuter.hoge = {
-  match: function (value) {
-    return value == "hoge";
+CommandExecuter = {
+  commands: [],
+  add: function (label, description, cmd) {
+    if (!Command.descriptions.some((v) => v[0] == label)) {
+      Command.descriptions.push([label, description]);
+    }
+    this.commands.push(cmd);
   },
-  execute: function (value, tab) {
-    alert("hoge");
+  execute: function (value, repeats, tab) {
+    try {
+      for (const [key, cmd] of Object.entries(this.commands)) {
+        if (cmd.match(value)) {
+          cmd.execute(value, repeats, tab);
+        }
+      }
+    } catch (e) {
+      alert(e.message);
+    }
   },
 };
 
-CommandExecuter.help = {
+CommandExecuter.add("issue", "open issue", {
+  match: function (value) {
+    return /^issue /.test(value);
+  },
+  execute: function (value, repeats, tab) {
+    let no = value.split(/\s+/)[1];
+    RUNTIME("openLink", {
+      tab: tab,
+      url: "https://redmine.org/issues/" + no,
+    });
+  },
+});
+
+CommandExecuter.add("help", "", {
   match: function (value) {
     return value == "help";
   },
-  execute: function (value, tab) {
+  execute: function (value, repeats, tab) {
     tab.tabbed = true;
     RUNTIME("openLink", {
       tab: tab,
       url: chrome.extension.getURL("/pages/mappings.html"),
     });
   },
-};
+});
 
-CommandExecuter.nohlsearch = {
+CommandExecuter.add("nohlsearch", "", {
   match: function (value) {
     return value == "nohlsearch";
   },
-  execute: function (value, tab) {
+  execute: function (value, repeats, tab) {
     Find.clear();
     HUD.hide();
   },
-};
+});
 
-CommandExecuter.settings = {
+CommandExecuter.add("settings", "", {
   match: function (value) {
     return value == "settings";
   },
-  execute: function (value, tab) {
+  execute: function (value, repeats, tab) {
     tab.tabbed = true;
     RUNTIME("openLink", {
       tab: tab,
@@ -45,45 +67,81 @@ CommandExecuter.settings = {
       repeats: repeats,
     });
   },
-};
+});
 
-CommandExecuter.bookmarks = {
+CommandExecuter.add("bookmarks", "", {
   match: function (value) {
     return /^bookmarks +/.test(value) && !/^\S+\s*$/.test(value);
   },
-  execute: function (value, tab) {
-    try {
-      if (/^\S+\s+\//.test(value)) {
-        RUNTIME("openBookmarkFolder", {
-          path: value.replace(/\S+\s+/, ""),
-          noconvert: true,
-        });
-        return;
-      }
-      if (
-        Command.completionResults.length &&
-        !Command.completionResults.some(function (e) {
-          return e[2] === value.replace(/^\S+\s*/, "");
-        })
-      ) {
-        RUNTIME("openLink", {
-          tab: tab,
-          url: Command.completionResults[0][2],
-          noconvert: true,
-        });
-        return;
-      }
-      RUNTIME("openLink", {
-        tab: tab,
-        url: value.replace(/^\S+\s+/, ""),
+  execute: function (value, repeats, tab) {
+    if (/^\S+\s+\//.test(value)) {
+      RUNTIME("openBookmarkFolder", {
+        path: value.replace(/\S+\s+/, ""),
         noconvert: true,
       });
       return;
-    } catch (e) {
-      alert(e.message);
+    }
+    if (
+      Command.completionResults.length &&
+      !Command.completionResults.some(function (e) {
+        return e[2] === value.replace(/^\S+\s*/, "");
+      })
+    ) {
+      RUNTIME("openLink", {
+        tab: tab,
+        url: Command.completionResults[0][2],
+        noconvert: true,
+      });
+      return;
+    }
+    RUNTIME("openLink", {
+      tab: tab,
+      url: value.replace(/^\S+\s+/, ""),
+      noconvert: true,
+    });
+    return;
+  },
+});
+
+CommandExecuter.add("buffer", "", {
+  match: function (value) {
+    return /^buffer +/.test(value);
+  },
+  execute: function (value, repeats, tab) {
+    var index = +value.replace(/^\S+\s+/, "") - 1,
+      selectedBuffer;
+    if (Number.isNaN(index)) {
+      selectedBuffer = Command.completionResults[0];
+      if (selectedBuffer === void 0) {
+        return;
+      }
+    } else {
+      selectedBuffer = Command.completionResults.filter(function (e) {
+        return e[1].indexOf((index + 1).toString()) === 0;
+      })[0];
+    }
+    if (selectedBuffer !== void 0) {
+      RUNTIME("goToTab", { id: selectedBuffer[3] });
     }
   },
-};
+});
+
+CommandExecuter.add("tabnew", "", {
+  match: function (value) {
+    return /^(tabnew|tabedit|tabe|to|tabopen|tabhistory)$/.test(
+      value.replace(/ .*/, "")
+    );
+  },
+  execute: function (value, repeats, tab) {
+    tab.tabbed = true;
+    RUNTIME("openLink", {
+      tab: tab,
+      url: Complete.convertToLink(value, tab.isURL, tab.isLink),
+      repeats: repeats,
+      noconvert: true,
+    });
+  },
+});
 /**
  *
  *
@@ -172,17 +230,24 @@ Command.execute = function (value, repeats) {
   value = value.replace(/[&$*!=?|]+$/, function (e) {
     return e.replace(/[^=?]/g, "");
   });
-  if (Complete.engineEnabled(Utils.compressArray(value.split(/\s+/g))[1]))
+
+  if (Complete.engineEnabled(Utils.compressArray(value.split(/\s+/g))[1])) {
     value = value.replace(/[=?]+$/, "");
+  }
 
   this.history.index = {};
 
-  for (const [key, cmd] of Object.entries(CommandExecuter)) {
-    if (cmd.match(value)) {
-      cmd.execute(value, tab);
-      return;
-    }
-  }
+  CommandExecuter.execute(value, repeats, tab);
+
+  //for (const [key, cmd] of Object.entries(CommandExecuter)) {
+  //  try {
+  //    if (cmd.match(value)) {
+  //      cmd.execute(value, repeats, tab);
+  //    }
+  //  } catch (e) {
+  //    alert(e.message);
+  //  }
+  //}
 
   /*
   switch (value) {
@@ -260,14 +325,14 @@ Command.execute = function (value, repeats) {
   }
   */
 
-  if (/^chrome +/.test(value)) {
-    RUNTIME("openLink", {
-      tab: tab,
-      url: value.replace(" ", "://"),
-      noconvert: true,
-    });
-    return;
-  }
+  //if (/^chrome +/.test(value)) {
+  //  RUNTIME("openLink", {
+  //    tab: tab,
+  //    url: value.replace(" ", "://"),
+  //    noconvert: true,
+  //  });
+  //  return;
+  //}
 
   //if (/^bookmarks +/.test(value) && !/^\S+\s*$/.test(value)) {
   //  if (/^\S+\s+\//.test(value)) {
@@ -298,248 +363,248 @@ Command.execute = function (value, repeats) {
   //  return;
   //}
 
-  if (/^history +/.test(value) && !/^\S+\s*$/.test(value)) {
-    RUNTIME("openLink", {
-      tab: tab,
-      url: Complete.convertToLink(value),
-      noconvert: true,
-    });
-    return;
-  }
+  //if (/^history +/.test(value) && !/^\S+\s*$/.test(value)) {
+  //  RUNTIME("openLink", {
+  //    tab: tab,
+  //    url: Complete.convertToLink(value),
+  //    noconvert: true,
+  //  });
+  //  return;
+  //}
 
-  if (/^taba(ttach)? +/.test(value) && !/^\S+\s*$/.test(value)) {
-    var windowId;
-    if (
-      (windowId = this.completionResults[
-        parseInt(value.replace(/^\S+ */, ""), 10)
-      ])
-    ) {
-      RUNTIME("moveTab", {
-        windowId: windowId[3],
-      });
-      return;
-    }
-  }
+  //if (/^taba(ttach)? +/.test(value) && !/^\S+\s*$/.test(value)) {
+  //  var windowId;
+  //  if (
+  //    (windowId = this.completionResults[
+  //      parseInt(value.replace(/^\S+ */, ""), 10)
+  //    ])
+  //  ) {
+  //    RUNTIME("moveTab", {
+  //      windowId: windowId[3],
+  //    });
+  //    return;
+  //  }
+  //}
 
-  if (/^tabd(etach)?/.test(value)) {
-    RUNTIME("moveTab");
-    return;
-  }
+  //if (/^tabd(etach)?/.test(value)) {
+  //  RUNTIME("moveTab");
+  //  return;
+  //}
 
-  if (/^file +/.test(value)) {
-    RUNTIME("openLink", {
-      tab: tab,
-      url:
-        "file://" +
-        value.replace(/\S+ +/, "").replace(/^~/, settings.homedirectory),
-      noconvert: true,
-    });
-    return;
-  }
+  //if (/^file +/.test(value)) {
+  //  RUNTIME("openLink", {
+  //    tab: tab,
+  //    url:
+  //      "file://" +
+  //      value.replace(/\S+ +/, "").replace(/^~/, settings.homedirectory),
+  //    noconvert: true,
+  //  });
+  //  return;
+  //}
 
-  if (/^source/.test(value)) {
-    var path = value.replace(/\S+ */, "");
-    if (!path.length) {
-      path = null;
-    } else {
-      path = "file://" + path;
-      path = path.split("~").join(settings.homedirectory || "~");
-    }
-    RUNTIME("loadLocalConfig", { path: path }, function (res) {
-      if (res.code === -1) {
-        // TODO: Fix Status (status bar cannot be displayed after the command
-        //       bar iframe exits
-        Status.setMessage("config file could not be opened", 1, "error");
-        console.error('cvim error: "%s" could not be opened for parsing', path);
-      }
-    });
-    return;
-  }
+  //if (/^source/.test(value)) {
+  //  var path = value.replace(/\S+ */, "");
+  //  if (!path.length) {
+  //    path = null;
+  //  } else {
+  //    path = "file://" + path;
+  //    path = path.split("~").join(settings.homedirectory || "~");
+  //  }
+  //  RUNTIME("loadLocalConfig", { path: path }, function (res) {
+  //    if (res.code === -1) {
+  //      // TODO: Fix Status (status bar cannot be displayed after the command
+  //      //       bar iframe exits
+  //      Status.setMessage("config file could not be opened", 1, "error");
+  //      console.error('cvim error: "%s" could not be opened for parsing', path);
+  //    }
+  //  });
+  //  return;
+  //}
 
-  if (/^(new|winopen|wo)$/.test(value.replace(/ .*/, ""))) {
-    RUNTIME("openLinkWindow", {
-      tab: tab,
-      url: Complete.convertToLink(value, tab.isURL, tab.isLink),
-      repeats: repeats,
-      noconvert: true,
-      incognito: tab.incognito,
-    });
-    return;
-  }
+  //if (/^(new|winopen|wo)$/.test(value.replace(/ .*/, ""))) {
+  //  RUNTIME("openLinkWindow", {
+  //    tab: tab,
+  //    url: Complete.convertToLink(value, tab.isURL, tab.isLink),
+  //    repeats: repeats,
+  //    noconvert: true,
+  //    incognito: tab.incognito,
+  //  });
+  //  return;
+  //}
 
-  if (/^restore\s+/.test(value)) {
-    var sessionId = value.replace(/^\S+\s+/, "");
-    if (Number.isNaN(+sessionId) && this.completionResults.length)
-      sessionId = this.completionResults[0][3];
-    RUNTIME("restoreChromeSession", {
-      sessionId: Utils.trim(sessionId),
-    });
-  }
+  //if (/^restore\s+/.test(value)) {
+  //  var sessionId = value.replace(/^\S+\s+/, "");
+  //  if (Number.isNaN(+sessionId) && this.completionResults.length)
+  //    sessionId = this.completionResults[0][3];
+  //  RUNTIME("restoreChromeSession", {
+  //    sessionId: Utils.trim(sessionId),
+  //  });
+  //}
 
-  if (
-    /^(tabnew|tabedit|tabe|to|tabopen|tabhistory)$/.test(
-      value.replace(/ .*/, "")
-    )
-  ) {
-    tab.tabbed = true;
-    RUNTIME("openLink", {
-      tab: tab,
-      url: Complete.convertToLink(value, tab.isURL, tab.isLink),
-      repeats: repeats,
-      noconvert: true,
-    });
-    return;
-  }
+  //if (
+  //  /^(tabnew|tabedit|tabe|to|tabopen|tabhistory)$/.test(
+  //    value.replace(/ .*/, "")
+  //  )
+  //) {
+  //  tab.tabbed = true;
+  //  RUNTIME("openLink", {
+  //    tab: tab,
+  //    url: Complete.convertToLink(value, tab.isURL, tab.isLink),
+  //    repeats: repeats,
+  //    noconvert: true,
+  //  });
+  //  return;
+  //}
 
-  if (/^(o|open)$/.test(value.replace(/ .*/, "")) && !/^\S+\s*$/.test(value)) {
-    RUNTIME("openLink", {
-      tab: tab,
-      url: Complete.convertToLink(value, tab.isURL, tab.isLink),
-      noconvert: true,
-    });
-    return;
-  }
+  //if (/^(o|open)$/.test(value.replace(/ .*/, "")) && !/^\S+\s*$/.test(value)) {
+  //  RUNTIME("openLink", {
+  //    tab: tab,
+  //    url: Complete.convertToLink(value, tab.isURL, tab.isLink),
+  //    noconvert: true,
+  //  });
+  //  return;
+  //}
 
-  if (/^buffer +/.test(value)) {
-    var index = +value.replace(/^\S+\s+/, "") - 1,
-      selectedBuffer;
-    if (Number.isNaN(index)) {
-      selectedBuffer = Command.completionResults[0];
-      if (selectedBuffer === void 0) return;
-    } else {
-      selectedBuffer = Command.completionResults.filter(function (e) {
-        return e[1].indexOf((index + 1).toString()) === 0;
-      })[0];
-    }
-    if (selectedBuffer !== void 0)
-      RUNTIME("goToTab", { id: selectedBuffer[3] });
-    return;
-  }
+  //if (/^buffer +/.test(value)) {
+  //  var index = +value.replace(/^\S+\s+/, "") - 1,
+  //    selectedBuffer;
+  //  if (Number.isNaN(index)) {
+  //    selectedBuffer = Command.completionResults[0];
+  //    if (selectedBuffer === void 0) return;
+  //  } else {
+  //    selectedBuffer = Command.completionResults.filter(function (e) {
+  //      return e[1].indexOf((index + 1).toString()) === 0;
+  //    })[0];
+  //  }
+  //  if (selectedBuffer !== void 0)
+  //    RUNTIME("goToTab", { id: selectedBuffer[3] });
+  //  return;
+  //}
 
-  if (/^execute +/.test(value)) {
-    var command = value.replace(/^\S+/, "").trim();
-    realKeys = "";
-    repeats = "";
-    Command.hide();
-    Mappings.executeSequence(command);
-    return;
-  }
+  //if (/^execute +/.test(value)) {
+  //  var command = value.replace(/^\S+/, "").trim();
+  //  realKeys = "";
+  //  repeats = "";
+  //  Command.hide();
+  //  Mappings.executeSequence(command);
+  //  return;
+  //}
 
-  if (/^delsession/.test(value)) {
-    value = Utils.trim(value.replace(/^\S+(\s+)?/, ""));
-    if (value === "") {
-      Status.setMessage("argument required", 1, "error");
-      return;
-    }
-    if (~sessions.indexOf(value)) {
-      sessions.splice(sessions.indexOf(value), 1);
-    }
-    value.split(" ").forEach(function (v) {
-      RUNTIME("deleteSession", { name: v });
-    });
-    PORT("getSessionNames");
-    return;
-  }
+  //if (/^delsession/.test(value)) {
+  //  value = Utils.trim(value.replace(/^\S+(\s+)?/, ""));
+  //  if (value === "") {
+  //    Status.setMessage("argument required", 1, "error");
+  //    return;
+  //  }
+  //  if (~sessions.indexOf(value)) {
+  //    sessions.splice(sessions.indexOf(value), 1);
+  //  }
+  //  value.split(" ").forEach(function (v) {
+  //    RUNTIME("deleteSession", { name: v });
+  //  });
+  //  PORT("getSessionNames");
+  //  return;
+  //}
 
-  if (/^mksession/.test(value)) {
-    value = Utils.trim(value.replace(/^\S+(\s+)?/, ""));
-    if (value === "") {
-      Status.setMessage("session name required", 1, "error");
-      return;
-    }
-    if (/[^a-zA-Z0-9_-]/.test(value)) {
-      Status.setMessage(
-        "only alphanumeric characters, dashes, " +
-          "and underscores are allowed",
-        1,
-        "error"
-      );
-      return;
-    }
-    if (!~sessions.indexOf(value)) {
-      sessions.push(value);
-    }
-    RUNTIME("createSession", { name: value }, function (response) {
-      sessions = response;
-    });
-    return;
-  }
+  //if (/^mksession/.test(value)) {
+  //  value = Utils.trim(value.replace(/^\S+(\s+)?/, ""));
+  //  if (value === "") {
+  //    Status.setMessage("session name required", 1, "error");
+  //    return;
+  //  }
+  //  if (/[^a-zA-Z0-9_-]/.test(value)) {
+  //    Status.setMessage(
+  //      "only alphanumeric characters, dashes, " +
+  //        "and underscores are allowed",
+  //      1,
+  //      "error"
+  //    );
+  //    return;
+  //  }
+  //  if (!~sessions.indexOf(value)) {
+  //    sessions.push(value);
+  //  }
+  //  RUNTIME("createSession", { name: value }, function (response) {
+  //    sessions = response;
+  //  });
+  //  return;
+  //}
 
-  if (/^session/.test(value)) {
-    value = Utils.trim(value.replace(/^\S+(\s+)?/, ""));
-    if (value === "") {
-      Status.setMessage("session name required", 1, "error");
-      return;
-    }
-    RUNTIME(
-      "openSession",
-      { name: value, sameWindow: !tab.active },
-      function () {
-        Status.setMessage("session does not exist", 1, "error");
-      }
-    );
-    return;
-  }
+  //if (/^session/.test(value)) {
+  //  value = Utils.trim(value.replace(/^\S+(\s+)?/, ""));
+  //  if (value === "") {
+  //    Status.setMessage("session name required", 1, "error");
+  //    return;
+  //  }
+  //  RUNTIME(
+  //    "openSession",
+  //    { name: value, sameWindow: !tab.active },
+  //    function () {
+  //      Status.setMessage("session does not exist", 1, "error");
+  //    }
+  //  );
+  //  return;
+  //}
 
-  if (/^((i?(re)?map)|i?unmap(All)?)+/.test(value)) {
-    settings.MAPPINGS += "\n" + value;
-    Mappings.parseLine(value);
-    PORT("syncSettings", { settings: settings });
-    return;
-  }
+  //if (/^((i?(re)?map)|i?unmap(All)?)+/.test(value)) {
+  //  settings.MAPPINGS += "\n" + value;
+  //  Mappings.parseLine(value);
+  //  PORT("syncSettings", { settings: settings });
+  //  return;
+  //}
 
-  if (/^set +/.test(value) && value !== "set") {
-    value = value.replace(/^set +/, "").split(/[ =]+/);
-    var isSet,
-      swapVal,
-      isQuery = /\?$/.test(value[0]);
-    value[0] = value[0].replace(/\?$/, "");
-    if (!settings.hasOwnProperty(value[0].replace(/^no|!$/g, ""))) {
-      Status.setMessage("unknown option: " + value[0], 1, "error");
-      return;
-    }
+  //if (/^set +/.test(value) && value !== "set") {
+  //  value = value.replace(/^set +/, "").split(/[ =]+/);
+  //  var isSet,
+  //    swapVal,
+  //    isQuery = /\?$/.test(value[0]);
+  //  value[0] = value[0].replace(/\?$/, "");
+  //  if (!settings.hasOwnProperty(value[0].replace(/^no|!$/g, ""))) {
+  //    Status.setMessage("unknown option: " + value[0], 1, "error");
+  //    return;
+  //  }
 
-    if (isQuery) {
-      Status.setMessage(value + ": " + settings[value[0]], 1);
-      return;
-    }
+  //  if (isQuery) {
+  //    Status.setMessage(value + ": " + settings[value[0]], 1);
+  //    return;
+  //  }
 
-    isSet = !/^no/.test(value[0]);
-    swapVal = tab.tabbed;
-    value[0] = value[0].replace(/^no|\?$/g, "");
+  //  isSet = !/^no/.test(value[0]);
+  //  swapVal = tab.tabbed;
+  //  value[0] = value[0].replace(/^no|\?$/g, "");
 
-    if (value.length === 1 && Boolean(settings[value]) === settings[value]) {
-      if (value[0] === "hud" && !isSet) {
-        HUD.hide(true);
-      }
-      if (swapVal) {
-        settings[value[0]] = !settings[value[0]];
-      } else {
-        settings[value[0]] = isSet;
-      }
-      RUNTIME("syncSettings", { settings: settings });
-    }
-    return;
-  }
+  //  if (value.length === 1 && Boolean(settings[value]) === settings[value]) {
+  //    if (value[0] === "hud" && !isSet) {
+  //      HUD.hide(true);
+  //    }
+  //    if (swapVal) {
+  //      settings[value[0]] = !settings[value[0]];
+  //    } else {
+  //      settings[value[0]] = isSet;
+  //    }
+  //    RUNTIME("syncSettings", { settings: settings });
+  //  }
+  //  return;
+  //}
 
-  if (/^let +/.test(value) && value !== "let") {
-    try {
-      var added = RCParser.parse(value);
-      delete added.MAPPINGS;
-      Object.merge(settings, added);
-      PORT("syncSettings", { settings: settings });
-    } catch (e) {
-      Command.hide();
-    }
-    return;
-  }
+  //if (/^let +/.test(value) && value !== "let") {
+  //  try {
+  //    var added = RCParser.parse(value);
+  //    delete added.MAPPINGS;
+  //    Object.merge(settings, added);
+  //    PORT("syncSettings", { settings: settings });
+  //  } catch (e) {
+  //    Command.hide();
+  //  }
+  //  return;
+  //}
 
-  if (/^call +/.test(value)) {
-    Mappings.parseLine(value);
-    return;
-  }
+  //if (/^call +/.test(value)) {
+  //  Mappings.parseLine(value);
+  //  return;
+  //}
 
-  if (/^script +/.test(value)) {
-    RUNTIME("runScript", { code: value.slice(7) });
-  }
+  //if (/^script +/.test(value)) {
+  //  RUNTIME("runScript", { code: value.slice(7) });
+  //}
 };
