@@ -22,6 +22,7 @@
         <script src="../content_scripts/hud.js"></script>
         <script src="../content_scripts/visual.js"></script>
         <script src="../content_scripts/command.js"></script>
+        <script src="../content_scripts/command_execute.js"></script>
         <script src="../content_scripts/scroll.js"></script>
         <script src="../content_scripts/search.js"></script>
         <script src="../content_scripts/frames.js"></script>
@@ -73,6 +74,14 @@
                         <td class="options-left">Clear the command bar history</td>
                         <td class="options-right">
                             <input id="clearHistory" value="Clear" type="button">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="options-left">
+                            EvalText
+                        </td>
+                        <td class="options-right">
+                            <textarea id="evalText" name="css"></textarea>
                         </td>
                     </tr>
                 </table>
