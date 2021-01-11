@@ -82,9 +82,10 @@ select {
 }
 
 #mappings,
-#evalText {
+#eval_text {
   width: 100%;
   max-width: 100%;
+  min-height: 500px;
   height: 200px;
   resize: none;
   font-family: monospace;

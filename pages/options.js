@@ -3,13 +3,13 @@ var Settings = {
 };
 
 Settings.loadrc = function (config) {
-  console.log(config);
   this.rcEl.value = config.RC;
   this.rcEl.style.height = this.rcEl.scrollHeight + "px";
   if (this.cssEl) {
     this.cssEl.setValue(config.COMMANDBARCSS);
   }
   this.gistUrl.value = config.GISTURL;
+  this.evalEl.value = config.EVAL;
 };
 
 Settings.resetSettings = function () {
@@ -22,6 +22,7 @@ Settings.resetSettings = function () {
         this.rcEl.value = defaults.RC;
         this.cssEl.setValue(defaults.COMMANDBARCSS);
         this.gistUrl.value = defaults.GISTURL;
+        this.evalEl.value = defaults.EVAL;
         delete this.settings;
         this.settings = Object.clone(defaults);
       }.bind(this)
@@ -55,6 +56,8 @@ Settings.saveSettings = function () {
       }
       this.settings.COMMANDBARCSS = this.cssEl.getValue();
       this.settings.GISTURL = this.gistUrl.value;
+      this.settings.EVAL = this.evalEl.value;
+
       this.settings.mapleader = this.settings.mapleader.replace(
         / /g,
         "<Space>"
@@ -126,6 +129,7 @@ Settings.init = function () {
   this.saveButton = document.getElementById("save_button");
   this.rcEl = document.getElementById("mappings");
   this.editModeEl = document.getElementById("edit_mode");
+  this.evalEl = document.getElementById("eval_text");
 
   function autoSize() {
     var stop = document.scrollingElement.scrollTop;
@@ -175,6 +179,8 @@ port.onMessage.addListener(function (response) {
         Settings.initialLoad = false;
         Settings.settings = response.settings;
         Settings.init();
+        Settings.loadrc(response.settings);
+        /*
         if (response.settings.localconfig && response.settings.configpath) {
           var path =
             "file://" +
@@ -199,6 +205,7 @@ port.onMessage.addListener(function (response) {
         } else {
           Settings.loadrc(response.settings);
         }
+        */
       }
     });
   }

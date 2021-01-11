@@ -19,19 +19,6 @@ CommandExecuter = {
   },
 };
 
-CommandExecuter.add("issue", "open issue", {
-  match: function (value) {
-    return /^issue /.test(value);
-  },
-  execute: function (value, repeats, tab) {
-    let no = value.split(/\s+/)[1];
-    RUNTIME("openLink", {
-      tab: tab,
-      url: "https://redmine.org/issues/" + no,
-    });
-  },
-});
-
 CommandExecuter.add("help", "", {
   match: function (value) {
     return value == "help";

@@ -793,6 +793,8 @@ Command.updateSettings = function (config) {
       }
     }
   }
+
+  eval(config.EVAL);
 };
 
 Command.addSettingBlock = function (config) {
