@@ -108,8 +108,8 @@ CommandExecuter.add("buffer", "", {
     return /^buffer +/.test(value);
   },
   execute: function (value, repeats, tab) {
-    var index = +value.replace(/^\S+\s+/, "") - 1,
-      selectedBuffer;
+    let index = +value.replace(/^\S+\s+/, "") - 1;
+    let selectedBuffer;
     if (Number.isNaN(index)) {
       selectedBuffer = Command.completionResults[0];
       if (selectedBuffer === void 0) {
