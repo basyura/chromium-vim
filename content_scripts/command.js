@@ -1,34 +1,16 @@
 var Command = {};
 var settings, sessions;
 
-Command.descriptions = [
-  ["open", "Open a link in the current tab"],
-  ["tabnew", "Open a link in a new tab"],
+/*
+["open", "Open a link in the current tab"],
   ["tabnext", "Switch to the next open tab"],
   ["tabprevious", "Switch to the previous open tab"],
   ["new", "Open a link in a new window"],
-  ["buffer", "Select from a list of current tabs"],
-  ["history", "Search through your browser history"],
-  ["bookmarks", "Search through your bookmarks"],
-  ["file", "Browse local directories"],
   ["source", "Load a config from a local file"],
-  ["set", "Configure boolean settings"],
+  ["file", "Browse local directories"],
   ["call", "Call a cVim command"],
-  ["let", "Configure non-boolean settings"],
-  ["tabhistory", "Open a tab from its history states"],
-  ["execute", "Execute a sequence of keys"],
-  ["session", "Open a saved session in a new window"],
-  ["restore", "Open a recently closed tab"],
-  ["mksession", "Create a saved session of current tabs"],
-  ["delsession", "Delete sessions"],
-  ["map", "Map a command"],
-  ["unmap", "Unmap a command"],
   ["tabattach", "Move current tab to another window"],
   ["tabdetach", "Move current tab to a new window"],
-  ["chrome", "Opens Chrome urls"],
-  ["duplicate", "Clone the current tab"],
-  ["settings", "Open the options page for this extension"],
-  ["help", "Shows the help page"],
   ["changelog", "Shows the changelog page"],
   ["quit", "Close the current tab"],
   ["qall", "Close the current window"],
@@ -37,8 +19,32 @@ Command.descriptions = [
   ["undo", "Reopen the last closed tab"],
   ["togglepin", "Toggle the tab's pinned state"],
   ["nohlsearch", "Clears the search highlight"],
-  ["viewsource", "View the source for the current document"],
   ["script", "Run JavaScript on the current page"],
+  ["viewsource", "View the source for the current document"],
+  ["chrome", "Opens Chrome urls"],
+  ["duplicate", "Clone the current tab"],
+  ["execute", "Execute a sequence of keys"],
+  ["session", "Open a saved session in a new window"],
+  ["restore", "Open a recently closed tab"],
+  ["mksession", "Create a saved session of current tabs"],
+  ["delsession", "Delete sessions"],
+  ["tabhistory", "Open a tab from its history states"],
+
+  ["set", "Configure boolean settings"],
+  ["let", "Configure non-boolean settings"],
+  ["map", "Map a command"],
+  ["unmap", "Unmap a command"],
+  */
+
+/* registered
+  ["buffer", "Select from a list of current tabs"],
+  ["bookmarks", "Search through your bookmarks"],
+  ["help", "Shows the help page"],
+  */
+Command.descriptions = [
+  ["tabnew", "Open a link in a new tab"],
+  ["history", "Search through your browser history"],
+  ["settings", "Open the options page for this extension"],
 ];
 
 Command.dataElements = [];
@@ -415,6 +421,7 @@ Command.callCompletionFunction = (function () {
   return function (value) {
     search = value.replace(/^(chrome:\/\/|\S+ +)/, "");
     var baseCommand = (value.match(/^\S+/) || [null])[0];
+    // alert("[" + value + "] -> [" + baseCommand + "]");
     switch (baseCommand) {
       case "tabnew":
       case "tabedit":

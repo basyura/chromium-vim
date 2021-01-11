@@ -19,7 +19,7 @@ CommandExecuter = {
   },
 };
 
-CommandExecuter.add("help", "", {
+CommandExecuter.add("help", "Shows the help page", {
   match: function (value) {
     return value == "help";
   },
@@ -56,7 +56,7 @@ CommandExecuter.add("settings", "", {
   },
 });
 
-CommandExecuter.add("bookmarks", "", {
+CommandExecuter.add("Dookmarks", "Search through your bookmarks", {
   match: function (value) {
     return /^bookmarks +/.test(value) && !/^\S+\s*$/.test(value);
   },
@@ -90,7 +90,7 @@ CommandExecuter.add("bookmarks", "", {
   },
 });
 
-CommandExecuter.add("buffer", "", {
+CommandExecuter.add("buffer", "Select buffer from a list of current tabs", {
   match: function (value) {
     return /^buffer +/.test(value);
   },
