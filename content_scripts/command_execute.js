@@ -32,6 +32,7 @@ CommandExecuter.add("help", "Shows the help page", {
   },
 });
 
+/*
 CommandExecuter.add("nohlsearch", "", {
   match: function (value) {
     return value == "nohlsearch";
@@ -41,6 +42,7 @@ CommandExecuter.add("nohlsearch", "", {
     HUD.hide();
   },
 });
+*/
 
 CommandExecuter.add("settings", "", {
   match: function (value) {
@@ -134,6 +136,7 @@ CommandExecuter.add("tabnew", "", {
  *
  */
 Command.execute = function (value, repeats) {
+  /*
   if (value.indexOf("@%") !== -1) {
     RUNTIME("getRootUrl", function (url) {
       Command.execute(value.split("@%").join(url), repeats);
@@ -146,22 +149,23 @@ Command.execute = function (value, repeats) {
     });
     return;
   }
+  */
 
   commandMode = false;
 
-  var split = Utils.compressArray(value.split(/\s+/g));
-  if (this.customCommands.hasOwnProperty(split[0])) {
-    this.execute(
-      this.customCommands[split[0]] + " " + split.slice(1).join(" "),
-      1
-    );
-    return;
-  }
+  //var split = Utils.compressArray(value.split(/\s+/g));
+  //if (this.customCommands.hasOwnProperty(split[0])) {
+  //  this.execute(
+  //    this.customCommands[split[0]] + " " + split.slice(1).join(" "),
+  //    1
+  //  );
+  //  return;
+  //}
 
-  value = this.expandCompletion(value);
-  value = value.replace(/@@[a-zA-Z_$][a-zA-Z0-9_$]*/g, function (e) {
-    return settings.hasOwnProperty(e) ? settings[e] : e;
-  });
+  //value = this.expandCompletion(value);
+  //value = value.replace(/@@[a-zA-Z_$][a-zA-Z0-9_$]*/g, function (e) {
+  //  return settings.hasOwnProperty(e) ? settings[e] : e;
+  //});
 
   // Match commands like ':tabnew*&! search' before
   // commands like ':tabnew search&*!'
@@ -181,6 +185,8 @@ Command.execute = function (value, repeats) {
     tabbed: true,
     incognito: false,
   };
+
+  /*
   (value.match(/^[^\s&$!*=?|]*([&$!*=?|]+)/) || [])
     .concat(value.match(/[&$!*=?|]*$/) || [])
     .join("")
@@ -213,6 +219,7 @@ Command.execute = function (value, repeats) {
           break;
       }
     });
+  */
   value = value.replace(/^([^\s&$*!=?|]*)[&$*!=?|]*\s/, "$1 ");
   value = value.replace(/[&$*!=?|]+$/, function (e) {
     return e.replace(/[^=?]/g, "");
