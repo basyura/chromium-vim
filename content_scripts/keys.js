@@ -660,7 +660,9 @@ if (HAS_EVENT_KEY_SUPPORT) {
 
 var KeyHandler = {
   down: function (key, event) {
-    if (event.which == 229) {
+    // To filter multibyte bookmarks on decide the conversion.
+    // I use `<C-]>` to decide word in auto lists.
+    if (event.which == 229 && key != "<Enter>" && key != "<C-]>") {
       return;
     }
 
