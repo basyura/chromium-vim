@@ -1,6 +1,25 @@
 LOG = console.log.bind(console);
 
 var Utils = {
+  httpPost: function (url, data) {
+    return new Promise(function (resolve, reject) {
+      let xhr = new XMLHttpRequest();
+      xhr.open("POST", url, false);
+      xhr.setRequestHeader("Content-Type", "application/json");
+      xhr.onload = () => {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          resolve(xhr.response);
+        } else {
+          reject(new Error(xhr.statusText));
+        }
+      };
+      xhr.onerror = () => {
+        reject(new Error(xhr.statusText));
+      };
+
+      xhr.send(JSON.stringify(data));
+    });
+  },
   cacheFunction: function (callback) {
     var cache = new Map();
     var result = function (arg) {
