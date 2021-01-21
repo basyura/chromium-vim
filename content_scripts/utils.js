@@ -1047,7 +1047,7 @@ var searchArray = function (opt) {
     if (
       search.every(function (searchTerm) {
         return text.some(function (textTerm) {
-          return textTerm.toLowerCase().indexOf(searchTerm) === 0;
+          return textTerm.toLowerCase().indexOf(searchTerm) >= 0;
         });
       })
     ) {
