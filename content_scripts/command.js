@@ -43,7 +43,6 @@ var settings, sessions;
   */
 Command.descriptions = [
   ["tabnew", "Open a link in a new tab"],
-  ["history", "Search through your browser history"],
   ["settings", "Open the options page for this extension"],
 ];
 

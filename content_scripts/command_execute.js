@@ -131,6 +131,20 @@ CommandExecuter.add("tabnew", "", {
     });
   },
 });
+
+CommandExecuter.add("history", "Search through your browser history", {
+  match: function (value) {
+    return /^history +/.test(value) && !/^\S+\s*$/.test(value);
+  },
+  execute: function (value, repeats, tab) {
+    RUNTIME("openLink", {
+      tab: tab,
+      url: Complete.convertToLink(value),
+      noconvert: true,
+    });
+    return;
+  },
+});
 /**
  *
  *
