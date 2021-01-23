@@ -46,6 +46,8 @@ Command.descriptions = [
   ["settings", "Open the options page for this extension"],
 ];
 
+Command.completers = {};
+
 Command.dataElements = [];
 Command.matches = [];
 Command.customCommands = {};
@@ -339,6 +341,7 @@ Command.callCompletionFunction = (function () {
       }
       self.historyMode = false;
       self.searchMode = true;
+
       PORT("searchHistory", {
         search: value.replace(/^\S+\s+/, ""),
         limit: settings.searchlimit,
@@ -418,7 +421,13 @@ Command.callCompletionFunction = (function () {
   return function (value) {
     search = value.replace(/^(chrome:\/\/|\S+ +)/, "");
     var baseCommand = (value.match(/^\S+/) || [null])[0];
-    // alert("[" + value + "] -> [" + baseCommand + "]");
+
+    // check registered completer
+    let completer = Command.completers[baseCommand];
+    if (completer != null) {
+      return completer(search);
+    }
+
     switch (baseCommand) {
       case "tabnew":
       case "tabedit":
@@ -477,14 +486,16 @@ Command.callCompletionFunction = (function () {
         return true;
       case "let": // TODO
         return true;
-      case "history":
-        if (search.trim() === "") {
-          self.hideData();
-          return;
-        }
-        self.historyMode = true;
-        PORT("searchHistory", { search: search, limit: settings.searchlimit });
-        return true;
+      //case "history":
+      //  if (search.trim() === "") {
+      //    self.hideData();
+      //    return;
+      //  }
+      //  self.historyMode = true;
+
+      //  Utils.httpPost("http://localhost:8000/", "searchHistory");
+      //  PORT("searchHistory", { search: search, limit: settings.searchlimit });
+      //  return true;
       case "file":
         Marks.parseFileCommand(search);
         return true;

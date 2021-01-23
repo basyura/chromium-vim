@@ -5,6 +5,9 @@ CommandExecuter = {
       Command.descriptions.push([label, description]);
     }
     this.commands.push(cmd);
+    if (cmd.complete != null) {
+      Command.completers[label] = cmd.complete;
+    }
   },
   execute: function (value, repeats, tab) {
     try {
@@ -143,6 +146,15 @@ CommandExecuter.add("history", "Search through your browser history", {
       noconvert: true,
     });
     return;
+  },
+  complete: function (value) {
+    if (value.trim() === "") {
+      Command.hideData();
+      return false;
+    }
+    Command.historyMode = true;
+    PORT("searchHistory", { search: value, limit: settings.searchlimit });
+    return true;
   },
 });
 /**
