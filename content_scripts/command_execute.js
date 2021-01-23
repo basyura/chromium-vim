@@ -93,6 +93,17 @@ CommandExecuter.add("bookmarks", "Search through your bookmarks", {
     });
     return;
   },
+  complete: function (value) {
+    Command.completions = {};
+    if (value[0] === "/") {
+      return Marks.matchPath(value);
+    }
+    Marks.match(value, function (response) {
+      Command.completions.bookmarks = response;
+      Command.updateCompletions();
+    });
+    return true;
+  },
 });
 
 CommandExecuter.add("buffer", "Select buffer from a list of current tabs", {
