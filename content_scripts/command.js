@@ -352,14 +352,12 @@ Command.callCompletionFunction = (function () {
       }
     }
     if (Complete.engineEnabled(search[0])) {
-      Complete.queryEngine(
-        search[0],
-        search.slice(1).join(" "),
-        function (response) {
-          self.completions = { search: response };
-          self.updateCompletions();
-        }
-      );
+      Complete.queryEngine(search[0], search.slice(1).join(" "), function (
+        response
+      ) {
+        self.completions = { search: response };
+        self.updateCompletions();
+      });
     }
   };
 
