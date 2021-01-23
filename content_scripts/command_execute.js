@@ -1,12 +1,13 @@
 CommandExecuter = {
   commands: [],
+  completers: {},
   add: function (label, description, cmd) {
     if (!Command.descriptions.some((v) => v[0] == label)) {
       Command.descriptions.push([label, description]);
     }
     this.commands.push(cmd);
     if (cmd.complete != null) {
-      Command.completers[label] = cmd.complete;
+      this.completers[label] = cmd.complete;
     }
   },
   execute: function (value, repeats, tab) {
@@ -35,19 +36,7 @@ CommandExecuter.add("help", "Shows the help page", {
   },
 });
 
-/*
-CommandExecuter.add("nohlsearch", "", {
-  match: function (value) {
-    return value == "nohlsearch";
-  },
-  execute: function (value, repeats, tab) {
-    Find.clear();
-    HUD.hide();
-  },
-});
-*/
-
-CommandExecuter.add("settings", "", {
+CommandExecuter.add("settings", "Open the options page for this extension", {
   match: function (value) {
     return value == "settings";
   },
@@ -129,7 +118,7 @@ CommandExecuter.add("buffer", "Select buffer from a list of current tabs", {
   },
 });
 
-CommandExecuter.add("tabnew", "", {
+CommandExecuter.add("tabnew", "Open a link in a new tab", {
   match: function (value) {
     return /^(tabnew|tabedit|tabe|to|tabopen|tabhistory)$/.test(
       value.replace(/ .*/, "")
@@ -640,4 +629,8 @@ Command.execute = function (value, repeats) {
   //if (/^script +/.test(value)) {
   //  RUNTIME("runScript", { code: value.slice(7) });
   //}
+};
+
+Command.getCompleter = function (command) {
+  return CommandExecuter.completers[command];
 };

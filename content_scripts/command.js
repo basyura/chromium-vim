@@ -41,12 +41,12 @@ var settings, sessions;
   ["bookmarks", "Search through your bookmarks"],
   ["help", "Shows the help page"],
   */
-Command.descriptions = [
-  ["tabnew", "Open a link in a new tab"],
-  ["settings", "Open the options page for this extension"],
-];
 
-Command.completers = {};
+// Command definitions
+Command.descriptions = [];
+// replace to command_execute
+Command.execute = {};
+Command.getCompleter = {};
 
 Command.dataElements = [];
 Command.matches = [];
@@ -423,7 +423,7 @@ Command.callCompletionFunction = (function () {
     var baseCommand = (value.match(/^\S+/) || [null])[0];
 
     // check registered completer
-    let completer = Command.completers[baseCommand];
+    let completer = this.getCompleter(baseCommand);
     if (completer != null) {
       return completer(search);
     }
@@ -502,16 +502,16 @@ Command.callCompletionFunction = (function () {
       case "source":
         Marks.parseFileCommand(search);
         return true;
-      case "bookmarks":
-        self.completions = {};
-        if (search[0] === "/") {
-          return Marks.matchPath(search);
-        }
-        Marks.match(search, function (response) {
-          self.completions.bookmarks = response;
-          self.updateCompletions();
-        });
-        return true;
+      //case "bookmarks":
+      //  self.completions = {};
+      //  if (search[0] === "/") {
+      //    return Marks.matchPath(search);
+      //  }
+      //  Marks.match(search, function (response) {
+      //    self.completions.bookmarks = response;
+      //    self.updateCompletions();
+      //  });
+      //  return true;
     }
     return false;
   };
@@ -537,9 +537,6 @@ Command.complete = function (value) {
   };
   this.updateCompletions();
 };
-
-// replace to command_execute
-Command.execute = {};
 
 Command.show = function (search, value, complete) {
   if (!this.domElementsLoaded) {
