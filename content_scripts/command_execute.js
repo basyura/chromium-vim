@@ -148,7 +148,8 @@ CommandExecuter.add("history", "Search through your browser history", {
     return;
   },
   complete: function (value) {
-    if (value.trim() === "") {
+    value = value.trim();
+    if (value.length < 2 || value === "") {
       Command.hideData();
       return false;
     }
