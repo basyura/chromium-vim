@@ -116,6 +116,10 @@ CommandExecuter.add("buffer", "Select buffer from a list of current tabs", {
       RUNTIME("goToTab", { id: selectedBuffer[3] });
     }
   },
+  complete: function (value) {
+    PORT("getBuffers");
+    return true;
+  },
 });
 
 CommandExecuter.add("tabnew", "Open a link in a new tab", {
