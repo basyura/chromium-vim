@@ -986,10 +986,13 @@ var matchLocation = function (url, pattern) {
       return false;
     }
     var origHostname = hostname;
+
     hostname = hostname[0].replace(/([.])/g, "\\$1").replace(/\*/g, ".*");
     hostMatch = url.hostname.match(new RegExp(hostname, "i"));
-    if (!hostMatch || hostMatch[0].length !== url.hostname.length) {
-      return false;
+    if (!hostname.startsWith("localhost")) {
+      if (!hostMatch || hostMatch[0].length !== url.hostname.length) {
+        return false;
+      }
     }
     pattern = pattern.slice(origHostname[0].length);
   }
