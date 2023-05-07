@@ -1034,7 +1034,7 @@ Actions = (function () {
     const url = "https://b.hatena.ne.jp/entry/json/" + o.request.targetUrl;
     fetch(url)
       .then((response) => response.json())
-      .then((data) => o.callback({ success: true, url, data, o }))
+      .then((data) => o.callback({ success: true, url, data }))
       .catch((error) =>
         o.callback({ success: false, url, error: error.message })
       );

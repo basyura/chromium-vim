@@ -12,7 +12,6 @@ Hateb.showComment = function () {
     "showHatebComment",
     { targetUrl: window.location.href },
     function (res) {
-      console.log(res);
       const table = self.createTableFromBookmarks(res.data);
       self.showMessage(table);
     }
