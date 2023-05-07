@@ -113,7 +113,8 @@
         "content_scripts/scroll.js",
         "content_scripts/search.js",
         "content_scripts/frames.js",
-        "content_scripts/messenger.js"
+        "content_scripts/messenger.js",
+        "content_scripts/hateb.js"
       ],
       "css": ["content_scripts/main.css"],
       "run_at": "document_start",

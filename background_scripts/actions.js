@@ -1030,6 +1030,17 @@ Actions = (function () {
     });
   };
 
+  _.showHatebComment = function (o) {
+    const url = "https://b.hatena.ne.jp/entry/json/" + o.request.targetUrl;
+    fetch(url)
+      .then((response) => response.json())
+      .then((data) => o.callback({ success: true, url, data, o }))
+      .catch((error) =>
+        o.callback({ success: false, url, error: error.message })
+      );
+    return true;
+  };
+
   return function (_request, _sender, _callback, _port) {
     var action = _request.action;
     if (!_.hasOwnProperty(action) || typeof _[action] !== "function") return;

@@ -795,6 +795,9 @@ Mappings.actions = {
   muteTab: function () {
     RUNTIME("muteTab");
   },
+  showHatebComment: function () {
+    Hateb.showComment();
+  },
 };
 
 (function () {
