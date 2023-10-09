@@ -45,7 +45,7 @@ Find.search = function (mode, repeats, ignoreFocus) {
   if (this.matches.length === 0) return;
   mode = mode || "/";
 
-  var reverse = repeats < 0;
+  let reverse = repeats < 0;
   if (reverse) repeats = Math.abs(repeats);
   if (mode === "?") reverse = !reverse;
 
@@ -76,13 +76,13 @@ Find.search = function (mode, repeats, ignoreFocus) {
   } else {
     this.tries = 0;
   }
-  var br = this.matches[this.index].getBoundingClientRect();
-  var origTop = document.scrollingElement.scrollTop;
+  const br = this.matches[this.index].getBoundingClientRect();
+  let origTop = document.scrollingElement.scrollTop;
   if (!ignoreFocus) {
     document.activeElement.blur();
     document.body.focus();
   }
-  var isLink = ignoreFocus
+  const isLink = ignoreFocus
     ? false
     : this.focusParentLink(this.matches[this.index]);
   this.matches[this.index].setAttribute("active", "");
@@ -93,7 +93,7 @@ Find.search = function (mode, repeats, ignoreFocus) {
     paddingBottom = Command.barPaddingBottom;
     paddingTop = Command.barPaddingTop;
   }
-  var documentZoom = parseFloat(document.body.style.zoom) || 1;
+  const documentZoom = parseFloat(document.body.style.zoom) || 1;
   if (
     br.top * documentZoom + br.height * documentZoom >
     window.innerHeight - paddingBottom
