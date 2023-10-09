@@ -87,8 +87,8 @@ Find.search = function (mode, repeats, ignoreFocus) {
     : this.focusParentLink(this.matches[this.index]);
   this.matches[this.index].setAttribute("active", "");
   HUD.display(this.index + 1 + " / " + this.matches.length);
-  var paddingTop = 0,
-    paddingBottom = 0;
+  let paddingTop = 100;
+  let paddingBottom = 100;
   if (Command.active) {
     paddingBottom = Command.barPaddingBottom;
     paddingTop = Command.barPaddingTop;
