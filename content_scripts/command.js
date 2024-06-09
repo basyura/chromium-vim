@@ -1,4 +1,3 @@
-console.log("command:start");
 var Command = {};
 var settings, sessions;
 
@@ -662,7 +661,6 @@ Command.callOnCvimLoad = (function () {
 })();
 
 Command.onDOMLoad = function () {
-  console.log("Command.onDOMLoad start");
   this.onDOMLoadAll();
   if (window.self === window.top) {
     Command.frame = document.createElement("iframe");
@@ -670,7 +668,6 @@ Command.onDOMLoad = function () {
     Command.frame.id = "cVim-command-frame";
     document.lastElementChild.appendChild(Command.frame);
   }
-  console.log("Command.onDOMLoad end");
 };
 
 Command.preventAutoFocus = function () {
@@ -812,7 +809,7 @@ Command.updateSettings = function (config) {
   }
 
   try {
-    eval(config.EVAL);
+    //eval(config.EVAL);
   } catch (e) {
     alert("failed to eval command : " + e.message);
   }
@@ -832,7 +829,6 @@ Command.addSettingBlock = function (config) {
 };
 
 Command.init = function (enabled) {
-  console.log("init start");
   Mappings.defaults = Object.clone(Mappings.defaultsClone);
   Mappings.parseCustom(settings.MAPPINGS, true);
   if (enabled) {
@@ -956,4 +952,3 @@ Command.configureSettings = function (_settings) {
     this.init(false);
   }
 };
-console.log("command:end");

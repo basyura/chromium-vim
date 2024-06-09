@@ -1116,9 +1116,7 @@ Actions = (function () {
     }
 
     if (!o.sender.tab && action !== "openLinkTab") return;
-
-    console.log(_[action](o));
-    console.log("action:return func end");
+    
     return _[action](o);
   };
 })();

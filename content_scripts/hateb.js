@@ -16,7 +16,6 @@ Hateb.showComment = function () {
       self.showMessage(table);
     }
   );
-  console.log("showHatebComment");
 };
 
 Hateb.showMessage = function (table) {

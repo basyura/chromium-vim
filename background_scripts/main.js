@@ -14,8 +14,6 @@ importScripts("update.js");
 importScripts("tab_creation_order.js");
 importScripts("frames.js");
 
-console.log("background:main start");
-
 var sessions = {},
   ActiveTabs = {},
   TabHistory = {},
@@ -256,10 +254,8 @@ var Listeners = {
 (function () {
   for (const api in Listeners) {
     for (const method in Listeners[api]) {
-      console.log("addListener:", api, method);
       chrome[api][method].addListener(Listeners[api][method]);
     }
   }
 })();
 
-console.log("background:main end");

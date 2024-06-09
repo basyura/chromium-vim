@@ -1,4 +1,3 @@
-console.log("messenger start");
 var port = chrome.runtime.connect({ name: "main" });
 port.onDisconnect.addListener(function () {
   window.portDestroyed = true;
@@ -32,7 +31,6 @@ port.onDisconnect.addListener(function () {
 })();
 
 port.onMessage.addListener(function (response) {
-  console.log("messenger#onMessage", response);
   var key;
   switch (response.type) {
     case "hello":
@@ -336,4 +334,3 @@ chrome.runtime.onMessage.addListener(function (request, sender, callback) {
   }
 });
 
-console.log("messenger end");
