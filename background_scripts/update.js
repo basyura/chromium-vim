@@ -37,21 +37,19 @@ chrome.runtime.onInstalled.addListener(function (details) {
     return chrome.tabs.query({ status: "complete" }, function (tabs) {
       tabs.forEach(function (tab) {
         contentScripts.js.forEach(function (file) {
-          chrome.tabs.executeScript(
-            tab.id,
+          chrome.scripting.executeScript(
             {
-              file: file,
-              allFrames: contentScripts.all_fames,
+              target: { tabId: tab.id, allFrames: contentScripts.all_frames },
+              files: [file],
             },
             checkError
           );
         });
         contentScripts.css.forEach(function (file) {
-          chrome.tabs.insertCSS(
-            tab.id,
+          chrome.scripting.insertCSS(
             {
-              file: file,
-              allFrames: contentScripts.all_fames,
+              target: { tabId: tab.id, allFrames: contentScripts.all_frames },
+              files: [file],
             },
             checkError
           );

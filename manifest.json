@@ -68,7 +68,8 @@
     "clipboardRead",
     "clipboardWrite",
     "webNavigation",
-    "activeTab"
+    "activeTab",
+    "scripting"
   ],
   "background": {
     "service_worker": "background_scripts/main.js"

@@ -1,3 +1,4 @@
+console.log("command:start");
 var Command = {};
 var settings, sessions;
 
@@ -355,12 +356,14 @@ Command.callCompletionFunction = (function () {
       }
     }
     if (Complete.engineEnabled(search[0])) {
-      Complete.queryEngine(search[0], search.slice(1).join(" "), function (
-        response
-      ) {
-        self.completions = { search: response };
-        self.updateCompletions();
-      });
+      Complete.queryEngine(
+        search[0],
+        search.slice(1).join(" "),
+        function (response) {
+          self.completions = { search: response };
+          self.updateCompletions();
+        }
+      );
     }
   };
 
@@ -659,6 +662,7 @@ Command.callOnCvimLoad = (function () {
 })();
 
 Command.onDOMLoad = function () {
+  console.log("Command.onDOMLoad start");
   this.onDOMLoadAll();
   if (window.self === window.top) {
     Command.frame = document.createElement("iframe");
@@ -666,6 +670,7 @@ Command.onDOMLoad = function () {
     Command.frame.id = "cVim-command-frame";
     document.lastElementChild.appendChild(Command.frame);
   }
+  console.log("Command.onDOMLoad end");
 };
 
 Command.preventAutoFocus = function () {
@@ -827,6 +832,7 @@ Command.addSettingBlock = function (config) {
 };
 
 Command.init = function (enabled) {
+  console.log("init start");
   Mappings.defaults = Object.clone(Mappings.defaultsClone);
   Mappings.parseCustom(settings.MAPPINGS, true);
   if (enabled) {
@@ -950,3 +956,4 @@ Command.configureSettings = function (_settings) {
     this.init(false);
   }
 };
+console.log("command:end");
