@@ -1,4 +1,3 @@
-console.log("options#start");
 var storageMethod = "local",
   settings = {},
   Options = {};
@@ -203,4 +202,3 @@ chrome.runtime.onMessage.addListener(function (request, sender, callback) {
   }
 });
 
-console.log("options#end");

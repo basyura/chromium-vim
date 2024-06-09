@@ -994,10 +994,15 @@ addListeners();
 
 window.addEventListener("DOMContentLoaded", function () {
   if (self === top) {
-    RUNTIME("isNewInstall", null, function (message) {
-      if (message) {
-        alert(message);
+    chrome.runtime.sendMessage({"action" : "isNewInstall"}, (res) => {
+      if (res != "") {
+        alert(res)
       }
-    });
+    })
+    // RUNTIME("isNewInstall", null, function (message) {
+    //   if (message) {
+    //     alert(message);
+    //   }
+    // });
   }
 });
