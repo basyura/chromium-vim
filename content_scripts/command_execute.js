@@ -25,27 +25,40 @@ CommandExecuter = {
 
 CommandExecuter.add("help", "Shows the help page", {
   match: function (value) {
-    return value == "help";
+    return value === "help";
   },
   execute: function (value, repeats, tab) {
     tab.tabbed = true;
-    RUNTIME("openLink", {
-      tab: tab,
-      url: chrome.extension.getURL("/pages/mappings.html"),
+    // ヘルプページのURLを取得
+    const helpUrl = chrome.runtime.getURL("/pages/mappings.html");
+    // 新しいタブでヘルプページを開く
+    chrome.tabs.create({ url: helpUrl }, function (newTab) {
+      if (chrome.runtime.lastError) {
+        console.error(
+          "Failed to open help page: ",
+          chrome.runtime.lastError.message
+        );
+      }
     });
   },
 });
 
 CommandExecuter.add("settings", "Open the options page for this extension", {
   match: function (value) {
-    return value == "settings";
+    return value === "settings";
   },
   execute: function (value, repeats, tab) {
     tab.tabbed = true;
-    RUNTIME("openLink", {
-      tab: tab,
-      url: chrome.extension.getURL("/pages/options.html"),
-      repeats: repeats,
+    // オプションページのURLを取得
+    const optionsUrl = chrome.runtime.getURL("/pages/options.html");
+    // 新しいタブでオプションページを開く
+    chrome.tabs.create({ url: optionsUrl }, function (newTab) {
+      if (chrome.runtime.lastError) {
+        console.error(
+          "Failed to open options page: ",
+          chrome.runtime.lastError.message
+        );
+      }
     });
   },
 });
