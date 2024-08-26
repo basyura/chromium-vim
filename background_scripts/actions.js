@@ -820,15 +820,24 @@ Actions = (function () {
   };
 
   _.getSettings = function (o) {
-    console.log("getSettings start")
-    Options.refreshSettings(function () {
-      console.log("getSettings callback")
-      o.callback({
-        type: "sendSettings",
-        settings: o.request.reset ? defaultSettings : settings,
+    const send = () => {
+      Options.refreshSettings(function () {
+        o.callback({
+          type: "sendSettings",
+          settings: o.request.reset ? defaultSettings : settings,
+        });
       });
+    };
+
+    if (settings.blacklists.length != 0) {
+      send();
+      return;
+    }
+
+    chrome.storage[storageMethod].get("settings", function (data) {
+      settings = data.settings;
+      send();
     });
-    console.log("getSettings end")
   };
 
   _.setIconEnabled = function (o) {
