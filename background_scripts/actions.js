@@ -585,14 +585,12 @@ Actions = (function () {
       Updates.displayMessage = false;
       Updates.tabId = null;
       o.callback(Updates.installMessage);
-    }
-    else {
+    } else {
       o.callback("");
     }
   };
 
   _.cancelAllWebRequests = function () {
-    console.log("cancelAllWebResuests")
     chrome.tabs.query({ currentWindow: true }, function (tabs) {
       tabs.forEach(function (tab) {
         chrome.tabs.sendMessage(tab.id, { action: "cancelAllWebRequests" });
@@ -724,16 +722,19 @@ Actions = (function () {
   };
 
   _.injectCSS = function (o) {
-    chrome.scripting.insertCSS({
-      target: { tabId: o.sender.tab.id },
-      css: o.request.css ,
-    }, () => {
+    chrome.scripting.insertCSS(
+      {
+        target: { tabId: o.sender.tab.id },
+        css: o.request.css,
+      },
+      () => {
         // prevent the background script from throwing exceptions
         // when trying to insert CSS into unsupported URLs (chrome://*, etc)
         if (!chrome.runtime.lastError) {
           return true;
         }
-    });
+      }
+    );
   };
 
   _.getBookmarks = function (o) {
@@ -881,12 +882,10 @@ Actions = (function () {
   };
 
   _.httpRequest = function (o) {
-    console.log("httpRequest start")
     httpRequest(o.request.request).then(function (res) {
       o.callback({ type: "httpRequest", id: o.request.id, text: res });
     });
-    console.log("httpRequest end")
-    return true
+    return true;
   };
 
   _.createBookmark = function (o) {
@@ -986,14 +985,12 @@ Actions = (function () {
   };
 
   _.loadLocalConfig = function (o) {
-    console.log("loadLocalConfig start")
     var path =
       o.request.path ||
       "file://" +
         settings.configpath.split("~").join(settings.homedirectory || "~");
     httpRequest({ url: path }).then(
       function (data) {
-        console.log("loadLocalConfig then")
         var added = window.parseConfig(data);
         if (added.error) {
           console.error(
@@ -1084,8 +1081,7 @@ Actions = (function () {
     }
 
     if (!o.sender.tab && action !== "openLinkTab") return;
-    
+
     return _[action](o);
   };
 })();
-
