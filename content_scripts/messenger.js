@@ -8,6 +8,7 @@ port.onDisconnect.addListener(function () {
   Visual.exit();
   Find.clear();
   Command.destroy();
+  stopHeartbeat()
 });
 
 (function () {
@@ -339,11 +340,14 @@ let heartbeatInterval;
 async function runHeartbeat() {
   await chrome.storage.local.set({ 'last-heartbeat': new Date().getTime() });
 }
-async function startHeartbeat() {
+function startHeartbeat() {
   runHeartbeat().then(() => {
     heartbeatInterval = setInterval(() => {
       runHeartbeat()
     }, 20 * 1000);
   });
+}
+function stopHeartbeat() {
+  clearInterval(heartbeatInterval);
 }
 startHeartbeat()
