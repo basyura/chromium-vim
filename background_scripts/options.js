@@ -201,3 +201,4 @@ chrome.runtime.onMessage.addListener(function (request, sender, callback) {
     Options[request.action](request, sender, callback);
   }
 });
+

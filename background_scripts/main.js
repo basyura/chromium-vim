@@ -1,18 +1,32 @@
+importScripts("../content_scripts/utils.js");
+importScripts("../content_scripts/cvimrc_parser.js");
+importScripts("clipboard.js");
+importScripts("bookmarks.js");
+importScripts("sites.js");
+importScripts("files.js");
+importScripts("links.js");
+importScripts("history.js");
+importScripts("actions.js");
+importScripts("options.js");
+importScripts("sessions.js");
+importScripts("popup.js");
+importScripts("update.js");
+importScripts("tab_creation_order.js");
+importScripts("frames.js");
+
 var sessions = {},
   ActiveTabs = {},
   TabHistory = {},
   activePorts = [],
   LastUsedTabs = [];
 
-window.httpRequest = function (request) {
-  return new Promise(function (acc, rej) {
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", request.url);
-    xhr.onload = function () {
-      acc(request.json ? JSON.parse(xhr.responseText) : xhr.responseText);
-    };
-    xhr.onerror = rej.bind(null, xhr);
-    xhr.send();
+globalThis.httpRequest = function (request) {
+  return fetch(request.url).then((response) => {
+    if (request.json) {
+      return response.json();
+    } else {
+      return response.text();
+    }
   });
 };
 
@@ -116,7 +130,7 @@ var Listeners = {
     },
   },
 
-  extension: {
+  runtime: {
     onConnect: function (port) {
       if (activePorts.indexOf(port) !== -1) return;
       var frameId = port.sender.frameId;
@@ -137,9 +151,8 @@ var Listeners = {
         }
       });
     },
+    onMessage: Actions,
   },
-
-  runtime: { onMessage: Actions },
 
   commands: {
     onCommand: function (command) {
@@ -239,9 +252,10 @@ var Listeners = {
 };
 
 (function () {
-  for (var api in Listeners) {
-    for (var method in Listeners[api]) {
+  for (const api in Listeners) {
+    for (const method in Listeners[api]) {
       chrome[api][method].addListener(Listeners[api][method]);
     }
   }
 })();
+

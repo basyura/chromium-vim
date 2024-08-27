@@ -585,6 +585,8 @@ Actions = (function () {
       Updates.displayMessage = false;
       Updates.tabId = null;
       o.callback(Updates.installMessage);
+    } else {
+      o.callback("");
     }
   };
 
@@ -720,10 +722,12 @@ Actions = (function () {
   };
 
   _.injectCSS = function (o) {
-    chrome.tabs.insertCSS(
-      o.sender.tab.id,
-      { code: o.request.css },
-      function () {
+    chrome.scripting.insertCSS(
+      {
+        target: { tabId: o.sender.tab.id },
+        css: o.request.css,
+      },
+      () => {
         // prevent the background script from throwing exceptions
         // when trying to insert CSS into unsupported URLs (chrome://*, etc)
         if (!chrome.runtime.lastError) {
@@ -817,16 +821,28 @@ Actions = (function () {
   };
 
   _.getSettings = function (o) {
-    Options.refreshSettings(function () {
-      o.callback({
-        type: "sendSettings",
-        settings: o.request.reset ? defaultSettings : settings,
+    const send = () => {
+      Options.refreshSettings(function () {
+        o.callback({
+          type: "sendSettings",
+          settings: o.request.reset ? defaultSettings : settings,
+        });
       });
+    };
+
+    if (settings.blacklists.length != 0) {
+      send();
+      return;
+    }
+
+    chrome.storage[storageMethod].get("settings", function (data) {
+      settings = data.settings;
+      send();
     });
   };
 
   _.setIconEnabled = function (o) {
-    chrome.browserAction.setIcon(
+    chrome.action.setIcon(
       {
         path: "icons/38.png",
         tabId: o.sender.tab.id,
@@ -869,6 +885,7 @@ Actions = (function () {
     httpRequest(o.request.request).then(function (res) {
       o.callback({ type: "httpRequest", id: o.request.id, text: res });
     });
+    return true;
   };
 
   _.createBookmark = function (o) {

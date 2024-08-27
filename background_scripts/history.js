@@ -8,7 +8,7 @@ var History = {
   saveCommandHistory: function () {
     Object.keys(this.commandHistory).forEach(
       function (e) {
-        localStorage[e] = JSON.stringify(this.commandHistory[e]);
+        chrome.storage.local.set({ e: JSON.stringify(this.commandHistory[e]) });
       }.bind(this)
     );
   },
@@ -108,7 +108,7 @@ var History = {
 
 (function () {
   History.historyTypes.forEach(function (type) {
-    var data = localStorage[type];
+    var data = chrome.storage.local.get(type);
     try {
       data = JSON.parse(data);
     } catch (e) {

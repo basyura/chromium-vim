@@ -1,4 +1,4 @@
-var port = chrome.extension.connect({ name: "main" });
+var port = chrome.runtime.connect({ name: "main" });
 port.onDisconnect.addListener(function () {
   window.portDestroyed = true;
   chrome.runtime.sendMessage = function () {};
@@ -165,7 +165,7 @@ port.onMessage.addListener(function (response) {
   }
 });
 
-chrome.extension.onMessage.addListener(function (request, sender, callback) {
+chrome.runtime.onMessage.addListener(function (request, sender, callback) {
   switch (request.action) {
     case "hideHud":
       HUD.hide(true);
@@ -333,3 +333,17 @@ chrome.extension.onMessage.addListener(function (request, sender, callback) {
       break;
   }
 });
+
+
+let heartbeatInterval;
+async function runHeartbeat() {
+  await chrome.storage.local.set({ 'last-heartbeat': new Date().getTime() });
+}
+async function startHeartbeat() {
+  runHeartbeat().then(() => {
+    heartbeatInterval = setInterval(() => {
+      runHeartbeat()
+    }, 20 * 1000);
+  });
+}
+startHeartbeat()

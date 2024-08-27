@@ -32,8 +32,11 @@ var Frames = {
     return true;
   },
   markAsActive: function () {
-    RUNTIME("markActiveFrame", {
-      frameId: this.frameId,
+    chrome.runtime.sendMessage({
+      action: "markActiveFrame",
+      params: {
+        frameId: this.frameId,
+      },
     });
   },
   init: function (frameId) {

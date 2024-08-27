@@ -1010,7 +1010,7 @@ var matchLocation = function (url, pattern) {
 
 var waitForLoad = function (callback, constructor) {
   if (document.body) return callback.call(constructor);
-  window.setTimeout(function () {
+  globalThis.setTimeout(function () {
     waitForLoad(callback, constructor);
   }, 5);
 };
@@ -1213,7 +1213,7 @@ var findFirstOf = function (array, callback) {
   return null;
 };
 
-window.parseConfig = (function () {
+globalThis.parseConfig = (function () {
   var formatConfig = function (configText, config) {
     var result = {
       MAPPINGS: [],
