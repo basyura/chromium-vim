@@ -334,3 +334,16 @@ chrome.runtime.onMessage.addListener(function (request, sender, callback) {
   }
 });
 
+
+let heartbeatInterval;
+async function runHeartbeat() {
+  await chrome.storage.local.set({ 'last-heartbeat': new Date().getTime() });
+}
+async function startHeartbeat() {
+  runHeartbeat().then(() => {
+    heartbeatInterval = setInterval(() => {
+      runHeartbeat()
+    }, 20 * 1000);
+  });
+}
+startHeartbeat()
