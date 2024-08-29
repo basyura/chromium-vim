@@ -2,7 +2,7 @@ var Command = {};
 var settings, sessions;
 
 /*
-["open", "Open a link in the current tab"],
+  ["open", "Open a link in the current tab"],
   ["tabnext", "Switch to the next open tab"],
   ["tabprevious", "Switch to the previous open tab"],
   ["new", "Open a link in a new window"],
@@ -34,13 +34,12 @@ var settings, sessions;
   ["let", "Configure non-boolean settings"],
   ["map", "Map a command"],
   ["unmap", "Unmap a command"],
-  */
+*/
 
 /* registered
   ["buffer", "Select from a list of current tabs"],
   ["bookmarks", "Search through your bookmarks"],
-  ["help", "Shows the help page"],
-  */
+*/
 
 // Command definitions
 Command.descriptions = [];
@@ -366,66 +365,12 @@ Command.callCompletionFunction = (function () {
     }
   };
 
-  //var tabHistoryCompletion = function (value) {
-  //  RUNTIME("getHistoryStates", null, function (response) {
-  //    self.completions = {
-  //      tabhistory: searchArray({
-  //        array: response.links,
-  //        search: value.replace(/\S+\s+/, ""),
-  //        limit: settings.searchlimit,
-  //      }),
-  //    };
-  //    self.updateCompletions();
-  //  });
-  //};
-
-  //var restoreTabCompletion = function (value) {
-  //  RUNTIME("getChromeSessions", null, function (sessions) {
-  //    self.completions = {
-  //      chromesessions: Object.keys(sessions)
-  //        .map(function (e) {
-  //          return [
-  //            sessions[e].id + ": " + sessions[e].title,
-  //            sessions[e].url,
-  //            sessions[e].id,
-  //          ];
-  //        })
-  //        .filter(function (e) {
-  //          return ~e
-  //            .join("")
-  //            .toLowerCase()
-  //            .indexOf(value.replace(/^\S+\s+/, "").toLowerCase());
-  //        }),
-  //    };
-  //    self.updateCompletions();
-  //  });
-  //};
-
-  //var deleteSessionCompletion = function () {
-  //  self.completions = {
-  //    sessions: sessions.filter(function (e) {
-  //      var regexp;
-  //      var isValidRegex = true;
-  //      try {
-  //        regexp = new RegExp(search, "i");
-  //      } catch (ex) {
-  //        isValidRegex = false;
-  //      }
-  //      if (isValidRegex) {
-  //        return regexp.test(e[0]);
-  //      }
-  //      return e[0].substring(0, search.length) === search;
-  //    }),
-  //  };
-  //  self.updateCompletions();
-  //};
-
   return function (value) {
     search = value.replace(/^(chrome:\/\/|\S+ +)/, "");
-    var baseCommand = (value.match(/^\S+/) || [null])[0];
+    const baseCommand = (value.match(/^\S+/) || [null])[0];
 
     // check registered completer
-    let completer = this.getCompleter(baseCommand);
+    const completer = this.getCompleter(baseCommand);
     if (completer != null) {
       return completer(search);
     }
@@ -438,82 +383,6 @@ Command.callCompletionFunction = (function () {
       case "new":
         searchCompletion(value);
         return true;
-      //case "chrome":
-      //  Search.chromeMatch(search, function (matches) {
-      //    self.completions = { chrome: matches };
-      //    self.updateCompletions();
-      //  });
-      //  return true;
-      //case "tabhistory":
-      //  tabHistoryCompletion(value);
-      //  return true;
-      //case "tabattach":
-      //  RUNTIME("getWindows", function (wins) {
-      //    if (Command.active === true) {
-      //      Command.completions = {
-      //        windows: Object.keys(wins).map(function (e, i) {
-      //          var tlen = wins[e].length.toString();
-      //          return [
-      //            (i + 1).toString() +
-      //              " (" +
-      //              tlen +
-      //              (tlen === "1" ? " Tab)" : " Tabs)"),
-      //            wins[e].join(", "),
-      //            e,
-      //          ];
-      //        }),
-      //      };
-      //      Command.completions.windows.unshift(["0 (New window)", ""]);
-      //      Command.updateCompletions();
-      //    }
-      //  });
-      //  self.completions = {};
-      //  return true;
-      //case "buffer":
-      //  PORT("getBuffers");
-      //  return true;
-      //case "restore":
-      //  restoreTabCompletion(value);
-      //  return true;
-      //case "session":
-      //case "mksession":
-      //case "delsession":
-      //  deleteSessionCompletion(value);
-      //  return true;
-      //case "set":
-      //  Search.settingsMatch(search, function (matches) {
-      //    self.completions = { settings: matches };
-      //    self.updateCompletions();
-      //  });
-      //  return true;
-      //case "let": // TODO
-      //  return true;
-      //case "history":
-      //  if (search.trim() === "") {
-      //    self.hideData();
-      //    return;
-      //  }
-      //  self.historyMode = true;
-
-      //  Utils.httpPost("http://localhost:8000/", "searchHistory");
-      //  PORT("searchHistory", { search: search, limit: settings.searchlimit });
-      //  return true;
-      //case "file":
-      //  Marks.parseFileCommand(search);
-      //  return true;
-      //case "source":
-      //  Marks.parseFileCommand(search);
-      //  return true;
-      //case "bookmarks":
-      //  self.completions = {};
-      //  if (search[0] === "/") {
-      //    return Marks.matchPath(search);
-      //  }
-      //  Marks.match(search, function (response) {
-      //    self.completions.bookmarks = response;
-      //    self.updateCompletions();
-      //  });
-      //  return true;
     }
     return false;
   };
@@ -841,11 +710,11 @@ Command.init = function (enabled) {
     }
     addListeners();
     if (typeof settings.AUTOFUNCTIONS === "object") {
-      Object.getOwnPropertyNames(settings.AUTOFUNCTIONS).forEach(function (
-        name
-      ) {
-        eval("(function(){" + settings.AUTOFUNCTIONS[name] + "})()");
-      });
+      Object.getOwnPropertyNames(settings.AUTOFUNCTIONS).forEach(
+        function (name) {
+          eval("(function(){" + settings.AUTOFUNCTIONS[name] + "})()");
+        }
+      );
     }
   } else {
     RUNTIME("setIconDisabled");
