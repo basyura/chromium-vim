@@ -23,6 +23,27 @@ CommandExecuter = {
   },
 };
 
+// ツールバーのアイコンにある Settings から実行する
+CommandExecuter.add("settings", "Open the options page for this extension", {
+  match: function (value) {
+    return value === "settings";
+  },
+  execute: function (_value, _repeats, tab) {
+    tab.tabbed = true;
+    // オプションページのURLを取得
+    const optionsUrl = chrome.runtime.getURL("/pages/options.html");
+    // 新しいタブでオプションページを開く
+    chrome.tabs.create({ url: optionsUrl }, function (_newTab) {
+      if (chrome.runtime.lastError) {
+        console.error(
+          "Failed to open options page: ",
+          chrome.runtime.lastError.message
+        );
+      }
+    });
+  },
+});
+
 CommandExecuter.add("bookmarks", "Search through your bookmarks", {
   match: function (value) {
     return /^bookmarks +/.test(value) && !/^\S+\s*$/.test(value);
