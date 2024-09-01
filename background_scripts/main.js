@@ -20,14 +20,13 @@ var sessions = {},
   activePorts = [],
   LastUsedTabs = [];
 
-globalThis.httpRequest = function (request) {
-  return fetch(request.url).then((response) => {
-    if (request.json) {
-      return response.json();
-    } else {
-      return response.text();
-    }
-  });
+globalThis.httpRequest = async function (request) {
+  const response = await fetch(request.url);
+  if (request.json) {
+    return await response.json();
+  } else {
+    return await response.text();
+  }
 };
 
 function updateTabIndices() {
@@ -258,4 +257,3 @@ var Listeners = {
     }
   }
 })();
-
