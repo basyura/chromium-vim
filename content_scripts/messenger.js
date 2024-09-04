@@ -1,24 +1,14 @@
-let port = chrome.runtime.connect({ name: "main" });
-console.log(new Date() + "connect");
-port.onDisconnect.addListener(function () {
-  console.log(new Date() + "Disconnect");
-  port = chrome.runtime.connect({ name: "main" });
+/*
+ *
+ */
+function connect() {
+  let port = chrome.runtime.connect({ name: "main" });
   console.log(new Date() + "connect");
-  initialize();
-  /*
-  window.portDestroyed = true;
-  chrome.runtime.sendMessage = function () {};
-  chrome.runtime.connect = function () {};
-  Command.hide();
-  removeListeners();
-  Visual.exit();
-  Find.clear();
-  Command.destroy();
-  stopHeartbeat();
-  */
-});
-
-function initialize() {
+  port.onDisconnect.addListener(function () {
+    console.log(new Date() + "Disconnect");
+    port = chrome.runtime.connect({ name: "main" });
+    connect();
+  });
   (function () {
     var $ = function (FN, caller) {
       return function (action, args, callback) {
@@ -354,20 +344,14 @@ function initialize() {
   });
 }
 
-initialize();
+connect();
 
-let heartbeatInterval;
 async function runHeartbeat() {
   await chrome.storage.local.set({ "last-heartbeat": new Date().getTime() });
 }
 function startHeartbeat() {
   runHeartbeat().then(() => {
-    heartbeatInterval = setInterval(() => {
-      runHeartbeat();
-    }, 10 * 1000);
+    setInterval(() => runHeartbeat(), 10 * 1000);
   });
-}
-function stopHeartbeat() {
-  clearInterval(heartbeatInterval);
 }
 startHeartbeat();
