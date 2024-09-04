@@ -1,3 +1,4 @@
+// ref : pages/options.js
 let port = chrome.runtime.connect({ name: "main" });
 console.log(new Date() + "connect");
 port.onDisconnect.addListener(function () {
@@ -5,17 +6,6 @@ port.onDisconnect.addListener(function () {
   port = chrome.runtime.connect({ name: "main" });
   console.log(new Date() + "connect");
   initialize();
-  /*
-  window.portDestroyed = true;
-  chrome.runtime.sendMessage = function () {};
-  chrome.runtime.connect = function () {};
-  Command.hide();
-  removeListeners();
-  Visual.exit();
-  Find.clear();
-  Command.destroy();
-  stopHeartbeat();
-  */
 });
 
 function initialize() {
@@ -356,18 +346,13 @@ function initialize() {
 
 initialize();
 
-let heartbeatInterval;
 async function runHeartbeat() {
   await chrome.storage.local.set({ "last-heartbeat": new Date().getTime() });
 }
 function startHeartbeat() {
   runHeartbeat().then(() => {
-    heartbeatInterval = setInterval(() => {
-      runHeartbeat();
-    }, 10 * 1000);
+    setInterval(() => runHeartbeat(), 10 * 1000);
   });
 }
-function stopHeartbeat() {
-  clearInterval(heartbeatInterval);
-}
+
 startHeartbeat();
