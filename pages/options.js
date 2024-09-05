@@ -9,13 +9,6 @@ Settings.loadrc = function (config) {
     this.cssEl.setValue(config.COMMANDBARCSS);
   }
   this.gistUrl.value = config.GISTURL;
-  try {
-    if (this.evalEl) {
-      this.evalEl.setValue(config.EVAL);
-    }
-  } catch (e) {
-    alert(e.message);
-  }
 };
 
 Settings.resetSettings = function () {
@@ -28,7 +21,6 @@ Settings.resetSettings = function () {
         this.rcEl.value = defaults.RC;
         this.cssEl.setValue(defaults.COMMANDBARCSS);
         this.gistUrl.value = defaults.GISTURL;
-        this.evalEl.setValue(defaults.EVAL);
         delete this.settings;
         this.settings = Object.clone(defaults);
       }.bind(this)
@@ -62,7 +54,6 @@ Settings.saveSettings = function () {
       }
       this.settings.COMMANDBARCSS = this.cssEl.getValue();
       this.settings.GISTURL = this.gistUrl.value;
-      this.settings.EVAL = this.evalEl.getValue();
 
       this.settings.mapleader = this.settings.mapleader.replace(
         / /g,
@@ -95,10 +86,6 @@ Settings.saveSettings = function () {
 Settings.editMode = function (e) {
   if (this.cssEl) {
     this.cssEl.setOption(
-      "keyMap",
-      e.target.value === "Vim" ? "vim" : "default"
-    );
-    this.evalEl.setOption(
       "keyMap",
       e.target.value === "Vim" ? "vim" : "default"
     );
@@ -185,40 +172,10 @@ port.onMessage.addListener(function (response) {
           document.getElementById("commandBarCSS"),
           { lineNumbers: true }
         );
-        Settings.evalEl = CodeMirror.fromTextArea(
-          document.getElementById("eval_text"),
-          { lineNumbers: true }
-        );
         Settings.initialLoad = false;
         Settings.settings = response.settings;
         Settings.init();
         Settings.loadrc(response.settings);
-        /*
-        if (response.settings.localconfig && response.settings.configpath) {
-          var path =
-            "file://" +
-            response.settings.configpath
-              .split("~")
-              .join(response.settings.homedirectory || "~");
-          RUNTIME("loadLocalConfig", { path: path }, function (e) {
-            Settings.loadrc(e.config);
-            switch (e.code) {
-              case -1:
-                alert('error loading configpath: "' + path + '"');
-                break;
-              case -2:
-                console.error("Line %d: %s", e.error.lineno, e.error.message);
-                alert(
-                  "parse error on line " +
-                    e.error.lineno +
-                    " of config (see console for more info)"
-                );
-            }
-          });
-        } else {
-          Settings.loadrc(response.settings);
-        }
-        */
       }
     });
   }

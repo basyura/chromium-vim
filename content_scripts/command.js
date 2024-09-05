@@ -676,12 +676,6 @@ Command.updateSettings = function (config) {
       }
     }
   }
-
-  try {
-    //eval(config.EVAL);
-  } catch (e) {
-    alert("failed to eval command : " + e.message);
-  }
 };
 
 Command.addSettingBlock = function (config) {
