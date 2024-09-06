@@ -1,4 +1,4 @@
-var Command = {};
+const Command = {};
 var settings, sessions;
 
 /*
@@ -65,7 +65,7 @@ Command.setupFrameElements = function () {
   this.bar.spellcheck = false;
   try {
     document.lastChild.appendChild(this.bar);
-  } catch (e) {
+  } catch {
     document.body.appendChild(this.bar);
   }
   if (!this.data) {
@@ -74,7 +74,7 @@ Command.setupFrameElements = function () {
     this.data.cVim = true;
     try {
       document.lastChild.appendChild(this.data);
-    } catch (e) {
+    } catch {
       document.body.appendChild(this.data);
     }
     this.barHeight = parseInt(getComputedStyle(this.bar).height, 10);
@@ -100,7 +100,7 @@ Command.setup = function () {
   this.statusBar.style[this.onBottom ? "bottom" : "top"] = "0";
   try {
     document.lastChild.appendChild(this.statusBar);
-  } catch (e) {
+  } catch {
     document.body.appendChild(this.statusBar);
   }
   if (window.isCommandFrame) Command.setupFrameElements();
@@ -292,7 +292,7 @@ Command.expandCompletion = function (value) {
           !this.customCommands.hasOwnProperty(this.descriptions[i][0])
         )
           return this.descriptions[i][0];
-      for (let key in this.customCommands)
+      for (const key in this.customCommands)
         if (key.indexOf(firstWord) === 0) return this.customCommands[key];
     }.bind(this)();
     if (completedWord) return value.replace(firstWord, completedWord);
@@ -354,12 +354,14 @@ Command.callCompletionFunction = (function () {
       }
     }
     if (Complete.engineEnabled(search[0])) {
-      Complete.queryEngine(search[0], search.slice(1).join(" "), function (
-        response
-      ) {
-        self.completions = { search: response };
-        self.updateCompletions();
-      });
+      Complete.queryEngine(
+        search[0],
+        search.slice(1).join(" "),
+        function (response) {
+          self.completions = { search: response };
+          self.updateCompletions();
+        }
+      );
     }
   };
 
@@ -500,7 +502,7 @@ Command.insertCSS = function () {
 
   RUNTIME("injectCSS", { css: css, runAt: "document_start" });
 
-  var head = document.getElementsByTagName("head");
+  const head = document.getElementsByTagName("head");
   if (head.length) {
     this.css = document.createElement("style");
     this.css.textContent = css;
@@ -702,11 +704,11 @@ Command.init = function (enabled) {
     }
     addListeners();
     if (typeof settings.AUTOFUNCTIONS === "object") {
-      Object.getOwnPropertyNames(settings.AUTOFUNCTIONS).forEach(function (
-        name
-      ) {
-        eval("(function(){" + settings.AUTOFUNCTIONS[name] + "})()");
-      });
+      Object.getOwnPropertyNames(settings.AUTOFUNCTIONS).forEach(
+        function (name) {
+          eval("(function(){" + settings.AUTOFUNCTIONS[name] + "})()");
+        }
+      );
     }
   } else {
     RUNTIME("setIconDisabled");
