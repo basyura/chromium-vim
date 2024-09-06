@@ -121,7 +121,7 @@ Command.history = {
   url: [],
   action: [],
   setInfo: function (type, index) {
-    var fail = false;
+    let fail = false;
     if (index < 0) {
       index = 0;
       fail = true;
@@ -137,12 +137,12 @@ Command.history = {
     if (this[type].length === 0) {
       return false;
     }
-    var len = this[type].length,
+    const len = this[type].length,
       index = this.index[type];
     if (index === void 0) {
       index = len;
     }
-    var lastIndex = index;
+    const lastIndex = index;
     index += reverse ? -1 : 1;
     if (Command.typed && Command.typed.trim()) {
       while (this.setInfo(type, index)) {
@@ -195,8 +195,8 @@ Command.updateCompletions = function (useStyles) {
   this.completionResults = [];
   this.dataElements = [];
   this.data.innerHTML = "";
-  var key, i;
-  var completionKeys = Object.keys(this.completions).sort(
+  let key, i;
+  const completionKeys = Object.keys(this.completions).sort(
     function (a, b) {
       return (
         this.completionOrder.getImportance(b) -
@@ -206,7 +206,7 @@ Command.updateCompletions = function (useStyles) {
   );
   for (i = 0; i < completionKeys.length; i++) {
     key = completionKeys[i];
-    for (var j = 0; j < this.completions[key].length; ++j) {
+    for (let j = 0; j < this.completions[key].length; ++j) {
       this.completionResults.push([key].concat(this.completions[key][j]));
     }
   }
@@ -214,14 +214,14 @@ Command.updateCompletions = function (useStyles) {
     if (i > settings.searchlimit) {
       break;
     }
-    var item = document.createElement("div");
+    const item = document.createElement("div");
     item.className = "cVim-completion-item";
-    var identifier;
+    let identifier;
     if (
       useStyles &&
       this.completionStyles.hasOwnProperty(this.completionResults[i][0])
     ) {
-      var styles = this.completionStyles[this.completionResults[i][0]];
+      const styles = this.completionStyles[this.completionResults[i][0]];
       identifier = document.createElement("span");
       identifier.style.backgroundColor = styles[1];
       identifier.style.position = "absolute";
@@ -230,10 +230,10 @@ Command.updateCompletions = function (useStyles) {
       identifier.style.left = "0";
     }
     if (this.completionResults[i].length >= 3) {
-      var left = document.createElement("span");
+      const left = document.createElement("span");
       left.className = "cVim-left";
       left.textContent = this.completionResults[i][1];
-      var right = document.createElement("span");
+      const right = document.createElement("span");
       right.className = "cVim-right";
       right.textContent = this.completionResults[i][2];
       if (identifier) {
@@ -243,7 +243,7 @@ Command.updateCompletions = function (useStyles) {
       item.appendChild(left);
       item.appendChild(right);
     } else {
-      var full = document.createElement("span");
+      const full = document.createElement("span");
       full.className = "cVim-full";
       full.textContent = this.completionResults[i][1];
       item.appendChild(full);
@@ -270,14 +270,14 @@ Command.hideData = function () {
 
 Command.deleteCompletions = function (completions) {
   completions = completions.split(",");
-  for (var i = 0, l = completions.length; i < l; ++i) {
+  for (let i = 0, l = completions.length; i < l; ++i) {
     this.completions[completions[i]] = [];
   }
 };
 
 Command.expandCompletion = function (value) {
-  var firstWord = value.match(/^[a-z]+(\b|$)/);
-  var exactMatch = this.descriptions.some(function (e) {
+  let firstWord = value.match(/^[a-z]+(\b|$)/);
+  const exactMatch = this.descriptions.some(function (e) {
     return e[0] === firstWord;
   });
   if (firstWord && this.customCommands.hasOwnProperty(firstWord[0])) {
@@ -285,14 +285,14 @@ Command.expandCompletion = function (value) {
   }
   if (firstWord && !exactMatch) {
     firstWord = firstWord[0];
-    var completedWord = function () {
-      for (var i = 0; i < this.descriptions.length; i++)
+    const completedWord = function () {
+      for (let i = 0; i < this.descriptions.length; i++)
         if (
           this.descriptions[i][0].indexOf(firstWord) === 0 &&
           !this.customCommands.hasOwnProperty(this.descriptions[i][0])
         )
           return this.descriptions[i][0];
-      for (var key in this.customCommands)
+      for (let key in this.customCommands)
         if (key.indexOf(firstWord) === 0) return this.customCommands[key];
     }.bind(this)();
     if (completedWord) return value.replace(firstWord, completedWord);
@@ -301,10 +301,10 @@ Command.expandCompletion = function (value) {
 };
 
 Command.callCompletionFunction = (function () {
-  var self = Command;
-  var search;
+  const self = Command;
+  let search;
 
-  var searchCompletion = function (value) {
+  const searchCompletion = function (value) {
     self.deleteCompletions("engines,bookmarks,complete,chrome,search");
     search = Utils.compressArray(search.split(/ +/));
     if (
@@ -354,14 +354,12 @@ Command.callCompletionFunction = (function () {
       }
     }
     if (Complete.engineEnabled(search[0])) {
-      Complete.queryEngine(
-        search[0],
-        search.slice(1).join(" "),
-        function (response) {
-          self.completions = { search: response };
-          self.updateCompletions();
-        }
-      );
+      Complete.queryEngine(search[0], search.slice(1).join(" "), function (
+        response
+      ) {
+        self.completions = { search: response };
+        self.updateCompletions();
+      });
     }
   };
 
@@ -391,7 +389,7 @@ Command.callCompletionFunction = (function () {
 Command.complete = function (value) {
   Search.index = null;
   this.typed = this.input.value;
-  var originalValue = value; // prevent expandCompletion from
+  const originalValue = value; // prevent expandCompletion from
   // limiting command completions
   value = this.expandCompletion(value).replace(
     /(^[^\s&$!*?=|]+)[&$!*?=|]*/,
@@ -449,7 +447,7 @@ Command.show = function (search, value, complete) {
     Status.hide();
   }
   this.bar.style.display = "inline-block";
-  var timerId = setInterval(
+  const timerId = setInterval(
     function () {
       this.input.focus();
       if (complete !== null) {
@@ -490,7 +488,7 @@ Command.hide = function (callback) {
 };
 
 Command.insertCSS = function () {
-  var css = settings.COMMANDBARCSS;
+  const css = settings.COMMANDBARCSS;
   if (!css) {
     return;
   }
@@ -511,7 +509,7 @@ Command.insertCSS = function () {
 };
 
 Command.callOnCvimLoad = (function () {
-  var fnQueue = [];
+  const fnQueue = [];
   return function (FN) {
     if (!this.domElementsLoaded) {
       if (typeof FN === "function") {
@@ -540,17 +538,17 @@ Command.onDOMLoad = function () {
 };
 
 Command.preventAutoFocus = function () {
-  var manualFocus = false;
+  let manualFocus = false;
 
-  var addTextListeners = (function () {
-    var allElems = [];
+  const addTextListeners = (function () {
+    let allElems = [];
     return function (elems) {
       elems = [].filter.call(elems, function (e) {
         return allElems.indexOf(e) === -1;
       });
       allElems = allElems.concat(elems);
       elems.forEach(function (elem) {
-        var listener = function (event) {
+        const listener = function (event) {
           if (manualFocus) {
             elem.removeEventListener("focus", listener);
             return;
@@ -565,7 +563,7 @@ Command.preventAutoFocus = function () {
     };
   })();
 
-  var reset;
+  let reset;
   if (KeyboardEvent.prototype.hasOwnProperty("key")) {
     reset = function (key) {
       if (["Control", "Alt", "Meta", "Shift"].indexOf(key) !== -1) return;
@@ -586,12 +584,12 @@ Command.preventAutoFocus = function () {
     window.addEventListener("mousedown", reset, true);
   }
 
-  var preventFocus = function () {
+  const preventFocus = function () {
     if (manualFocus) return;
-    var textElements = document.querySelectorAll(
+    const textElements = document.querySelectorAll(
       "input,textarea,*[contenteditable]"
     );
-    for (var i = 0; i < textElements.length; i++) {
+    for (let i = 0; i < textElements.length; i++) {
       if (manualFocus) break;
       if (document.activeElement === textElements[i]) textElements[i].blur();
     }
@@ -625,7 +623,7 @@ Command.onDOMLoadAll = function () {
 };
 
 Command.updateSettings = function (config) {
-  var key;
+  let key;
   if (Array.isArray(config.completionengines)) {
     config.completionengines.forEach(function (name) {
       Complete.enableEngine(name);
@@ -639,7 +637,7 @@ Command.updateSettings = function (config) {
   );
   if (config.searchengines && config.searchengines.constructor === Object) {
     for (key in config.searchengines) {
-      var engine = config.searchengines[key];
+      const engine = config.searchengines[key];
       if (typeof engine === "string") {
         Complete.addEngine(key, engine);
       } else if (
@@ -666,7 +664,7 @@ Command.updateSettings = function (config) {
     Complete.setLocale(config.locale);
   }
 
-  var chars = Utils.uniqueElements((config.hintcharacters || "").split(""));
+  const chars = Utils.uniqueElements((config.hintcharacters || "").split(""));
   settings.hintcharacters = chars.join("");
 
   if (config !== settings) {
@@ -679,7 +677,7 @@ Command.updateSettings = function (config) {
 };
 
 Command.addSettingBlock = function (config) {
-  for (var key in config) {
+  for (const key in config) {
     if (key === "MAPPINGS") {
       settings.MAPPINGS += "\n" + config[key];
       Mappings.parseCustom(settings.MAPPINGS, false);
@@ -704,11 +702,11 @@ Command.init = function (enabled) {
     }
     addListeners();
     if (typeof settings.AUTOFUNCTIONS === "object") {
-      Object.getOwnPropertyNames(settings.AUTOFUNCTIONS).forEach(
-        function (name) {
-          eval("(function(){" + settings.AUTOFUNCTIONS[name] + "})()");
-        }
-      );
+      Object.getOwnPropertyNames(settings.AUTOFUNCTIONS).forEach(function (
+        name
+      ) {
+        eval("(function(){" + settings.AUTOFUNCTIONS[name] + "})()");
+      });
     }
   } else {
     RUNTIME("setIconDisabled");
@@ -716,7 +714,7 @@ Command.init = function (enabled) {
     if (this.css && this.css.parentNode) {
       this.css.parentNode.removeChild(this.css);
     }
-    var links = document.getElementById("cVim-link-container");
+    const links = document.getElementById("cVim-link-container");
     if (Cursor.overlay && Cursor.overlay.parentNode) {
       Cursor.overlay.parentNode.removeChild(Cursor.overlay);
     }
@@ -731,8 +729,8 @@ Command.init = function (enabled) {
 };
 
 Command.onSettingsLoad = (function () {
-  var funcList = [];
-  var loaded = false;
+  const funcList = [];
+  let loaded = false;
   return function (callback) {
     if (typeof callback === "function") {
       if (!loaded) {
@@ -751,9 +749,9 @@ Command.onSettingsLoad = (function () {
 })();
 
 Command.destroy = function () {
-  var removeElements = function () {
-    for (var i = 0; i < arguments.length; i++) {
-      var elem = arguments[i];
+  const removeElements = function () {
+    for (let i = 0; i < arguments.length; i++) {
+      const elem = arguments[i];
       if (!elem) continue;
       if (typeof elem.remove === "function") elem.remove();
     }
@@ -781,12 +779,12 @@ Command.configureSettings = function (_settings) {
     Session.ignoreTitleUpdate = false;
   });
   this.initialLoadStarted = true;
-  var checkBlacklist = function () {
+  const checkBlacklist = function () {
     var blacklists = settings.blacklists,
       blacklist;
     Command.blacklisted = false;
-    var isBlacklisted = false;
-    for (var i = 0, l = blacklists.length; i < l; i++) {
+    let isBlacklisted = false;
+    for (let i = 0, l = blacklists.length; i < l; i++) {
       blacklist = Utils.split(blacklists[i], /\s+/);
       if (!blacklist.length) {
         continue;
