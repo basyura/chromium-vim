@@ -99,7 +99,7 @@ Marks = (function () {
     (function recurse(marks) {
       marks.forEach(function (bookmark) {
         if (bookmark.url) {
-          bookmarks.push([bookmark.title, bookmark.url]);
+          bookmarks.push([bookmark.title, bookmark.url, bookmark.nickname]);
         }
         if (bookmark.children) {
           recurse(bookmark.children);
