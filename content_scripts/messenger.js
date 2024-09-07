@@ -10,7 +10,7 @@ port.onDisconnect.addListener(function () {
 
 function initialize() {
   (function () {
-    var $ = function (FN, caller) {
+    const $ = function (FN, caller) {
       return function (action, args, callback) {
         if (typeof args === "function") {
           callback = args;
@@ -34,7 +34,7 @@ function initialize() {
   })();
 
   port.onMessage.addListener(function (response) {
-    var key;
+    let key;
     switch (response.type) {
       case "hello":
         PORT("getSettings");
@@ -60,8 +60,8 @@ function initialize() {
           Command.history[key] = response.history[key];
         }
         break;
-      case "history":
-        var matches = [];
+      case "history": {
+        const matches = [];
         for (key in response.history) {
           if (response.history[key].url) {
             if (response.history[key].title.trim() === "") {
@@ -87,6 +87,7 @@ function initialize() {
           }
         }
         break;
+      }
       case "bookmarks":
         Marks.parse(response.bookmarks);
         break;
@@ -95,7 +96,7 @@ function initialize() {
         break;
       case "buffers":
         if (Command.bar.style.display !== "none") {
-          var val = Command.input.value.replace(/\S+\s+/, "");
+          const val = Command.input.value.replace(/\S+\s+/, "");
           Command.hideData();
           Command.completions = {
             buffers: (function () {
@@ -133,8 +134,8 @@ function initialize() {
           Command.hideData();
         }
         break;
-      case "editWithVim":
-        var lastInputElement = Mappings.insertFunctions.__getElement__();
+      case "editWithVim": {
+        const lastInputElement = Mappings.insertFunctions.__getElement__();
         if (lastInputElement) {
           lastInputElement[
             lastInputElement.value !== void 0 ? "value" : "innerHTML"
@@ -144,6 +145,7 @@ function initialize() {
           }
         }
         break;
+      }
       case "httpRequest":
         httpCallback(response.id, response.text);
         break;
@@ -166,11 +168,6 @@ function initialize() {
           Mappings.parseCustom(settings.MAPPINGS, true);
         }
         break;
-      case "updateLastCommand":
-        if (request.data) {
-          Mappings.lastCommand = JSON.parse(request.data);
-        }
-        break;
     }
   });
 
@@ -180,7 +177,7 @@ function initialize() {
         HUD.hide(true);
         break;
       case "commandHistory":
-        for (var key in request.history) {
+        for (const key in request.history) {
           Command.history[key] = request.history[key];
         }
         break;

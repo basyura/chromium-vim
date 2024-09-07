@@ -704,11 +704,11 @@ Command.init = function (enabled) {
     }
     addListeners();
     if (typeof settings.AUTOFUNCTIONS === "object") {
-      Object.getOwnPropertyNames(settings.AUTOFUNCTIONS).forEach(
-        function (name) {
-          eval("(function(){" + settings.AUTOFUNCTIONS[name] + "})()");
-        }
-      );
+      Object.getOwnPropertyNames(settings.AUTOFUNCTIONS).forEach(function (
+        name
+      ) {
+        eval("(function(){" + settings.AUTOFUNCTIONS[name] + "})()");
+      });
     }
   } else {
     RUNTIME("setIconDisabled");
@@ -782,8 +782,7 @@ Command.configureSettings = function (_settings) {
   });
   this.initialLoadStarted = true;
   const checkBlacklist = function () {
-    var blacklists = settings.blacklists,
-      blacklist;
+    const blacklists = settings.blacklists;
     Command.blacklisted = false;
     let isBlacklisted = false;
     for (let i = 0, l = blacklists.length; i < l; i++) {
