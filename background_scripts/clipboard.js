@@ -1,6 +1,9 @@
 var Clipboard = {};
 
 Clipboard.createTextArea = function () {
+  if (document == null) {
+    return null;
+  }
   var t = document.createElement("textarea");
   t.style.position = "absolute";
   t.style.left = "-100%";
@@ -9,6 +12,9 @@ Clipboard.createTextArea = function () {
 
 Clipboard.copy = function (text) {
   var t = this.createTextArea();
+  if (t == null) {
+    return;
+  }
   t.value = text;
   document.body.appendChild(t);
   t.select();
@@ -18,6 +24,9 @@ Clipboard.copy = function (text) {
 
 Clipboard.paste = function () {
   var t = this.createTextArea();
+  if (t == null) {
+    return;
+  }
   document.body.appendChild(t);
   t.focus();
   document.execCommand("Paste");
