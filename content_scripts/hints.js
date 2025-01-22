@@ -449,6 +449,7 @@ Hints.siteFilters = {
   },
   "*://*.google.*/*": {
     reject: [
+      "div",
       'li[class$="_dropdownitem"]',
       'div[class$="_dropdown"]',
       'div[aria-label="Apps"]',
