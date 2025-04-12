@@ -25,7 +25,7 @@ Popup.setIconDisabled = function () {
   this.getActiveTab(function (tab) {
     chrome.action.setIcon(
       {
-        path: "icons/disabled.png",
+        path: chrome.runtime.getURL("icons/disabled.png"),
         tabId: tab.id,
       },
       function () {
@@ -39,7 +39,7 @@ Popup.setIconEnabled = function (obj) {
   if (obj.sender) {
     return chrome.action.setIcon(
       {
-        path: "icons/38.png",
+        path: chrome.runtime.getURL("icons/38.png"),
         tabId: obj.sender.tab.id,
       },
       function () {
@@ -50,7 +50,7 @@ Popup.setIconEnabled = function (obj) {
   this.getActiveTab(function (tab) {
     chrome.action.setIcon(
       {
-        path: "icons/38.png",
+        path: chrome.runtime.getURL("icons/38.png"),
         tabId: tab.id,
       },
       function () {
@@ -89,12 +89,12 @@ Popup.toggleEnabled = function (obj) {
               chrome.tabs.sendMessage(id, { action: "toggleEnabled" });
               if (this.active) {
                 chrome.action.setIcon({
-                  path: "icons/38.png",
+                  path: chrome.runtime.getURL("icons/38.png"),
                   tabId: id,
                 });
               } else {
                 chrome.action.setIcon({
-                  path: "icons/disabled.png",
+                  path: chrome.runtime.getURL("icons/disabled.png"),
                   tabId: id,
                 });
               }
@@ -140,11 +140,12 @@ chrome.runtime.onConnect.addListener(function (port) {
       }
     });
   }
+  return true;
 });
 
 chrome.runtime.onMessage.addListener(function (request, sender, callback) {
   if (Popup.hasOwnProperty(request.action)) {
-    if (!sender.tab) return;
+    //if (!sender.tab) return;
     Popup[request.action]({
       callback: function (response) {
         callback(response);
@@ -153,4 +154,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, callback) {
       sender: sender,
     });
   }
+
+  return true;
 });

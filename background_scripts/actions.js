@@ -844,7 +844,7 @@ Actions = (function () {
   _.setIconEnabled = function (o) {
     chrome.action.setIcon(
       {
-        path: "icons/38.png",
+        path: chrome.runtime.getURL("icons/38.png"),
         tabId: o.sender.tab.id,
       },
       function () {

@@ -1,10 +1,13 @@
-var pause = document.getElementById("pause"),
-  blacklist = document.getElementById("blacklist"),
-  settings = document.getElementById("settings"),
-  isEnabled = true,
-  isBlacklisted = false;
+console.log(new Date() + "Popup");
+var pause = document.getElementById("pause");
+var blacklist = document.getElementById("blacklist");
+var settings = document.getElementById("settings");
+var _isEnabled = true;
+var isBlacklisted = false;
 
 var port = chrome.runtime.connect({ name: "popup" });
+
+/*
 port.onMessage.addListener(function (data) {
   if (data === true) {
     blacklist.textContent = "Enable cVim on this domain";
@@ -12,10 +15,17 @@ port.onMessage.addListener(function (data) {
   }
 });
 port.postMessage({ action: "getBlacklisted" });
+*/
+
+// port.onDisconnect.addListener(function () {
+//   console.log(new Date() + "Disconnect Popup");
+//   port = chrome.runtime.connect({ name: "popup" });
+//   console.log(new Date() + "connect Popup");
+// });
 
 chrome.runtime.sendMessage({ action: "getActiveState" }, function (response) {
-  isEnabled = response;
-  if (isEnabled) {
+  _isEnabled = response;
+  if (_isEnabled) {
     pause.textContent = "Disable cVim";
   } else {
     pause.textContent = "Enable cVim";
@@ -38,8 +48,8 @@ settings.addEventListener(
 pause.addEventListener(
   "click",
   function () {
-    isEnabled = !isEnabled;
-    if (isEnabled) {
+    _isEnabled = !_isEnabled;
+    if (_isEnabled) {
       pause.textContent = "Disable cVim";
     } else {
       pause.textContent = "Enable cVim";
@@ -49,6 +59,7 @@ pause.addEventListener(
   false
 );
 
+/*
 blacklist.addEventListener(
   "click",
   function () {
@@ -59,7 +70,7 @@ blacklist.addEventListener(
       blacklist.textContent = "Disable cVim on this domain";
     }
     port.postMessage({ action: "toggleBlacklisted" });
-    if (isEnabled) {
+    if (_isEnabled) {
       port.postMessage({
         action: "toggleEnabled",
         singleTab: true,
@@ -69,3 +80,17 @@ blacklist.addEventListener(
   },
   false
 );
+*/
+
+// async function runHeartbeat() {
+//   await chrome.storage.local.set({
+//     "last-heartbeat-popup": new Date().getTime(),
+//   });
+// }
+// function startHeartbeat() {
+//   runHeartbeat().then(() => {
+//     setInterval(() => runHeartbeat(), 10 * 1000);
+//   });
+// }
+
+// startHeartbeat();
