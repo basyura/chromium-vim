@@ -927,6 +927,8 @@ Actions = (function () {
     if (frame) {
       frame.focusedId = o.request.frameId;
     }
+
+    o.callback(null);
   };
 
   _.hideCommandFrame = function (o) {

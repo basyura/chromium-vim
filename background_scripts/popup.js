@@ -153,7 +153,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, callback) {
       request: request,
       sender: sender,
     });
+    return true;
   }
-
-  return true;
 });
