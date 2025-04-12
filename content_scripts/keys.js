@@ -991,18 +991,3 @@ if (!HAS_EVENT_KEY_SUPPORT) {
 }
 
 addListeners();
-
-window.addEventListener("DOMContentLoaded", function () {
-  if (self === top) {
-    chrome.runtime.sendMessage({"action" : "isNewInstall"}, (res) => {
-      if (res != "") {
-        alert(res)
-      }
-    })
-    // RUNTIME("isNewInstall", null, function (message) {
-    //   if (message) {
-    //     alert(message);
-    //   }
-    // });
-  }
-});
