@@ -1,10 +1,7 @@
 // ref : pages/options.js
 let port = chrome.runtime.connect({ name: "main" });
-console.log(new Date() + "connect");
 port.onDisconnect.addListener(function () {
-  console.log(new Date() + "Disconnect");
   port = chrome.runtime.connect({ name: "main" });
-  console.log(new Date() + "connect");
   initialize();
 });
 

@@ -4,6 +4,7 @@ Bookmarks.getMarks = function (callback) {
   chrome.bookmarks.getTree(function (tree) {
     callback(tree[0].children);
   });
+  return true;
 };
 
 Bookmarks.containsFolder = function (path, directory) {

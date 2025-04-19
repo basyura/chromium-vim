@@ -757,6 +757,7 @@ Actions = (function () {
     Sites.getTop(function (results) {
       o.callback({ type: "topsites", sites: results });
     });
+    return true;
   };
 
   _.getQuickMarks = function (o) {
@@ -832,13 +833,15 @@ Actions = (function () {
 
     if (settings.blacklists.length != 0) {
       send();
-      return;
+      return true;
     }
 
     chrome.storage[storageMethod].get("settings", function (data) {
       settings = data.settings;
       send();
     });
+
+    return true;
   };
 
   _.setIconEnabled = function (o) {
