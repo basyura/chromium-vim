@@ -138,6 +138,9 @@ Complete.engines = {
     apiUrl:
       "https://www.google.com/complete/search?client=chrome-omni&gs_ri=chrome-ext&oit=1&cp=1&pgcl=7&q=%s",
     queryApi: function (query, callback) {
+      // ignore search
+      callback([])
+      return;
       httpRequest(
         {
           url: Utils.format(this.apiUrl, query),
