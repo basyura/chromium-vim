@@ -535,6 +535,9 @@ Command.onDOMLoad = function () {
     Command.frame = document.createElement("iframe");
     Command.frame.src = chrome.runtime.getURL("cmdline_frame.html");
     Command.frame.id = "cVim-command-frame";
+    if (document.URL.startsWith("https://bsky.app")) {
+      Command.frame.style.height = "40px";
+    }
     document.lastElementChild.appendChild(Command.frame);
   }
 };
