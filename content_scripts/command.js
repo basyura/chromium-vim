@@ -417,6 +417,13 @@ Command.show = function (search, value, complete) {
     return;
   }
   if (window.isCommandFrame === void 0) {
+
+    const iframe = document.getElementById("cVim-command-frame")
+    iframe.style.height = "auto";
+    if (search == "/" || value.includes("google")) {
+      iframe.style.height = "41px";
+    }
+
     Mappings.handleEscapeKey();
     Mappings.clearQueue();
     window.wasFocused = true;
@@ -535,9 +542,6 @@ Command.onDOMLoad = function () {
     Command.frame = document.createElement("iframe");
     Command.frame.src = chrome.runtime.getURL("cmdline_frame.html");
     Command.frame.id = "cVim-command-frame";
-    if (document.URL.startsWith("https://bsky.app")) {
-      Command.frame.style.height = "40px";
-    }
     document.lastElementChild.appendChild(Command.frame);
   }
 };
