@@ -236,7 +236,12 @@ function initialize() {
         }
         if (window.isCommandFrame === true) {
           window.focus();
-          Command.show(request.search, request.value, request.complete);
+          Command.show(
+            request.search,
+            request.value,
+            request.complete,
+            request.colorScheme
+          );
         }
         break;
       case "hideCommandFrame":

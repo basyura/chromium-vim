@@ -922,6 +922,7 @@ Actions = (function () {
       search: o.request.search,
       value: o.request.value,
       complete: o.request.complete,
+      colorScheme: o.request.colorScheme,
     });
   };
 

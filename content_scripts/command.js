@@ -354,14 +354,12 @@ Command.callCompletionFunction = (function () {
       }
     }
     if (Complete.engineEnabled(search[0])) {
-      Complete.queryEngine(
-        search[0],
-        search.slice(1).join(" "),
-        function (response) {
-          self.completions = { search: response };
-          self.updateCompletions();
-        }
-      );
+      Complete.queryEngine(search[0], search.slice(1).join(" "), function (
+        response
+      ) {
+        self.completions = { search: response };
+        self.updateCompletions();
+      });
     }
   };
 
@@ -409,7 +407,7 @@ Command.complete = function (value) {
   this.updateCompletions();
 };
 
-Command.show = function (search, value, complete) {
+Command.show = function (search, value, complete, colorScheme) {
   if (!this.domElementsLoaded) {
     Command.callOnCvimLoad(function () {
       Command.show(search, value, complete);
@@ -417,12 +415,9 @@ Command.show = function (search, value, complete) {
     return;
   }
   if (window.isCommandFrame === void 0) {
-
-    const iframe = document.getElementById("cVim-command-frame")
-    iframe.style.height = "auto";
-    if (search == "/" || value.includes("google")) {
-      iframe.style.height = "41px";
-    }
+    const colorScheme = getComputedStyle(
+      document.documentElement
+    ).getPropertyValue("color-scheme");
 
     Mappings.handleEscapeKey();
     Mappings.clearQueue();
@@ -432,9 +427,15 @@ Command.show = function (search, value, complete) {
       search: search,
       value: value,
       complete: complete ? value : null,
+      colorScheme: colorScheme,
     });
     return;
   }
+
+  if (colorScheme == "dark") {
+    document.documentElement.style.setProperty("color-scheme", "dark");
+  }
+
   commandMode = true;
   this.type = "";
   this.active = true;
