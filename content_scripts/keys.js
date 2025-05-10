@@ -676,6 +676,14 @@ var KeyHandler = {
       return;
     }
 
+
+    // 補完候補を表示するときのチラツキを抑える
+    // (updateCompletions の実行を抑える)
+    if (key == "<Eisu>") {
+      event.preventDefault();
+      return
+    }
+
     if (HAS_EVENT_KEY_SUPPORT) {
       if (Hints.active) {
         event.preventDefault();
