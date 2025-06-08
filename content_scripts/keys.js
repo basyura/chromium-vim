@@ -676,12 +676,11 @@ var KeyHandler = {
       return;
     }
 
-
     // 補完候補を表示するときのチラツキを抑える
     // (updateCompletions の実行を抑える)
     if (key == "<Eisu>") {
       event.preventDefault();
-      return
+      return;
     }
 
     if (HAS_EVENT_KEY_SUPPORT) {
@@ -846,7 +845,8 @@ var KeyHandler = {
           Command.history.cycle(Command.type, key === "<Up>");
           break;
         case "<Enter>":
-          //case '<C-Enter>':
+        case "<C-Enter>":
+        case "<C-]>": // for mac custom
           event.preventDefault();
           document.activeElement.blur();
           if (
