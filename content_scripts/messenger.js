@@ -26,7 +26,7 @@ function initialize() {
     ECHO = function (action, args, callback) {
       args.action = "echoRequest";
       args.call = action;
-      port.postMessage(args, typeof calback === "function" ? callback : void 0);
+      port.postMessage(args, typeof callback === "function" ? callback : void 0);
     };
   })();
 

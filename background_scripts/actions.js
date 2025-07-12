@@ -887,6 +887,8 @@ Actions = (function () {
   _.httpRequest = function (o) {
     httpRequest(o.request.request).then(function (res) {
       o.callback({ type: "httpRequest", id: o.request.id, text: res });
+    }).catch(function (error) {
+      o.callback({ type: "httpRequest", id: o.request.id, text: "", error: error.message });
     });
     return true;
   };
@@ -1066,7 +1068,7 @@ Actions = (function () {
 
   return function (_request, _sender, _callback, _port) {
     var action = _request.action;
-    if (!_.hasOwnProperty(action) || typeof _[action] !== "function") return;
+    if (!_.hasOwnProperty(action) || typeof _[action] !== "function") return false;
 
     var o = {
       request: _request,
@@ -1086,8 +1088,8 @@ Actions = (function () {
         : "../pages/blank.html";
     }
 
-    if (!o.sender.tab && action !== "openLinkTab") return;
+    if (!o.sender.tab && action !== "openLinkTab") return false;
 
-    return _[action](o);
+    return _[action](o) || false;
   };
 })();
