@@ -1,6 +1,9 @@
 var Clipboard = {};
 
 Clipboard.createTextArea = function () {
+  // not supported
+  return null;
+  /*
   if (document == null) {
     return null;
   }
@@ -8,6 +11,7 @@ Clipboard.createTextArea = function () {
   t.style.position = "absolute";
   t.style.left = "-100%";
   return t;
+  */
 };
 
 Clipboard.copy = function (text) {
