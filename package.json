@@ -7,8 +7,17 @@
     "url": "https://github.com/1995eaton/chromium-vim"
   },
   "private": true,
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
+  },
   "devDependencies": {
+    "@types/chrome": "^0.1.1",
+    "@types/jest": "^30.0.0",
     "highlight.js": "latest",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
     "markdown-it": "latest",
     "pegjs": "latest"
   }
