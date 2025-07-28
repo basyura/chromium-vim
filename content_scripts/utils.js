@@ -988,9 +988,18 @@ var matchLocation = function (url, pattern) {
     var origHostname = hostname;
 
     hostname = hostname[0].replace(/([.])/g, "\\$1").replace(/\*/g, ".*");
-    hostMatch = url.hostname.match(new RegExp(hostname, "i"));
-    if (!hostname.startsWith("localhost")) {
+    var urlHost = url.hostname + (url.port ? ":" + url.port : "");
+    var patternHost = origHostname[0];
+    
+    // If pattern has no port but URL has port, check if hostname matches
+    if (patternHost.indexOf(":") === -1 && url.port) {
+      hostMatch = url.hostname.match(new RegExp(hostname, "i"));
       if (!hostMatch || hostMatch[0].length !== url.hostname.length) {
+        return false;
+      }
+    } else {
+      hostMatch = urlHost.match(new RegExp(hostname, "i"));
+      if (!hostMatch || hostMatch[0].length !== urlHost.length) {
         return false;
       }
     }
