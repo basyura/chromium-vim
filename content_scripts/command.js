@@ -94,6 +94,7 @@ Command.setup = function () {
   this.input = document.createElement("input");
   this.input.type = "text";
   this.input.id = "cVim-command-bar-input";
+  this.input.autocomplete = "off";
   this.input.cVim = true;
   this.statusBar = document.createElement("div");
   this.statusBar.id = "cVim-status-bar";
