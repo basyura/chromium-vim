@@ -81,6 +81,7 @@ These extensions do a wonderful job of adding Vim-like keybindings to Google Chr
 | hintcharacters                      | string (alphanumeric)              | set the default characters to be used in link hint mode                                   | "asdfgqwertzxcvb"                                                           |
 | barposition                         | string ["top", "bottom"]           | set the default position of the command bar                                               | "top"                                                                       |
 | langmap                             | string                             | set a list of characters to be remapped (see vims langmap)                                | ""                                                                          |
+| prompt                              | string                             | default prompt used by `sendToChatGPT`; combined with active tab URL as `q=`              | ""                                                                          |
 
 ### Example configuration
 ```vim
@@ -460,6 +461,8 @@ let completionengines = ['google', 'google-image', 'youtube'] " Show only these 
 | `<C-k>`                   | move cursor back one line                                             | backwardLine                    |
 | unmapped                  | select input text (equivalent to `<C-a>`)                             | selectAll                       |
 | unmapped                  | edit with Vim in a terminal (need the [cvim_server.py](https://github.com/1995eaton/chromium-vim/blob/master/cvim_server.py) script running for this to work and the VIM_COMMAND set inside that script) | editWithVim     |
+| **Others**                |                                                                       |                                 |
+| unmapped                  | send to ChatGPT with prompt                                           | sendToChatGPT                   |
 
 # Command Mode
 
@@ -494,6 +497,22 @@ let completionengines = ['google', 'google-image', 'youtube'] " Show only these 
 | :togglepin                                  | toggle the pin state of the current tab                                                |
 | :pintab                                     | pin the current tab                                                                    |
 | :unpintab                                   | unpin the current tab                                                                  |
+
+# Send to ChatGPT
+
+- Action: `sendToChatGPT` opens `https://chatgpt.com` with a `q` query.
+- Query: `q = <prompt>\n<current page URL>` (newline-separated).
+- Prompt priority: `let prompt = '...'` in cVimrc > `"summarize"`.
+- Tab behavior: opens a new active tab next to the current one.
+
+Usage
+- Mapping example:
+  - `map gc sendToChatGPT`
+- cVimrc example:
+  - `let prompt = 'Summarize this page in Japanese'`
+
+Notes
+- `q` is URL-encoded automatically.
 
 # Tips
 
