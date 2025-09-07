@@ -798,6 +798,16 @@ Mappings.actions = {
   showHatebComment: function () {
     Hateb.showComment();
   },
+  sendToChatGPT: function () {
+    var prompt = (settings && settings.prompt) || "summarize";
+    var q = prompt + "\n" + location.href;
+    var u = new URL("https://chatgpt.com/");
+    u.searchParams.set("q", q);
+    RUNTIME("openLink", {
+      url: u.toString(),
+      tab: { tabbed: true, active: true },
+    });
+  },
 };
 
 (function () {
