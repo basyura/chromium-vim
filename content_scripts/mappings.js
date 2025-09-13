@@ -46,7 +46,6 @@ Mappings.defaults = [
   ["$", "scrollToRight"],
   ["i", "insertMode"],
   ["r", "reloadTab"],
-  ["cr", "reloadAllButCurrent"],
   ["gR", "reloadTabUncached"],
   ["f", "createHint"],
   ["mf", "createMultiHint"],
@@ -131,7 +130,6 @@ Mappings.defaults = [
   ["g+", "incrementURLPath"],
   ["g-", "decrementURLPath"],
   ["#", "resetScrollFocus"],
-  ["cm", "muteTab"],
 ];
 
 Mappings.defaultsClone = Object.clone(Mappings.defaults);
