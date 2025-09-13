@@ -131,3 +131,75 @@ This is cVim (chromium-vim), a Chrome extension that adds Vim-like key bindings 
 - No build process - direct file loading for development
 - Comprehensive test suite with Chrome API mocks
 - Uses jsdom for DOM testing in content scripts
+
+## Debugging & Investigation Guidelines
+
+### Key Event Processing Issues (最重要)
+
+When investigating key mapping problems (unmap not working, other extensions not receiving keys), **always start with event handling**, not configuration parsing:
+
+#### Investigation Priority Order:
+1. **Key Event Processing** (`content_scripts/keys.js`) - Check event propagation control
+2. **Mapping Resolution** (`content_scripts/mappings.js`) - Check prefix matching and trie traversal
+3. **Configuration Processing** (`content_scripts/command.js`, parser) - Only after ruling out event issues
+
+#### Common Key Event Investigation Commands:
+```bash
+# Find event blocking mechanisms
+grep -r "stopImmediatePropagation\|preventDefault" content_scripts/
+
+# Check prefix matching logic
+grep -r "mappingTrie\.find\|Mappings\.queue" content_scripts/
+
+# Find mappings that start with problematic key (e.g., 'c')
+grep -r "\[\"c[a-z]" content_scripts/mappings.js
+
+# Check trie node operations
+grep -r "removeByKey\|insert.*mapping" content_scripts/
+```
+
+#### Key Event Processing Analysis:
+
+**Prefix Matching Behavior**: cVim uses a trie structure for key mappings. When a key is pressed:
+1. `keys.js:489-490`: Checks if current key sequence matches any mapping prefix
+2. If prefix match found: `event.stopImmediatePropagation()` blocks other extensions
+3. Even if the specific key is unmapped, related prefixes (e.g., `cm`, `cr` for key `c`) will still cause blocking
+
+**Critical Understanding**: `unmap c` removes the `c` mapping but does NOT remove `cm` (muteTab) or `cr` (reloadAllButCurrent). The prefix matching mechanism will still intercept `c` keypress waiting for the next character.
+
+#### Debugging Mental Model:
+
+**Wrong Assumption**: "unmap not working = configuration processing bug"
+**Correct Approach**: "other extensions not receiving keys = event propagation issue"
+
+**User Report Analysis**:
+- "Extension X's shortcut doesn't work" → Event blocking issue
+- "cVim command still executes after unmap" → Configuration issue
+- "Key works on some sites but not others" → Site-specific configuration or DOM state issue
+
+#### Quick Diagnostic Checks:
+
+```bash
+# Find all mappings starting with the problematic key
+grep "\"PROBLEM_KEY" content_scripts/mappings.js
+
+# Check if site-specific unmapping is sufficient
+# For key 'c' with mappings 'cm', 'cr':
+# Solution: unmap c cm cr (not just unmap c)
+```
+
+### General Investigation Guidelines
+
+#### Problem Classification:
+1. **Event Processing**: Keys not reaching other extensions/page
+2. **Mapping Resolution**: Wrong commands executing
+3. **Configuration Parsing**: Site-specific rules not applying
+4. **DOM Interaction**: Elements not being found/activated
+
+#### Always Consider:
+- **User's Actual Problem**: What is supposed to happen vs. what actually happens
+- **Event Flow**: Key → Event Processing → Mapping Resolution → Command Execution
+- **State Dependencies**: Insert mode, command mode, hints active, site-specific rules
+- **Cross-Extension Interaction**: How cVim affects other browser extensions
+
+This debugging approach prevents getting lost in implementation details while missing the fundamental issue.
