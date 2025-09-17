@@ -1,44 +1,22 @@
 # Repository Guidelines
 
 ## Project Structure & Module Organization
-- `background_scripts/`: Background logic, message passing, lifecycle handlers.
-- `content_scripts/`: Page-level handlers, keymaps, UI injections.
-- `cvimrc_parser/`: cVimrc parser and helpers; keep grammar changes tested.
-- `pages/`: Extension pages (options/help); HTML/CSS/JS assets.
-- `icons/`: Extension icons.
-- `manifest.json`: Chrome extension manifest (permissions, scripts, pages).
-- `test/`: Jest tests and setup (`test/setup.js`).
-- Root: `README.md`, `.eslintrc`, `jest.config.js`, `package.json`.
+Responsibilities are split per folder. `background_scripts/` handles lifecycle hooks and message routing, while `content_scripts/` injects DOM helpers and keymaps. UI assets live in `pages/`, icons in `icons/`, and parser logic in `cvimrc_parser/`. `manifest.json` is the Chrome entry point, and tests plus Chrome mocks reside in `test/` with `test/setup.js` exporting the harness.
 
 ## Build, Test, and Development Commands
-- `npm test`: Run all Jest tests once.
-- `npm run test:watch`: Watch mode for rapid iteration.
-- `npm run test:coverage`: Generate coverage for core folders.
-- Load in Chrome: chrome://extensions → Enable Developer mode → Load unpacked → select repo root (where `manifest.json` lives).
+Install dependencies with `npm install`. Run `npm test` for a single Jest pass, `npm run test:watch` when iterating, and `npm run test:coverage` to review coverage output. To verify changes in Chrome, open `chrome://extensions`, enable Developer Mode, choose Load unpacked, and select the repository root containing `manifest.json`.
 
 ## Coding Style & Naming Conventions
-- JavaScript with ESLint: 2-space indent, single quotes, semicolons.
-- Enforce `camelCase` props, `eqeqeq`, no unused vars (except `LOG`).
-- Prefer small, pure functions; avoid global state in content scripts.
-- File names: lowerCamelCase for modules, `UPPER_CASE` for constants.
+JavaScript follows ESLint rules: two-space indentation, single quotes, and mandatory semicolons. Use `camelCase` for functions and props, lowerCamelCase for files, and `UPPER_CASE` for constants. Keep content scripts free of global leaks and prefer small, pure helpers. Run `npm run lint` before pushing so CI matches your result. Add brief intent comments only when logic is non-obvious.
 
 ## Testing Guidelines
-- Framework: Jest (`jsdom` env). Tests under `test/**/*.test.js|spec.js`.
-- Coverage includes `background_scripts/`, `content_scripts/`, `cvimrc_parser/`.
-- Name tests after behavior (e.g., `parser-handles-site-rules.spec.js`).
-- Mock `chrome` APIs as needed; see `test/setup.js`.
+Jest with a `jsdom` environment powers the suite. Place specs under `test/**/*.test.js` or `*.spec.js`, naming them after behaviors such as `parser-handles-site-rules.spec.js`. Reuse `test/setup.js` for Chrome API mocks. Cover success and edge cases whenever you touch `background_scripts/`, `content_scripts/`, or the parser. Branches should not leave failing `npm test` runs.
 
 ## Commit & Pull Request Guidelines
-- Conventional Commits: `type(scope): subject` (imperative, ≤50 chars, no period).
-- Body: blank line, then bullets (~72 chars/line) with rationale/impact.
-- Footer: `Refs: #123` / `Closes: #123` when applicable.
-- Split logically: manifest updates, build/test tweaks, logic changes separated.
-- Fix message issues via `--amend`; if shared already, use `rebase -i` `reword`.
-- PRs must include: summary, linked issues, reproduction/verification steps, and screenshots/GIFs when UI/UX changes affect the extension.
+Use `type(scope): subject` (English, imperative, ≤50 chars, no period). After a blank line, add bullet points describing motivation and impact. Split manifest updates, build tweaks, and logic changes into separate commits. Amend messages with `git commit --amend` before sharing. Pull requests must include a summary, linked issues, verification steps, and screenshots or GIFs for UI-visible changes. Explain new permissions or parser adjustments so reviewers can assess risk.
 
 ## Security & Configuration Tips
-- Keep permissions minimal in `manifest.json`; justify new permissions in PRs.
-- Do not commit secrets or personal data; avoid site-specific hardcoding.
-- Changes to key mappings or cVimrc parsing should include tests covering
-  site rules and `unmap` behavior.
+Keep `manifest.json` permissions minimal and remove unused host access. Never commit secrets or user data. Parser or keymap changes must ship with matching tests and a note about potential user impact. Provide sanitized defaults (e.g., `.env.example`) when configuration files are required.
 
+## Workflow Tips
+Rebase with `git pull --rebase` before starting work. Open draft PRs early to surface design questions, and prefer smaller, incremental merges. Capture investigation notes or reproduction steps in `docs/` or linked issues so teammates can follow the context quickly.
