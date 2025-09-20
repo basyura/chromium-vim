@@ -1,19 +1,19 @@
 var Clipboard = {
-  store: "",
+  store: '',
   copy: function (text, store) {
     if (!store) {
       this.store = text;
     } else {
-      this.store += (this.store.length ? "\n" : "") + text;
+      this.store += (this.store.length ? '\n' : '') + text;
     }
-    RUNTIME("copy", { text: this.store });
+    RUNTIME('copy', { text: this.store });
   },
   paste: function (tabbed) {
     var engineUrl = Complete.getEngine(settings.defaultengine);
     engineUrl = engineUrl
       ? engineUrl.requestUrl
-      : Complete.getEngine("google").requestUrl;
-    RUNTIME(tabbed ? "openPasteTab" : "openPaste", {
+      : Complete.getEngine('google').requestUrl;
+    RUNTIME(tabbed ? 'openPasteTab' : 'openPaste', {
       engineUrl: engineUrl,
     });
   },

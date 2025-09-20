@@ -18,7 +18,7 @@ TabFrames.prototype = {
     if (!this.frames.hasOwnProperty(frameId)) return;
     this.focusedId = frameId;
     this.frames[frameId].postMessage({
-      type: "focusFrame",
+      type: 'focusFrame',
       disableAnimation: !!disableAnimation,
     });
   },

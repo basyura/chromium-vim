@@ -22,7 +22,7 @@ Clipboard.copy = function (text) {
   t.value = text;
   document.body.appendChild(t);
   t.select();
-  document.execCommand("Copy");
+  document.execCommand('Copy');
   document.body.removeChild(t);
 };
 
@@ -33,7 +33,7 @@ Clipboard.paste = function () {
   }
   document.body.appendChild(t);
   t.focus();
-  document.execCommand("Paste");
+  document.execCommand('Paste');
   var text = t.value;
   document.body.removeChild(t);
   return text;

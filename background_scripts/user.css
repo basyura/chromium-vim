@@ -6,7 +6,13 @@
 .cVim-completion-item .cVim-full,
 .cVim-completion-item .cVim-left,
 .cVim-completion-item .cVim-right {
-  font-family: Helvetica, Helvetica Neue, Neue, sans-serif, monospace, Arial;
+  font-family:
+    Helvetica,
+    Helvetica Neue,
+    Neue,
+    sans-serif,
+    monospace,
+    Arial;
   font-size: 10pt !important;
   -webkit-font-smoothing: antialiased !important;
 }
@@ -104,7 +110,13 @@
 .cVim-link-hint,
 #cVim-hud,
 #cVim-status-bar {
-  font-family: Helvetica, Helvetica Neue, Neue, sans-serif, monospace, Arial;
+  font-family:
+    Helvetica,
+    Helvetica Neue,
+    Neue,
+    sans-serif,
+    monospace,
+    Arial;
   font-size: 10pt !important;
   -webkit-font-smoothing: antialiased !important;
 }

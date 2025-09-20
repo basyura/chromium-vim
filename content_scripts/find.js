@@ -3,7 +3,7 @@ var Find = {
   matches: [],
   index: 0,
   tries: 0,
-  mode: "/",
+  mode: '/',
 };
 
 Find.setIndex = function () {
@@ -12,7 +12,7 @@ Find.setIndex = function () {
     var br = this.matches[i].getBoundingClientRect();
     if (br.top > 0 && br.left > 0) {
       this.index = i;
-      HUD.display(this.index + 1 + " / " + this.matches.length);
+      HUD.display(this.index + 1 + ' / ' + this.matches.length);
       break;
     }
   }
@@ -29,7 +29,7 @@ Find.getSelectedTextNode = function () {
 
 Find.focusParentLink = function (node) {
   do {
-    if (node.hasAttribute("href")) {
+    if (node.hasAttribute('href')) {
       node.focus();
       return true;
     }
@@ -43,16 +43,16 @@ Find.getCurrentMatch = function () {
 
 Find.search = function (mode, repeats, ignoreFocus) {
   if (this.matches.length === 0) return;
-  mode = mode || "/";
+  mode = mode || '/';
 
   let reverse = repeats < 0;
   if (reverse) repeats = Math.abs(repeats);
-  if (mode === "?") reverse = !reverse;
+  if (mode === '?') reverse = !reverse;
 
-  if (!this.matches.length) return HUD.display("No matches", 1);
+  if (!this.matches.length) return HUD.display('No matches', 1);
 
   if (this.index >= this.matches.length) this.index = 0;
-  if (this.index >= 0) this.matches[this.index].removeAttribute("active");
+  if (this.index >= 0) this.matches[this.index].removeAttribute('active');
 
   if (reverse && repeats === 1 && this.index === 0) {
     this.index = this.matches.length - 1;
@@ -85,8 +85,8 @@ Find.search = function (mode, repeats, ignoreFocus) {
   const isLink = ignoreFocus
     ? false
     : this.focusParentLink(this.matches[this.index]);
-  this.matches[this.index].setAttribute("active", "");
-  HUD.display(this.index + 1 + " / " + this.matches.length);
+  this.matches[this.index].setAttribute('active', '');
+  HUD.display(this.index + 1 + ' / ' + this.matches.length);
   let paddingTop = 100;
   let paddingBottom = 100;
   if (Command.active) {
@@ -122,16 +122,16 @@ Find.highlight = function (params) {
   //   saveSearch     -> add search to search history
   params.base = params.base || document.body;
   var self = this;
-  var regexMode = "",
+  var regexMode = '',
     containsCap = params.search.search(/[A-Z]/) !== -1,
     useRegex = settings.regexp,
-    markBase = document.createElement("mark"),
+    markBase = document.createElement('mark'),
     nodes = [],
     linksOnly = false;
 
-  markBase.className = "cVim-find-mark";
+  markBase.className = 'cVim-find-mark';
 
-  this.mode = params.mode || "/";
+  this.mode = params.mode || '/';
   if (params.saveSearch) this.lastSearch = params.search;
 
   var search = params.search;
@@ -140,18 +140,18 @@ Find.highlight = function (params) {
     (settings.ignorecase || /\/i$/.test(params.search)) &&
     !(settings.smartcase && containsCap)
   ) {
-    search = search.replace(/\/i$/, "");
-    regexMode = "i";
+    search = search.replace(/\/i$/, '');
+    regexMode = 'i';
   }
 
   if (useRegex) {
-    if (params.mode === "$") {
+    if (params.mode === '$') {
       linksOnly = true;
     }
     try {
-      var rxp = new RegExp(search, "g" + regexMode);
-      var mts = rxp.exec(".");
-      if (!mts || (mts && mts[0] !== "")) {
+      var rxp = new RegExp(search, 'g' + regexMode);
+      var mts = rxp.exec('.');
+      if (!mts || (mts && mts[0] !== '')) {
         // Avoid infinite loop
         search = rxp;
       } else {
@@ -166,10 +166,10 @@ Find.highlight = function (params) {
   var acceptNode = function (node) {
     if (!node.data.trim()) return NodeFilter.FILTER_REJECT;
     switch (node.parentNode.localName.toLowerCase()) {
-      case "script":
-      case "style":
-      case "noscript":
-      case "mark":
+      case 'script':
+      case 'style':
+      case 'noscript':
+      case 'mark':
         return NodeFilter.FILTER_REJECT;
     }
     return DOM.isVisible(node.parentNode)
@@ -179,11 +179,11 @@ Find.highlight = function (params) {
 
   var acceptLinkNode = function (node) {
     if (!node.data.trim()) return NodeFilter.FILTER_REJECT;
-    Hints.type = "";
+    Hints.type = '';
     if (!node.parentNode) return NodeFilter.FILTER_REJECT;
     if (
       node.parentNode.nodeType !== Node.ELEMENT_NODE ||
-      node.parentNode.localName !== "a"
+      node.parentNode.localName !== 'a'
     ) {
       return NodeFilter.FILTER_REJECT;
     }
@@ -240,7 +240,7 @@ Find.highlight = function (params) {
   );
 
   document.body.normalize();
-  HUD.display(this.matches.length || "No matches");
+  HUD.display(this.matches.length || 'No matches');
   if (params.setIndex) this.setIndex();
   if (params.executeSearch) this.search(params.mode, 1);
 };

@@ -1,5 +1,5 @@
 var History = {
-  historyTypes: ["action", "url", "search"],
+  historyTypes: ['action', 'url', 'search'],
   searchResults: null,
   historyStore: [],
   commandHistory: {},
@@ -26,7 +26,7 @@ var History = {
     chrome.tabs.query({}, function (tabs) {
       tabs.forEach(function (tab) {
         chrome.tabs.sendMessage(tab.id, {
-          action: "commandHistory",
+          action: 'commandHistory',
           history: History.commandHistory,
         });
       });
@@ -35,7 +35,7 @@ var History = {
 
   append: function (value, type) {
     if (~this.historyTypes.indexOf(type)) {
-      this.commandHistory[type].push("" + value);
+      this.commandHistory[type].push('' + value);
       this.commandHistory[type] = this.commandHistory[type].splice(-500);
       this.saveCommandHistory();
     }
@@ -75,7 +75,7 @@ var History = {
       this.shouldRefresh = false;
       chrome.history.search(
         {
-          text: "",
+          text: '',
           startTime: 0,
           maxResults: 2147483647,
         },
@@ -98,7 +98,7 @@ var History = {
         search: search,
         limit: limit,
         fn: function (item) {
-          return item.title + " " + item.url;
+          return item.title + ' ' + item.url;
         },
       }),
       true
@@ -112,7 +112,7 @@ var History = {
     try {
       data = JSON.parse(data);
     } catch (e) {
-      data = typeof data === "string" ? data.split(",") : [];
+      data = typeof data === 'string' ? data.split(',') : [];
     }
     History.commandHistory[type] = data;
   });

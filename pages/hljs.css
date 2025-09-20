@@ -31,13 +31,11 @@
 }
 
 .hljs-symbol,
-.hljs-symbol .hljs-string
-{
+.hljs-symbol .hljs-string {
   color: #87afff;
 }
 
-.hljs-comment
-{
+.hljs-comment {
   color: #707070;
 }
 

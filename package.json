@@ -11,7 +11,7 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "format": "prettier --write \"**/*.{js,json,css,html,md}\""
+    "format": "prettier --write \"**/*.{js,json,css}\""
   },
   "devDependencies": {
     "@types/chrome": "^0.1.1",

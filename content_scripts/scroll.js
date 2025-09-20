@@ -21,9 +21,9 @@ var scrollingElement = (function () {
   function getScrollType(elem) {
     var cs = getComputedStyle(elem);
     var st = NON_SCROLLABLE;
-    if (cs.overflow === "hidden") return st;
+    if (cs.overflow === 'hidden') return st;
     if (
-      cs.overflowX !== "hidden" &&
+      cs.overflowX !== 'hidden' &&
       elem.offsetHeight > elem.clientHeight &&
       elem.scrollWidth > elem.clientWidth
     ) {
@@ -32,7 +32,7 @@ var scrollingElement = (function () {
         st |= SCROLLABLE_X_RIGHT;
     }
     if (
-      cs.overflowY !== "hidden" &&
+      cs.overflowY !== 'hidden' &&
       elem.offsetWidth > elem.clientWidth &&
       elem.scrollHeight > elem.clientHeight
     ) {
@@ -51,7 +51,7 @@ var scrollingElement = (function () {
     clickFocus = false;
   };
 
-  document.addEventListener("mousedown", function (event) {
+  document.addEventListener('mousedown', function (event) {
     if (!event.isTrusted) return true;
     clickFocus = true;
     lastActiveElem = event.srcElement;
@@ -99,7 +99,7 @@ function $scrollTo(elem, x, y) {
   };
 
   var timeFn =
-    typeof window.performance === "undefined"
+    typeof window.performance === 'undefined'
       ? Date.now
       : performance.now.bind(performance);
 
@@ -315,16 +315,16 @@ Scroll.scroll = function (type, repeats) {
 
   var direction = (function () {
     switch (type) {
-      case "up":
-      case "pageUp":
-      case "fullPageUp":
-      case "top":
+      case 'up':
+      case 'pageUp':
+      case 'fullPageUp':
+      case 'top':
         return SCROLLABLE_Y_UP;
-      case "left":
-      case "leftmost":
+      case 'left':
+      case 'leftmost':
         return SCROLLABLE_X_LEFT;
-      case "right":
-      case "rightmost":
+      case 'right':
+      case 'rightmost':
         return SCROLLABLE_X_RIGHT;
       default:
         return SCROLLABLE_Y_DOWN;
@@ -338,40 +338,40 @@ Scroll.scroll = function (type, repeats) {
     y = 0;
 
   switch (type) {
-    case "down":
+    case 'down':
       y = repeats * stepSize;
       break;
-    case "up":
+    case 'up':
       y -= repeats * stepSize;
       break;
-    case "pageDown":
+    case 'pageDown':
       y = (repeats * hy) >> 1;
       break;
-    case "fullPageDown":
+    case 'fullPageDown':
       y = repeats * hy * (settings.fullpagescrollpercent / 100 || 1);
       break;
-    case "pageUp":
+    case 'pageUp':
       y -= (repeats * hy) >> 1;
       break;
-    case "fullPageUp":
+    case 'fullPageUp':
       y -= repeats * hy * (settings.fullpagescrollpercent / 100 || 1);
       break;
-    case "top":
+    case 'top':
       y -= scrollElem.scrollTop;
       break;
-    case "bottom":
+    case 'bottom':
       y = scrollElem.scrollHeight - scrollElem.scrollTop - hy + 20;
       break;
-    case "left":
+    case 'left':
       x -= (repeats * stepSize) >> 1;
       break;
-    case "right":
+    case 'right':
       x = (repeats * stepSize) >> 1;
       break;
-    case "leftmost":
+    case 'leftmost':
       x -= scrollElem.scrollLeft;
       break;
-    case "rightmost":
+    case 'rightmost':
       x = scrollElem.scrollWidth - scrollElem.scrollLeft - hw + 20;
       break;
   }

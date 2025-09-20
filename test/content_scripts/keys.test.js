@@ -2,31 +2,31 @@
 global.settings = {
   hintcharacters: 'asdfgqwertzxcvb',
   smoothscroll: true,
-  scrollstep: 60
+  scrollstep: 60,
 };
 
 global.Mappings = {
   defaults: {},
   parseCustom: jest.fn(),
-  getSteps: jest.fn(() => [])
+  getSteps: jest.fn(() => []),
 };
 
 global.Command = {
-  execute: jest.fn()
+  execute: jest.fn(),
 };
 
 global.Status = {
-  setMessage: jest.fn()
+  setMessage: jest.fn(),
 };
 
 global.HUD = {
-  display: jest.fn()
+  display: jest.fn(),
 };
 
 // Mock DOM
 Object.defineProperty(document, 'activeElement', {
   writable: true,
-  value: document.createElement('div')
+  value: document.createElement('div'),
 });
 
 global.KeyHandler = {};
@@ -34,7 +34,7 @@ global.KeyHandler = {};
 describe('KeyHandler', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    
+
     // Reset DOM
     document.activeElement = document.createElement('div');
   });
@@ -50,7 +50,7 @@ describe('KeyHandler', () => {
       keyCode: 74,
       preventDefault: jest.fn(),
       stopPropagation: jest.fn(),
-      target: document.createElement('div')
+      target: document.createElement('div'),
     };
 
     // This would require more setup to test actual key handling

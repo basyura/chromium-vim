@@ -1,8 +1,9 @@
 html,
 body {
-  font-family: "DejaVu Sans", "Helvetica Neue", "Helvetica", "Noto Sans UI",
-    "Segoe UI", "Chrome Droid Sans", "Droid Sans Fallback", "Lucida Grande",
-    "Tahoma", sans-serif;
+  font-family:
+    'DejaVu Sans', 'Helvetica Neue', 'Helvetica', 'Noto Sans UI', 'Segoe UI',
+    'Chrome Droid Sans', 'Droid Sans Fallback', 'Lucida Grande', 'Tahoma',
+    sans-serif;
   -webkit-font-smoothing: antialiased;
   font-size: 12pt;
   margin: 0;

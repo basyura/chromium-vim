@@ -17,7 +17,7 @@ Bookmarks.containsFolder = function (path, directory) {
 };
 
 Bookmarks.getFolderLinks = function (path, callback) {
-  path = Utils.compressArray(path.split("/"));
+  path = Utils.compressArray(path.split('/'));
   chrome.bookmarks.getTree(function (tree) {
     var dir = tree[0];
     while ((dir = Bookmarks.containsFolder(path[0], dir))) {
@@ -37,9 +37,9 @@ Bookmarks.getPath = function (marks, path, callback, initialPath) {
     folder = null,
     matchFound = false;
   if (!initialPath) {
-    initialPath = path.replace(/\/[^\/]+$/, "/").replace(/\/+/g, "/");
+    initialPath = path.replace(/\/[^\/]+$/, '/').replace(/\/+/g, '/');
   }
-  if (typeof path !== "string" || path[0] !== "/") {
+  if (typeof path !== 'string' || path[0] !== '/') {
     return false;
   }
   path = Utils.compressArray(path.split(/\//));
@@ -52,14 +52,14 @@ Bookmarks.getPath = function (marks, path, callback, initialPath) {
       item.title.slice(0, path[0].length).toLowerCase() ===
         path[0].toLowerCase()
     ) {
-      result.push([item.title, item.url || "folder", initialPath]);
+      result.push([item.title, item.url || 'folder', initialPath]);
     }
     if (path.length === 0) {
       if (!matchFound) {
         result = [];
       }
       matchFound = true;
-      result.push([item.title, item.url || "folder", initialPath]);
+      result.push([item.title, item.url || 'folder', initialPath]);
     }
   });
   if (path.length === 0 || !folder) {
@@ -67,7 +67,7 @@ Bookmarks.getPath = function (marks, path, callback, initialPath) {
   }
   this.getPath(
     folder.children,
-    "/" + path.slice(1).join("/"),
+    '/' + path.slice(1).join('/'),
     callback,
     initialPath
   );

@@ -3,7 +3,7 @@ var Popup = {
 };
 
 Popup.getBlacklisted = function (callback) {
-  if (typeof callback === "object") callback = callback.callback;
+  if (typeof callback === 'object') callback = callback.callback;
   var blacklists = Utils.compressArray(settings.blacklists);
   this.getActiveTab(function (tab) {
     var url = tab.url;
@@ -25,7 +25,7 @@ Popup.setIconDisabled = function () {
   this.getActiveTab(function (tab) {
     chrome.action.setIcon(
       {
-        path: chrome.runtime.getURL("icons/disabled.png"),
+        path: chrome.runtime.getURL('icons/disabled.png'),
         tabId: tab.id,
       },
       function () {
@@ -39,7 +39,7 @@ Popup.setIconEnabled = function (obj) {
   if (obj.sender) {
     return chrome.action.setIcon(
       {
-        path: chrome.runtime.getURL("icons/38.png"),
+        path: chrome.runtime.getURL('icons/38.png'),
         tabId: obj.sender.tab.id,
       },
       function () {
@@ -50,7 +50,7 @@ Popup.setIconEnabled = function (obj) {
   this.getActiveTab(function (tab) {
     chrome.action.setIcon(
       {
-        path: chrome.runtime.getURL("icons/38.png"),
+        path: chrome.runtime.getURL('icons/38.png'),
         tabId: tab.id,
       },
       function () {
@@ -68,7 +68,7 @@ Popup.toggleEnabled = function (obj) {
   var request = obj.request;
   if (request && request.singleTab) {
     this.getActiveTab(function (tab) {
-      chrome.tabs.sendMessage(tab.id, { action: "toggleEnabled" });
+      chrome.tabs.sendMessage(tab.id, { action: 'toggleEnabled' });
     });
     if (request.blacklisted) {
       return this.setIconDisabled({});
@@ -86,15 +86,15 @@ Popup.toggleEnabled = function (obj) {
           })
           .forEach(
             function (id) {
-              chrome.tabs.sendMessage(id, { action: "toggleEnabled" });
+              chrome.tabs.sendMessage(id, { action: 'toggleEnabled' });
               if (this.active) {
                 chrome.action.setIcon({
-                  path: chrome.runtime.getURL("icons/38.png"),
+                  path: chrome.runtime.getURL('icons/38.png'),
                   tabId: id,
                 });
               } else {
                 chrome.action.setIcon({
-                  path: chrome.runtime.getURL("icons/disabled.png"),
+                  path: chrome.runtime.getURL('icons/disabled.png'),
                   tabId: id,
                 });
               }
@@ -118,7 +118,7 @@ Popup.toggleBlacklisted = function () {
     }
     if (!foundMatch) {
       url = new URL(url);
-      blacklists.push(url.protocol + "//" + url.hostname + "/*");
+      blacklists.push(url.protocol + '//' + url.hostname + '/*');
     }
     settings.blacklists = blacklists;
     Options.saveSettings({ settings: settings });
@@ -127,7 +127,7 @@ Popup.toggleBlacklisted = function () {
 };
 
 chrome.runtime.onConnect.addListener(function (port) {
-  if (port.name === "popup") {
+  if (port.name === 'popup') {
     port.onMessage.addListener(function (request) {
       if (Popup.hasOwnProperty(request.action)) {
         Popup[request.action]({

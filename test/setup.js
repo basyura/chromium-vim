@@ -4,10 +4,10 @@ global.chrome = {
     sendMessage: jest.fn(),
     onMessage: {
       addListener: jest.fn(),
-      removeListener: jest.fn()
+      removeListener: jest.fn(),
     },
     getURL: jest.fn((path) => `chrome-extension://test-id/${path}`),
-    getManifest: jest.fn(() => ({ version: '1.0.0' }))
+    getManifest: jest.fn(() => ({ version: '1.0.0' })),
   },
   tabs: {
     query: jest.fn(),
@@ -16,38 +16,38 @@ global.chrome = {
     remove: jest.fn(),
     sendMessage: jest.fn(),
     onActivated: {
-      addListener: jest.fn()
+      addListener: jest.fn(),
     },
     onUpdated: {
-      addListener: jest.fn()
-    }
+      addListener: jest.fn(),
+    },
   },
   storage: {
     local: {
       get: jest.fn(),
       set: jest.fn(),
       remove: jest.fn(),
-      clear: jest.fn()
+      clear: jest.fn(),
     },
     sync: {
       get: jest.fn(),
       set: jest.fn(),
       remove: jest.fn(),
-      clear: jest.fn()
-    }
+      clear: jest.fn(),
+    },
   },
   bookmarks: {
     search: jest.fn(),
-    getTree: jest.fn()
+    getTree: jest.fn(),
   },
   history: {
-    search: jest.fn()
+    search: jest.fn(),
   },
   action: {
     setIcon: jest.fn(),
     setBadgeText: jest.fn(),
-    setBadgeBackgroundColor: jest.fn()
-  }
+    setBadgeBackgroundColor: jest.fn(),
+  },
 };
 
 // DOM mocks for content scripts
@@ -57,9 +57,9 @@ Object.defineProperty(window, 'location', {
     origin: 'https://example.com',
     pathname: '/',
     search: '',
-    hash: ''
+    hash: '',
   },
-  writable: true
+  writable: true,
 });
 
 // Mock console methods to avoid noise in tests
@@ -67,5 +67,5 @@ global.console = {
   ...console,
   log: jest.fn(),
   warn: jest.fn(),
-  error: jest.fn()
+  error: jest.fn(),
 };

@@ -7,10 +7,10 @@ var Updates = {
 chrome.runtime.onInstalled.addListener(function (details) {
   var currentVersion = chrome.runtime.getManifest().version;
   var previousVersion = details.previousVersion;
-  if (details.reason === "install") {
+  if (details.reason === 'install') {
     chrome.tabs.create(
       {
-        url: chrome.runtime.getURL("pages/mappings.html"),
+        url: chrome.runtime.getURL('pages/mappings.html'),
         active: true,
       },
       function (tabInfo) {
@@ -18,12 +18,12 @@ chrome.runtime.onInstalled.addListener(function (details) {
         Updates.displayMessage = true;
       }
     );
-  } else if (details.reason === "update") {
+  } else if (details.reason === 'update') {
     if (previousVersion !== currentVersion) {
       Options.refreshSettings(function () {
         if (settings.changelog) {
           chrome.tabs.create({
-            url: chrome.runtime.getURL("pages/changelog.html"),
+            url: chrome.runtime.getURL('pages/changelog.html'),
             active: true,
           });
         }
@@ -34,7 +34,7 @@ chrome.runtime.onInstalled.addListener(function (details) {
     var checkError = function () {
       if (chrome.runtime.lastError) return false;
     };
-    return chrome.tabs.query({ status: "complete" }, function (tabs) {
+    return chrome.tabs.query({ status: 'complete' }, function (tabs) {
       tabs.forEach(function (tab) {
         contentScripts.js.forEach(function (file) {
           chrome.scripting.executeScript(

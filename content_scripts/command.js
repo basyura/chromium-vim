@@ -50,15 +50,15 @@ Command.getCompleter = {};
 Command.dataElements = [];
 Command.matches = [];
 Command.customCommands = {};
-Command.lastInputValue = "";
+Command.lastInputValue = '';
 
 Command.setupFrameElements = function () {
-  this.bar = document.createElement("div");
-  this.bar.id = "cVim-command-bar";
+  this.bar = document.createElement('div');
+  this.bar.id = 'cVim-command-bar';
   this.bar.cVim = true;
-  this.bar.style[this.onBottom ? "bottom" : "top"] = "0";
-  this.modeIdentifier = document.createElement("span");
-  this.modeIdentifier.id = "cVim-command-bar-mode";
+  this.bar.style[this.onBottom ? 'bottom' : 'top'] = '0';
+  this.modeIdentifier = document.createElement('span');
+  this.modeIdentifier.id = 'cVim-command-bar-mode';
   this.modeIdentifier.cVim = true;
   this.bar.appendChild(this.modeIdentifier);
   this.bar.appendChild(this.input);
@@ -69,8 +69,8 @@ Command.setupFrameElements = function () {
     document.body.appendChild(this.bar);
   }
   if (!this.data) {
-    this.data = document.createElement("div");
-    this.data.id = "cVim-command-bar-search-results";
+    this.data = document.createElement('div');
+    this.data.id = 'cVim-command-bar-search-results';
     this.data.cVim = true;
     try {
       document.lastChild.appendChild(this.data);
@@ -81,24 +81,24 @@ Command.setupFrameElements = function () {
     if (this.onBottom) {
       this.barPaddingTop = 0;
       this.barPaddingBottom = this.barHeight;
-      this.data.style.bottom = this.barHeight + "px";
+      this.data.style.bottom = this.barHeight + 'px';
     } else {
       this.barPaddingBottom = 0;
       this.barPaddingTop = this.barHeight;
-      this.data.style.top = this.barHeight + "px";
+      this.data.style.top = this.barHeight + 'px';
     }
   }
 };
 
 Command.setup = function () {
-  this.input = document.createElement("input");
-  this.input.type = "text";
-  this.input.id = "cVim-command-bar-input";
-  this.input.autocomplete = "off";
+  this.input = document.createElement('input');
+  this.input.type = 'text';
+  this.input.id = 'cVim-command-bar-input';
+  this.input.autocomplete = 'off';
   this.input.cVim = true;
-  this.statusBar = document.createElement("div");
-  this.statusBar.id = "cVim-status-bar";
-  this.statusBar.style[this.onBottom ? "bottom" : "top"] = "0";
+  this.statusBar = document.createElement('div');
+  this.statusBar.id = 'cVim-status-bar';
+  this.statusBar.style[this.onBottom ? 'bottom' : 'top'] = '0';
   try {
     document.lastChild.appendChild(this.statusBar);
   } catch {
@@ -112,7 +112,7 @@ Command.commandBarFocused = function () {
     commandMode &&
     this.active &&
     document.activeElement &&
-    document.activeElement.id === "cVim-command-bar-input"
+    document.activeElement.id === 'cVim-command-bar-input'
   );
 };
 
@@ -164,7 +164,7 @@ Command.history = {
     if (this.index[type] !== this[type].length) {
       Command.input.value = this[type][this.index[type]];
     } else {
-      Command.input.value = Command.typed || "";
+      Command.input.value = Command.typed || '';
     }
   },
 };
@@ -172,10 +172,10 @@ Command.history = {
 Command.completions = {};
 
 Command.completionStyles = {
-  engines: ["Se", "#87ff87"],
-  topsites: ["Ts", "#00afaf"],
-  history: ["Hi", "#87afff"],
-  bookmarks: ["Bk", "#af5fff"],
+  engines: ['Se', '#87ff87'],
+  topsites: ['Ts', '#00afaf'],
+  history: ['Hi', '#87afff'],
+  bookmarks: ['Bk', '#af5fff'],
 };
 
 Command.completionOrder = {
@@ -195,7 +195,7 @@ Command.updateCompletions = function (useStyles) {
   if (!window.isCommandFrame) return;
   this.completionResults = [];
   this.dataElements = [];
-  this.data.innerHTML = "";
+  this.data.innerHTML = '';
   let key, i;
   const completionKeys = Object.keys(this.completions).sort(
     function (a, b) {
@@ -215,37 +215,37 @@ Command.updateCompletions = function (useStyles) {
     if (i > settings.searchlimit) {
       break;
     }
-    const item = document.createElement("div");
-    item.className = "cVim-completion-item";
+    const item = document.createElement('div');
+    item.className = 'cVim-completion-item';
     let identifier;
     if (
       useStyles &&
       this.completionStyles.hasOwnProperty(this.completionResults[i][0])
     ) {
       const styles = this.completionStyles[this.completionResults[i][0]];
-      identifier = document.createElement("span");
+      identifier = document.createElement('span');
       identifier.style.backgroundColor = styles[1];
-      identifier.style.position = "absolute";
-      identifier.style.height = "100%";
-      identifier.style.width = "2px";
-      identifier.style.left = "0";
+      identifier.style.position = 'absolute';
+      identifier.style.height = '100%';
+      identifier.style.width = '2px';
+      identifier.style.left = '0';
     }
     if (this.completionResults[i].length >= 3) {
-      const left = document.createElement("span");
-      left.className = "cVim-left";
+      const left = document.createElement('span');
+      left.className = 'cVim-left';
       left.textContent = this.completionResults[i][1];
-      const right = document.createElement("span");
-      right.className = "cVim-right";
+      const right = document.createElement('span');
+      right.className = 'cVim-right';
       right.textContent = this.completionResults[i][2];
       if (identifier) {
-        left.style.paddingLeft = "4px";
+        left.style.paddingLeft = '4px';
         left.insertBefore(identifier, left.firstChild);
       }
       item.appendChild(left);
       item.appendChild(right);
     } else {
-      const full = document.createElement("span");
-      full.className = "cVim-full";
+      const full = document.createElement('span');
+      full.className = 'cVim-full';
       full.textContent = this.completionResults[i][1];
       item.appendChild(full);
     }
@@ -255,7 +255,7 @@ Command.updateCompletions = function (useStyles) {
   if (!this.active || !commandMode) {
     this.hideData();
   } else {
-    this.data.style.display = "block";
+    this.data.style.display = 'block';
   }
 };
 
@@ -264,13 +264,13 @@ Command.hideData = function () {
   Search.lastActive = null;
   this.dataElements.length = 0;
   if (this.data) {
-    this.data.innerHTML = "";
+    this.data.innerHTML = '';
     Search.index = null;
   }
 };
 
 Command.deleteCompletions = function (completions) {
-  completions = completions.split(",");
+  completions = completions.split(',');
   for (let i = 0, l = completions.length; i < l; ++i) {
     this.completions[completions[i]] = [];
   }
@@ -306,23 +306,23 @@ Command.callCompletionFunction = (function () {
   let search;
 
   const searchCompletion = function (value) {
-    self.deleteCompletions("engines,bookmarks,complete,chrome,search");
+    self.deleteCompletions('engines,bookmarks,complete,chrome,search');
     search = Utils.compressArray(search.split(/ +/));
     if (
-      (search.length < 2 && value.slice(-1) !== " ") ||
+      (search.length < 2 && value.slice(-1) !== ' ') ||
       (!Complete.engineEnabled(search[0]) && !Complete.hasAlias(search[0]))
     ) {
       self.completions.engines = Complete.getMatchingEngines(
-        search.join(" ")
+        search.join(' ')
       ).map(function (name) {
         return [name, Complete.engines[name].requestUrl];
       });
       self.updateCompletions(true);
       self.completions.topsites = Search.topSites
         .filter(function (e) {
-          return ~(e[0] + " " + e[1])
+          return ~(e[0] + ' ' + e[1])
             .toLowerCase()
-            .indexOf(search.slice(0).join(" ").toLowerCase());
+            .indexOf(search.slice(0).join(' ').toLowerCase());
         })
         .slice(0, 5)
         .map(function (e) {
@@ -331,7 +331,7 @@ Command.callCompletionFunction = (function () {
       self.updateCompletions(true);
       if (search.length) {
         Marks.match(
-          search.join(" "),
+          search.join(' '),
           function (response) {
             self.completions.bookmarks = response;
             self.updateCompletions(true);
@@ -342,8 +342,8 @@ Command.callCompletionFunction = (function () {
       self.historyMode = false;
       self.searchMode = true;
 
-      PORT("searchHistory", {
-        search: value.replace(/^\S+\s+/, ""),
+      PORT('searchHistory', {
+        search: value.replace(/^\S+\s+/, ''),
         limit: settings.searchlimit,
       });
       return;
@@ -355,17 +355,19 @@ Command.callCompletionFunction = (function () {
       }
     }
     if (Complete.engineEnabled(search[0])) {
-      Complete.queryEngine(search[0], search.slice(1).join(" "), function (
-        response
-      ) {
-        self.completions = { search: response };
-        self.updateCompletions();
-      });
+      Complete.queryEngine(
+        search[0],
+        search.slice(1).join(' '),
+        function (response) {
+          self.completions = { search: response };
+          self.updateCompletions();
+        }
+      );
     }
   };
 
   return function (value) {
-    search = value.replace(/^(chrome:\/\/|\S+ +)/, "");
+    search = value.replace(/^(chrome:\/\/|\S+ +)/, '');
     const baseCommand = (value.match(/^\S+/) || [null])[0];
 
     // check registered completer
@@ -375,11 +377,11 @@ Command.callCompletionFunction = (function () {
     }
 
     switch (baseCommand) {
-      case "tabnew":
-      case "tabedit":
-      case "tabopen":
-      case "open":
-      case "new":
+      case 'tabnew':
+      case 'tabedit':
+      case 'tabopen':
+      case 'open':
+      case 'new':
         searchCompletion(value);
         return true;
     }
@@ -394,9 +396,9 @@ Command.complete = function (value) {
   // limiting command completions
   value = this.expandCompletion(value).replace(
     /(^[^\s&$!*?=|]+)[&$!*?=|]*/,
-    "$1"
+    '$1'
   );
-  if (~value.indexOf(" ") && this.callCompletionFunction(value) === true) {
+  if (~value.indexOf(' ') && this.callCompletionFunction(value) === true) {
     return;
   }
   // Default completion for commands
@@ -418,12 +420,12 @@ Command.show = function (search, value, complete, colorScheme) {
   if (window.isCommandFrame === void 0) {
     const colorScheme = getComputedStyle(
       document.documentElement
-    ).getPropertyValue("color-scheme");
+    ).getPropertyValue('color-scheme');
 
     Mappings.handleEscapeKey();
     Mappings.clearQueue();
     window.wasFocused = true;
-    PORT("showCommandFrame", {
+    PORT('showCommandFrame', {
       frameId: Frames.frameId,
       search: search,
       value: value,
@@ -433,22 +435,22 @@ Command.show = function (search, value, complete, colorScheme) {
     return;
   }
 
-  if (colorScheme == "dark") {
-    document.documentElement.style.setProperty("color-scheme", "dark");
+  if (colorScheme == 'dark') {
+    document.documentElement.style.setProperty('color-scheme', 'dark');
   }
 
   commandMode = true;
-  this.type = "";
+  this.type = '';
   this.active = true;
   if (document.activeElement) {
     document.activeElement.blur();
   }
   if (search) {
-    this.type = "search";
+    this.type = 'search';
     this.modeIdentifier.innerHTML = search;
   } else {
-    this.type = "action";
-    this.modeIdentifier.innerHTML = ":";
+    this.type = 'action';
+    this.modeIdentifier.innerHTML = ':';
   }
   if (value) {
     this.input.value = value;
@@ -457,7 +459,7 @@ Command.show = function (search, value, complete, colorScheme) {
   if (Status.active) {
     Status.hide();
   }
-  this.bar.style.display = "inline-block";
+  this.bar.style.display = 'inline-block';
   const timerId = setInterval(
     function () {
       this.input.focus();
@@ -472,7 +474,7 @@ Command.show = function (search, value, complete, colorScheme) {
 
         // TODO: figure out why a842dd6 and fix for #527 are necessary
         // document.getSelection().collapseToEnd();
-        document.getSelection().modify("move", "right", "lineboundary");
+        document.getSelection().modify('move', 'right', 'lineboundary');
         clearInterval(timerId);
       }
       // End temp fix
@@ -488,14 +490,14 @@ Command.hide = function (callback) {
   this.active = false;
   Search.index = null;
   this.history.index = {};
-  this.typed = "";
+  this.typed = '';
   this.dataElements = [];
   this.hideData();
-  if (this.bar) this.bar.style.display = "none";
-  if (this.input) this.input.value = "";
-  if (this.data) this.data.style.display = "none";
+  if (this.bar) this.bar.style.display = 'none';
+  if (this.input) this.input.value = '';
+  if (this.data) this.data.style.display = 'none';
   if (callback) callback();
-  if (window.isCommandFrame) PORT("hideCommandFrame");
+  if (window.isCommandFrame) PORT('hideCommandFrame');
 };
 
 Command.insertCSS = function () {
@@ -505,15 +507,15 @@ Command.insertCSS = function () {
   }
   if (settings.linkanimations) {
     css +=
-      ".cVim-link-hint { transition: opacity 0.2s ease-out, " +
-      "background 0.2s ease-out; }";
+      '.cVim-link-hint { transition: opacity 0.2s ease-out, ' +
+      'background 0.2s ease-out; }';
   }
 
-  RUNTIME("injectCSS", { css: css, runAt: "document_start" });
+  RUNTIME('injectCSS', { css: css, runAt: 'document_start' });
 
-  const head = document.getElementsByTagName("head");
+  const head = document.getElementsByTagName('head');
   if (head.length) {
-    this.css = document.createElement("style");
+    this.css = document.createElement('style');
     this.css.textContent = css;
     head[0].appendChild(this.css);
   }
@@ -523,11 +525,11 @@ Command.callOnCvimLoad = (function () {
   const fnQueue = [];
   return function (FN) {
     if (!this.domElementsLoaded) {
-      if (typeof FN === "function") {
+      if (typeof FN === 'function') {
         fnQueue.push(FN);
       }
     } else {
-      if (typeof FN === "function") {
+      if (typeof FN === 'function') {
         FN();
       }
       fnQueue.forEach(function (FN) {
@@ -541,9 +543,9 @@ Command.callOnCvimLoad = (function () {
 Command.onDOMLoad = function () {
   this.onDOMLoadAll();
   if (window.self === window.top) {
-    Command.frame = document.createElement("iframe");
-    Command.frame.src = chrome.runtime.getURL("cmdline_frame.html");
-    Command.frame.id = "cVim-command-frame";
+    Command.frame = document.createElement('iframe');
+    Command.frame.src = chrome.runtime.getURL('cmdline_frame.html');
+    Command.frame.id = 'cVim-command-frame';
     document.lastElementChild.appendChild(Command.frame);
   }
 };
@@ -561,7 +563,7 @@ Command.preventAutoFocus = function () {
       elems.forEach(function (elem) {
         const listener = function (event) {
           if (manualFocus) {
-            elem.removeEventListener("focus", listener);
+            elem.removeEventListener('focus', listener);
             return;
           }
           if (event.sourceCapabilities === null) {
@@ -569,36 +571,36 @@ Command.preventAutoFocus = function () {
             elem.blur();
           }
         };
-        elem.addEventListener("focus", listener);
+        elem.addEventListener('focus', listener);
       });
     };
   })();
 
   let reset;
-  if (KeyboardEvent.prototype.hasOwnProperty("key")) {
+  if (KeyboardEvent.prototype.hasOwnProperty('key')) {
     reset = function (key) {
-      if (["Control", "Alt", "Meta", "Shift"].indexOf(key) !== -1) return;
+      if (['Control', 'Alt', 'Meta', 'Shift'].indexOf(key) !== -1) return;
       manualFocus = true;
-      KeyHandler.listener.removeListener("keydown", reset);
-      window.removeEventListener("mousedown", reset, true);
+      KeyHandler.listener.removeListener('keydown', reset);
+      window.removeEventListener('mousedown', reset, true);
     };
-    KeyHandler.listener.addListener("keydown", reset);
-    window.addEventListener("mousedown", reset, true);
+    KeyHandler.listener.addListener('keydown', reset);
+    window.addEventListener('mousedown', reset, true);
   } else {
     reset = function (event) {
       if (!event.isTrusted) return true;
       manualFocus = true;
-      window.removeEventListener("keypress", reset, true);
-      window.removeEventListener("mousedown", reset, true);
+      window.removeEventListener('keypress', reset, true);
+      window.removeEventListener('mousedown', reset, true);
     };
-    window.addEventListener("keypress", reset, true);
-    window.addEventListener("mousedown", reset, true);
+    window.addEventListener('keypress', reset, true);
+    window.addEventListener('mousedown', reset, true);
   }
 
   const preventFocus = function () {
     if (manualFocus) return;
     const textElements = document.querySelectorAll(
-      "input,textarea,*[contenteditable]"
+      'input,textarea,*[contenteditable]'
     );
     for (let i = 0; i < textElements.length; i++) {
       if (manualFocus) break;
@@ -607,21 +609,21 @@ Command.preventAutoFocus = function () {
     addTextListeners(textElements);
   };
 
-  window.addEventListener("load", preventFocus);
+  window.addEventListener('load', preventFocus);
   preventFocus();
 };
 
 Command.onDOMLoadAll = function () {
   this.insertCSS();
-  this.onBottom = settings.barposition === "bottom";
+  this.onBottom = settings.barposition === 'bottom';
   if (this.data !== void 0) {
-    this.data.style[!this.onBottom ? "bottom" : "top"] = "";
-    this.data.style[this.onBottom ? "bottom" : "top"] = "20px";
+    this.data.style[!this.onBottom ? 'bottom' : 'top'] = '';
+    this.data.style[this.onBottom ? 'bottom' : 'top'] = '20px';
   }
   if (!settings.autofocus) this.preventAutoFocus();
   httpRequest(
     {
-      url: chrome.runtime.getURL("content_scripts/main.css"),
+      url: chrome.runtime.getURL('content_scripts/main.css'),
     },
     function (data) {
       this.mainCSS = data;
@@ -643,19 +645,19 @@ Command.updateSettings = function (config) {
   this.customCommands = config.COMMANDS || {};
   Object.keys(this.customCommands).forEach(
     function (name) {
-      this.descriptions.push([name, ":" + this.customCommands[name]]);
+      this.descriptions.push([name, ':' + this.customCommands[name]]);
     }.bind(this)
   );
   if (config.searchengines && config.searchengines.constructor === Object) {
     for (key in config.searchengines) {
       const engine = config.searchengines[key];
-      if (typeof engine === "string") {
+      if (typeof engine === 'string') {
         Complete.addEngine(key, engine);
       } else if (
         Array.isArray(engine) &&
         engine.length === 2 &&
-        typeof engine[0] === "string" &&
-        typeof engine[1] === "string"
+        typeof engine[0] === 'string' &&
+        typeof engine[1] === 'string'
       ) {
         Complete.addEngine(key, {
           baseUrl: engine[0],
@@ -675,8 +677,8 @@ Command.updateSettings = function (config) {
     Complete.setLocale(config.locale);
   }
 
-  const chars = Utils.uniqueElements((config.hintcharacters || "").split(""));
-  settings.hintcharacters = chars.join("");
+  const chars = Utils.uniqueElements((config.hintcharacters || '').split(''));
+  settings.hintcharacters = chars.join('');
 
   if (config !== settings) {
     for (key in config) {
@@ -689,8 +691,8 @@ Command.updateSettings = function (config) {
 
 Command.addSettingBlock = function (config) {
   for (const key in config) {
-    if (key === "MAPPINGS") {
-      settings.MAPPINGS += "\n" + config[key];
+    if (key === 'MAPPINGS') {
+      settings.MAPPINGS += '\n' + config[key];
       Mappings.parseCustom(settings.MAPPINGS, false);
     } else if (config[key].constructor === Object) {
       settings[key] = Object.extend(settings[key], config[key]);
@@ -704,7 +706,7 @@ Command.init = function (enabled) {
   Mappings.defaults = Object.clone(Mappings.defaultsClone);
   Mappings.parseCustom(settings.MAPPINGS, true);
   if (enabled) {
-    RUNTIME("setIconEnabled");
+    RUNTIME('setIconEnabled');
     this.loaded = true;
     this.updateSettings(settings);
     waitForLoad(this.onDOMLoad, this);
@@ -712,20 +714,20 @@ Command.init = function (enabled) {
       waitForLoad(Cursor.init, Cursor);
     }
     addListeners();
-    if (typeof settings.AUTOFUNCTIONS === "object") {
-      Object.getOwnPropertyNames(settings.AUTOFUNCTIONS).forEach(function (
-        name
-      ) {
-        eval("(function(){" + settings.AUTOFUNCTIONS[name] + "})()");
-      });
+    if (typeof settings.AUTOFUNCTIONS === 'object') {
+      Object.getOwnPropertyNames(settings.AUTOFUNCTIONS).forEach(
+        function (name) {
+          eval('(function(){' + settings.AUTOFUNCTIONS[name] + '})()');
+        }
+      );
     }
   } else {
-    RUNTIME("setIconDisabled");
+    RUNTIME('setIconDisabled');
     this.loaded = false;
     if (this.css && this.css.parentNode) {
       this.css.parentNode.removeChild(this.css);
     }
-    const links = document.getElementById("cVim-link-container");
+    const links = document.getElementById('cVim-link-container');
     if (Cursor.overlay && Cursor.overlay.parentNode) {
       Cursor.overlay.parentNode.removeChild(Cursor.overlay);
     }
@@ -743,7 +745,7 @@ Command.onSettingsLoad = (function () {
   const funcList = [];
   let loaded = false;
   return function (callback) {
-    if (typeof callback === "function") {
+    if (typeof callback === 'function') {
       if (!loaded) {
         funcList.push(callback);
       } else {
@@ -764,7 +766,7 @@ Command.destroy = function () {
     for (let i = 0; i < arguments.length; i++) {
       const elem = arguments[i];
       if (!elem) continue;
-      if (typeof elem.remove === "function") elem.remove();
+      if (typeof elem.remove === 'function') elem.remove();
     }
   };
   removeElements(
@@ -783,8 +785,8 @@ Command.configureSettings = function (_settings) {
   this.onSettingsLoad();
   DOM.onTitleChange(function (text) {
     if (!Session.ignoreTitleUpdate && settings.showtabindices) {
-      if (text.indexOf(Session.tabIndex + " ") !== 0) {
-        document.title = Session.tabIndex + " " + document.title;
+      if (text.indexOf(Session.tabIndex + ' ') !== 0) {
+        document.title = Session.tabIndex + ' ' + document.title;
       }
     }
     Session.ignoreTitleUpdate = false;
@@ -799,7 +801,7 @@ Command.configureSettings = function (_settings) {
       if (!blacklist.length) {
         continue;
       }
-      if (blacklist[0].charAt(0) === "@") {
+      if (blacklist[0].charAt(0) === '@') {
         if (matchLocation(document.URL, blacklist[0].slice(1))) {
           isBlacklisted = false;
           break;
@@ -811,12 +813,12 @@ Command.configureSettings = function (_settings) {
     return isBlacklisted;
   };
   Search.settings = Object.keys(settings).filter(function (e) {
-    return typeof settings[e] === "boolean";
+    return typeof settings[e] === 'boolean';
   });
   removeListeners();
   settings.searchlimit = +settings.searchlimit;
   if (!checkBlacklist()) {
-    RUNTIME("getActiveState", null, function (isActive) {
+    RUNTIME('getActiveState', null, function (isActive) {
       Command.init(isActive);
     });
   } else {

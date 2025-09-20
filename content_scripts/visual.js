@@ -1,5 +1,5 @@
 var Visual = {
-  queue: "",
+  queue: '',
   visualModeActive: false,
   caretModeActive: false,
   textNodes: [],
@@ -10,7 +10,7 @@ Visual.getTextNodes = function (callback) {
   var node;
   this.textNodes = [];
   while ((node = walker.nextNode())) {
-    if (node.nodeType === 3 && node.data.trim() !== "") {
+    if (node.nodeType === 3 && node.data.trim() !== '') {
       this.textNodes.push(node);
     }
   }
@@ -22,11 +22,11 @@ Visual.getTextNodes = function (callback) {
 Visual.exit = function () {
   this.caretModeActive = false;
   this.visualModeActive = false;
-  document.designMode = "off";
+  document.designMode = 'off';
   if (!Find.matches.length) {
     HUD.hide();
   } else {
-    HUD.display(Find.index + 1 + " / " + Find.matches.length);
+    HUD.display(Find.index + 1 + ' / ' + Find.matches.length);
   }
   document.body.spellcheck = true;
   return;
@@ -45,12 +45,12 @@ Visual.focusSearchResult = function (lineMode) {
       this.selection.baseNode,
       this.selection.baseNode.length
     );
-    HUD.display(" -- VISUAL LINE -- ");
+    HUD.display(' -- VISUAL LINE -- ');
     return this.enterLineMode();
   }
-  HUD.display(" -- VISUAL -- ");
+  HUD.display(' -- VISUAL -- ');
   this.selection = document.getSelection();
-  this.selection.extend(node, node.data.replace(/\s+$/, "").length);
+  this.selection.extend(node, node.data.replace(/\s+$/, '').length);
   this.visualModeActive = true;
 };
 
@@ -82,7 +82,7 @@ Visual.selectNode = function (index) {
   this.selection.setPosition(this.textNodes[index], 0);
   this.selection.extend(
     this.textNodes[index],
-    this.textNodes[index].data.replace(/\s+$/, "").length
+    this.textNodes[index].data.replace(/\s+$/, '').length
   );
   this.visualModeActive = true;
 };
@@ -108,10 +108,10 @@ Visual.enterLineMode = function () {
   this.firstLine = true;
   var base = this.textNodes[this.textNodes.indexOf(this.selection.baseNode)];
   if (base === void 0) {
-    HUD.setMessage(" -- VISUAL -- ");
+    HUD.setMessage(' -- VISUAL -- ');
     return (this.lineMode = false);
   }
-  if (this.selection.type === "Caret") {
+  if (this.selection.type === 'Caret') {
     this.selection.setPosition(base, 0);
     this.selection.extend(base, base.length);
   } else {
@@ -123,11 +123,11 @@ Visual.enterLineMode = function () {
     ) {
       this.selection.setPosition(bnode, bnode.length);
       this.selection.extend(enode, 0);
-      this.selection.modify("extend", "left", "lineboundary");
+      this.selection.modify('extend', 'left', 'lineboundary');
     } else {
       this.selection.setPosition(bnode, 0);
       this.selection.extend(enode, enode.length);
-      this.selection.modify("extend", "right", "lineboundary");
+      this.selection.modify('extend', 'right', 'lineboundary');
     }
     this.firstExtentNode = this.selection.extentNode;
   }
@@ -135,16 +135,16 @@ Visual.enterLineMode = function () {
 
 Visual.fillLine = function () {
   this.selection = document.getSelection();
-  if (this.selection.type === "Caret") {
+  if (this.selection.type === 'Caret') {
     this.selection.setPosition(this.selection.baseNode, 0);
-    this.selection.modify("extend", "right", "lineboundary");
+    this.selection.modify('extend', 'right', 'lineboundary');
   }
 };
 
 Visual.lineAction = function (key) {
   this.selection = document.getSelection();
   switch (key) {
-    case "j":
+    case 'j':
       if (
         this.firstLine ||
         this.selection.extentNode === this.firstExtentNode ||
@@ -153,11 +153,11 @@ Visual.lineAction = function (key) {
         this.selection.setPosition(this.selection.baseNode, 0);
         this.firstLine = false;
       }
-      this.selection.modify("extend", "right", "line");
-      this.selection.modify("extend", "left", "lineboundary");
+      this.selection.modify('extend', 'right', 'line');
+      this.selection.modify('extend', 'left', 'lineboundary');
       this.fillLine();
       break;
-    case "k":
+    case 'k':
       if (
         this.firstLine ||
         this.selection.extentNode === this.firstExtentNode ||
@@ -169,90 +169,90 @@ Visual.lineAction = function (key) {
         );
         this.firstLine = false;
       }
-      this.selection.modify("extend", "left", "line");
-      this.selection.modify("extend", "right", "lineboundary");
+      this.selection.modify('extend', 'left', 'line');
+      this.selection.modify('extend', 'right', 'lineboundary');
       this.fillLine();
       break;
-    case "p":
-    case "P":
+    case 'p':
+    case 'P':
       Clipboard.copy(this.selection.toString());
-      Clipboard.paste(key === "P");
+      Clipboard.paste(key === 'P');
       this.exit();
       break;
-    case "y":
+    case 'y':
       Clipboard.copy(this.selection.toString());
       Visual.collapse();
       break;
-    case "G":
-      this.selection.modify("extend", "right", "documentboundary");
+    case 'G':
+      this.selection.modify('extend', 'right', 'documentboundary');
       break;
   }
   Visual.scrollIntoView();
 };
 
 Visual.movements = {
-  l: ["right", "character"],
-  h: ["left", "character"],
-  k: ["left", "line"],
-  j: ["right", "line"],
-  w: ["right", "word"],
-  b: ["left", "word"],
-  0: ["left", "lineboundary"],
-  "^": ["left", "lineboundary"],
-  $: ["right", "lineboundary"],
-  G: ["right", "documentboundary"],
+  l: ['right', 'character'],
+  h: ['left', 'character'],
+  k: ['left', 'line'],
+  j: ['right', 'line'],
+  w: ['right', 'word'],
+  b: ['left', 'word'],
+  0: ['left', 'lineboundary'],
+  '^': ['left', 'lineboundary'],
+  $: ['right', 'lineboundary'],
+  G: ['right', 'documentboundary'],
 };
 
 Visual.action = function (key) {
   this.selection = document.getSelection();
 
   switch (key) {
-    case "g":
+    case 'g':
       if (!this.queue.length) {
-        this.queue += "g";
+        this.queue += 'g';
       } else {
-        this.queue = "";
+        this.queue = '';
         this.selection.modify(
-          this.visualModeActive ? "extend" : "move",
-          "left",
-          "documentboundary"
+          this.visualModeActive ? 'extend' : 'move',
+          'left',
+          'documentboundary'
         );
         this.scrollIntoView();
       }
       return;
-    case "v":
+    case 'v':
       if (this.lineMode) {
-        HUD.setMessage(" -- VISUAL -- ");
+        HUD.setMessage(' -- VISUAL -- ');
         this.lineMode = false;
         return;
       }
       this.visualModeActive = !this.visualModeActive;
       HUD.setMessage(
-        " -- " + (this.visualModeActive ? "VISUAL" : "CARET") + " -- "
+        ' -- ' + (this.visualModeActive ? 'VISUAL' : 'CARET') + ' -- '
       );
       break;
-    case "V":
+    case 'V':
       this.lineMode = !this.lineMode;
       this.visualModeActive = true;
       this.enterLineMode();
-      HUD.setMessage(" -- VISUAL LINE -- ");
+      HUD.setMessage(' -- VISUAL LINE -- ');
       return;
     default:
-      this.queue = "";
+      this.queue = '';
   }
 
   if (this.lineMode) {
     this.lineAction(key);
     return;
   }
-  if (this.selection.type === "Range") {
+  if (this.selection.type === 'Range') {
     this.visualModeActive = true;
   }
 
   var movementType =
-    this.selection.type === "Range" || this.visualModeActive
-      ? "extend"
-      : "move";
+    this.selection.type === 'Range' || this.visualModeActive
+      ? 'extend'
+      : 'move';
 
   if (this.movements.hasOwnProperty(key)) {
     this.selection.modify.apply(
@@ -263,24 +263,24 @@ Visual.action = function (key) {
   }
 
   switch (key) {
-    case "n":
-    case "N":
-      if (key === "N") {
+    case 'n':
+    case 'N':
+      if (key === 'N') {
         Mappings.actions.previousSearchResult(1);
       } else {
         Mappings.actions.nextSearchResult(1);
       }
       this.focusSearchResult();
       break;
-    case "p":
-    case "P":
+    case 'p':
+    case 'P':
       Clipboard.copy(this.selection.toString());
       this.selection.collapseToEnd();
-      Clipboard.paste(key === "P");
+      Clipboard.paste(key === 'P');
       this.exit();
       break;
-    case "y":
-      if (movementType === "extend") {
+    case 'y':
+      if (movementType === 'extend') {
         Clipboard.copy(this.selection.toString());
         Visual.collapse();
       }

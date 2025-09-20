@@ -7,7 +7,10 @@ global.Utils = {};
 // Load the utils module
 const fs = require('fs');
 const path = require('path');
-const utilsCode = fs.readFileSync(path.join(__dirname, '../../content_scripts/utils.js'), 'utf8');
+const utilsCode = fs.readFileSync(
+  path.join(__dirname, '../../content_scripts/utils.js'),
+  'utf8'
+);
 eval(utilsCode);
 
 describe('Utils', () => {

@@ -3,117 +3,117 @@ var insertMappings = new Trie(),
   currentTrieNode = mappingTrie;
 
 var Mappings = {
-  repeats: "",
-  queue: "",
+  repeats: '',
+  queue: '',
   lastCommand: {
-    fn: "",
-    queue: "",
-    repeatStr: "",
+    fn: '',
+    queue: '',
+    repeatStr: '',
     repeats: 1,
   },
 };
 
 Mappings.defaults = [
-  [";*", "setMark"],
-  [":", "openCommandBar"],
-  ["?", "openSearchBarReverse"],
-  [".", "repeatCommand"],
-  ["''", "lastScrollPosition"],
-  ["'*", "goToMark"],
-  ["[[", "previousMatchPattern"],
-  ["[d", "previousDomain"],
-  ["]]", "nextMatchPattern"],
-  ["]d", "nextDomain"],
-  ["/", "openSearchBar"],
-  ["#", "resetScrollFocus"],
-  ["%", "goToTab"],
-  ["<", "moveTabLeft"],
-  ["<C-6>", "lastUsedTab"],
-  ["<C-b>", "createBookmark"],
-  ["<C-i>", "nextScrollPosition"],
-  ["<C-o>", "previousScrollPosition"],
-  ["<C-S-h>", "openLastLinkInTab"],
-  ["<C-S-l>", "openNextLinkInTab"],
-  [">", "moveTabRight"],
-  ["$", "scrollToRight"],
-  ["0", "scrollToLeft"],
-  ["a", ":tabnew google "],
-  ["A", "openLastHint"],
-  ["b", ":bookmarks "],
-  ["B", ":buffer "],
-  ["D", "goForward"],
-  ["d", "scrollPageDown"],
-  ["E", "previousTab"],
-  ["e", "scrollPageUp"],
-  ["f", "createHint"],
-  ["F", "createTabbedHint"],
-  ["G", "scrollToBottom"],
-  ["gg", "scrollToTop"],
-  ["H", "goBack"],
-  ["h", "scrollLeft"],
-  ["I", ":history "],
-  ["i", "insertMode"],
-  ["J", "previousTab"],
-  ["j", "scrollDown"],
-  ["j", "scrollDown"],
-  ["K", "nextTab"],
-  ["k", "scrollUp"],
-  ["L", "goForward"],
-  ["l", "scrollRight"],
-  ["M*", "addQuickMark"],
-  ["mf", "createMultiHint"],
-  ["mr", "multiReverseImage"],
-  ["my", "multiYankUrl"],
-  ["n", "nextSearchResult"],
-  ["N", "previousSearchResult"],
-  ["o", ":open "],
-  ["O", ":open @%"],
-  ["p", "openPaste"],
-  ["P", "openPasteTab"],
-  ["q", "createHoverHint"],
-  ["Q", "createUnhoverHint"],
-  ["R", "nextTab"],
-  ["r", "reloadTab"],
-  ["S", "goBack"],
-  ["s", "scrollDown"],
-  ["t", ":tabnew "],
-  ["T", ":tabnew @%"],
-  ["u", "scrollPageUp"],
-  ["V", "toggleVisualLineMode"],
-  ["v", "toggleVisualMode"],
-  ["W", "createHintWindow"],
-  ["w", "scrollUp"],
-  ["x", "closeTab"],
-  ["X", "lastClosedTab"],
-  ["ya", "yankWindowUrls"],
-  ["yh", "yankHighlight"],
-  ["yy", "yankDocumentUrl"],
-  ["yY", "yankFrameUrl"],
-  ["z<Enter>", "toggleImageZoom"],
-  ["z0", "zoomOrig"],
-  ["zb", "centerMatchB"],
-  ["zi", "zoomPageIn"],
-  ["zo", "zoomPageOut"],
-  ["zt", "centerMatchT"],
-  ["zz", "centerMatchH"],
+  [';*', 'setMark'],
+  [':', 'openCommandBar'],
+  ['?', 'openSearchBarReverse'],
+  ['.', 'repeatCommand'],
+  ["''", 'lastScrollPosition'],
+  ["'*", 'goToMark'],
+  ['[[', 'previousMatchPattern'],
+  ['[d', 'previousDomain'],
+  [']]', 'nextMatchPattern'],
+  [']d', 'nextDomain'],
+  ['/', 'openSearchBar'],
+  ['#', 'resetScrollFocus'],
+  ['%', 'goToTab'],
+  ['<', 'moveTabLeft'],
+  ['<C-6>', 'lastUsedTab'],
+  ['<C-b>', 'createBookmark'],
+  ['<C-i>', 'nextScrollPosition'],
+  ['<C-o>', 'previousScrollPosition'],
+  ['<C-S-h>', 'openLastLinkInTab'],
+  ['<C-S-l>', 'openNextLinkInTab'],
+  ['>', 'moveTabRight'],
+  ['$', 'scrollToRight'],
+  ['0', 'scrollToLeft'],
+  ['a', ':tabnew google '],
+  ['A', 'openLastHint'],
+  ['b', ':bookmarks '],
+  ['B', ':buffer '],
+  ['D', 'goForward'],
+  ['d', 'scrollPageDown'],
+  ['E', 'previousTab'],
+  ['e', 'scrollPageUp'],
+  ['f', 'createHint'],
+  ['F', 'createTabbedHint'],
+  ['G', 'scrollToBottom'],
+  ['gg', 'scrollToTop'],
+  ['H', 'goBack'],
+  ['h', 'scrollLeft'],
+  ['I', ':history '],
+  ['i', 'insertMode'],
+  ['J', 'previousTab'],
+  ['j', 'scrollDown'],
+  ['j', 'scrollDown'],
+  ['K', 'nextTab'],
+  ['k', 'scrollUp'],
+  ['L', 'goForward'],
+  ['l', 'scrollRight'],
+  ['M*', 'addQuickMark'],
+  ['mf', 'createMultiHint'],
+  ['mr', 'multiReverseImage'],
+  ['my', 'multiYankUrl'],
+  ['n', 'nextSearchResult'],
+  ['N', 'previousSearchResult'],
+  ['o', ':open '],
+  ['O', ':open @%'],
+  ['p', 'openPaste'],
+  ['P', 'openPasteTab'],
+  ['q', 'createHoverHint'],
+  ['Q', 'createUnhoverHint'],
+  ['R', 'nextTab'],
+  ['r', 'reloadTab'],
+  ['S', 'goBack'],
+  ['s', 'scrollDown'],
+  ['t', ':tabnew '],
+  ['T', ':tabnew @%'],
+  ['u', 'scrollPageUp'],
+  ['V', 'toggleVisualLineMode'],
+  ['v', 'toggleVisualMode'],
+  ['W', 'createHintWindow'],
+  ['w', 'scrollUp'],
+  ['x', 'closeTab'],
+  ['X', 'lastClosedTab'],
+  ['ya', 'yankWindowUrls'],
+  ['yh', 'yankHighlight'],
+  ['yy', 'yankDocumentUrl'],
+  ['yY', 'yankFrameUrl'],
+  ['z<Enter>', 'toggleImageZoom'],
+  ['z0', 'zoomOrig'],
+  ['zb', 'centerMatchB'],
+  ['zi', 'zoomPageIn'],
+  ['zo', 'zoomPageOut'],
+  ['zt', 'centerMatchT'],
+  ['zz', 'centerMatchH'],
 ];
 
 Mappings.defaultsClone = Object.clone(Mappings.defaults);
 
 Mappings.actions = {
   lastUsedTab: function () {
-    RUNTIME("lastUsedTab");
+    RUNTIME('lastUsedTab');
   },
-  "<Nop>": function () {},
+  '<Nop>': function () {},
   toggleVisualMode: function () {
     Command.callOnCvimLoad(function () {
       Visual.caretModeActive = true;
       Visual.getTextNodes();
       Visual.lineMode = false;
       document.body.spellcheck = false;
-      document.designMode = "on";
+      document.designMode = 'on';
       Visual.selection = document.getSelection();
-      if (document.getSelection().type === "Range") {
+      if (document.getSelection().type === 'Range') {
         return false;
       }
       if (Find.matches.length) {
@@ -122,7 +122,7 @@ Mappings.actions = {
         var closestNode = Visual.closestNode();
         if (closestNode) {
           Visual.selection.setPosition(Visual.closestNode(), 0);
-          HUD.display(" -- CARET -- ");
+          HUD.display(' -- CARET -- ');
           Visual.scrollIntoView();
         } else {
           Visual.lineMode = false;
@@ -140,9 +140,9 @@ Mappings.actions = {
     Visual.getTextNodes();
     Visual.lineMode = true;
     document.body.spellcheck = false;
-    document.designMode = "on";
+    document.designMode = 'on';
     Visual.selection = document.getSelection();
-    if (document.getSelection().type === "Range") {
+    if (document.getSelection().type === 'Range') {
       return false;
     }
     if (Find.matches.length) {
@@ -162,103 +162,103 @@ Mappings.actions = {
     window.stop();
   },
   cancelAllWebRequests: function () {
-    RUNTIME("cancelAllWebRequests");
+    RUNTIME('cancelAllWebRequests');
   },
   percentScroll: function (repeats) {
-    repeats = Mappings.repeats === "0" || Mappings.repeats === "" ? 0 : repeats;
+    repeats = Mappings.repeats === '0' || Mappings.repeats === '' ? 0 : repeats;
     document.scrollingElement.scrollTop =
       ((document.body.scrollHeight - window.innerHeight) * repeats) / 100;
   },
   goToTab: function (repeats) {
-    RUNTIME("goToTab", { index: repeats - 1 });
+    RUNTIME('goToTab', { index: repeats - 1 });
   },
   hideDownloadsShelf: function () {
-    RUNTIME("hideDownloadsShelf");
+    RUNTIME('hideDownloadsShelf');
   },
   goToRootUrl: function () {
-    RUNTIME("openLink", {
+    RUNTIME('openLink', {
       url:
         location.protocol +
-        "//" +
+        '//' +
         location.hostname +
-        (location.port ? ":" + location.port : ""),
+        (location.port ? ':' + location.port : ''),
       tab: { pinned: null },
     });
   },
   goUpUrl: function (repeats) {
     var path =
-      "/" +
+      '/' +
       location.pathname
-        .split("/")
+        .split('/')
         .filter(function (e) {
           return e;
         })
         .slice(0, -repeats)
-        .join("/");
+        .join('/');
     if (path !== location.pathname) {
-      RUNTIME("openLink", {
+      RUNTIME('openLink', {
         url:
           location.protocol +
-          "//" +
+          '//' +
           location.hostname +
-          (location.port ? ":" + location.port : "") +
+          (location.port ? ':' + location.port : '') +
           path,
         tab: { pinned: null },
       });
     }
   },
   nextFrame: function (repeats) {
-    RUNTIME("focusFrame", { repeats: repeats });
+    RUNTIME('focusFrame', { repeats: repeats });
   },
   rootFrame: function () {
-    RUNTIME("focusFrame", { isRoot: true });
+    RUNTIME('focusFrame', { isRoot: true });
   },
   closeTab: function (repeats) {
-    RUNTIME("closeTab", { repeats: repeats });
+    RUNTIME('closeTab', { repeats: repeats });
   },
   closeTabLeft: function (repeats) {
-    RUNTIME("closeTabLeft", { repeats: repeats });
+    RUNTIME('closeTabLeft', { repeats: repeats });
   },
   closeTabRight: function (repeats) {
-    RUNTIME("closeTabRight", { repeats: repeats });
+    RUNTIME('closeTabRight', { repeats: repeats });
   },
   closeTabsToLeft: function () {
-    RUNTIME("closeTabsToLeft");
+    RUNTIME('closeTabsToLeft');
   },
   closeTabsToRight: function () {
-    RUNTIME("closeTabsToRight");
+    RUNTIME('closeTabsToRight');
   },
   pinTab: function () {
-    RUNTIME("pinTab");
+    RUNTIME('pinTab');
   },
   firstTab: function () {
-    RUNTIME("firstTab");
+    RUNTIME('firstTab');
   },
   lastTab: function () {
-    RUNTIME("lastTab");
+    RUNTIME('lastTab');
   },
   lastClosedTab: function (repeats) {
-    RUNTIME("openLast", { repeats: repeats });
+    RUNTIME('openLast', { repeats: repeats });
   },
   moveTabRight: function (repeats) {
-    RUNTIME("moveTabRight", { repeats: repeats });
+    RUNTIME('moveTabRight', { repeats: repeats });
   },
   moveTabLeft: function (repeats) {
-    RUNTIME("moveTabLeft", { repeats: repeats });
+    RUNTIME('moveTabLeft', { repeats: repeats });
   },
   lastActiveTab: function () {
-    RUNTIME("lastActiveTab");
+    RUNTIME('lastActiveTab');
   },
   reverseImage: function () {
     if (
       /\(\d+×\d+\)$/.test(document.title) === true &&
-      document.body.firstChild.localName === "img"
+      document.body.firstChild.localName === 'img'
     ) {
       if (document.body.firstChild.src) {
-        RUNTIME("openLinkTab", {
+        RUNTIME('openLinkTab', {
           active: false,
           url:
-            "https://www.google.com/searchbyimage?image_url=" +
+            'https://www.google.com/searchbyimage?image_url=' +
             document.body.firstChild.src,
           noconvert: true,
         });
@@ -266,40 +266,40 @@ Mappings.actions = {
       }
     } else {
       window.setTimeout(function () {
-        Hints.create("image");
+        Hints.create('image');
       }, 0);
     }
   },
   multiReverseImage: function () {
     window.setTimeout(function () {
-      Hints.create("multiimage");
+      Hints.create('multiimage');
     }, 0);
   },
   toggleImageZoom: function () {
     if (/\.[a-z]+\s+\(\d+×\d+\)/i.test(document.title)) {
-      var images = document.getElementsByTagName("img");
+      var images = document.getElementsByTagName('img');
       if (images.length) {
-        DOM.mouseEvent("click", images[0]);
+        DOM.mouseEvent('click', images[0]);
       }
     }
   },
   zoomPageIn: function (repeats) {
-    RUNTIME("zoomIn", { repeats: repeats }, function () {
+    RUNTIME('zoomIn', { repeats: repeats }, function () {
       document.body.style.zoom =
         (+document.body.style.zoom ? parseFloat(document.body.style.zoom) : 1) +
         settings.zoomfactor * repeats;
     });
   },
   zoomPageOut: function (repeats) {
-    RUNTIME("zoomOut", { repeats: repeats }, function () {
+    RUNTIME('zoomOut', { repeats: repeats }, function () {
       document.body.style.zoom =
         (+document.body.style.zoom ? parseFloat(document.body.style.zoom) : 1) -
         settings.zoomfactor * repeats;
     });
   },
   zoomOrig: function () {
-    RUNTIME("zoomOrig", null, function () {
-      document.body.style.zoom = "1";
+    RUNTIME('zoomOrig', null, function () {
+      document.body.style.zoom = '1';
     });
   },
   centerMatchT: function () {
@@ -338,46 +338,46 @@ Mappings.actions = {
     }
   },
   openLastLinkInTab: function (repeats) {
-    RUNTIME("openLastLinkInTab", { repeats: repeats });
+    RUNTIME('openLastLinkInTab', { repeats: repeats });
   },
   openNextLinkInTab: function (repeats) {
-    RUNTIME("openNextLinkInTab", { repeats: repeats });
+    RUNTIME('openNextLinkInTab', { repeats: repeats });
   },
   scrollDown: function (repeats) {
-    Scroll.scroll("down", repeats);
+    Scroll.scroll('down', repeats);
   },
   scrollUp: function (repeats) {
-    Scroll.scroll("up", repeats);
+    Scroll.scroll('up', repeats);
   },
   scrollPageDown: function (repeats) {
-    Scroll.scroll("pageDown", repeats);
+    Scroll.scroll('pageDown', repeats);
   },
   scrollFullPageDown: function (repeats) {
-    Scroll.scroll("fullPageDown", repeats);
+    Scroll.scroll('fullPageDown', repeats);
   },
   scrollPageUp: function (repeats) {
-    Scroll.scroll("pageUp", repeats);
+    Scroll.scroll('pageUp', repeats);
   },
   scrollFullPageUp: function (repeats) {
-    Scroll.scroll("fullPageUp", repeats);
+    Scroll.scroll('fullPageUp', repeats);
   },
   scrollLeft: function (repeats) {
-    Scroll.scroll("left", repeats);
+    Scroll.scroll('left', repeats);
   },
   scrollRight: function (repeats) {
-    Scroll.scroll("right", repeats);
+    Scroll.scroll('right', repeats);
   },
   scrollToTop: function () {
-    Scroll.scroll("top");
+    Scroll.scroll('top');
   },
   scrollToBottom: function () {
-    Scroll.scroll("bottom");
+    Scroll.scroll('bottom');
   },
   scrollToLeft: function () {
-    Scroll.scroll("leftmost");
+    Scroll.scroll('leftmost');
   },
   scrollToRight: function () {
-    Scroll.scroll("rightmost");
+    Scroll.scroll('rightmost');
   },
   lastScrollPosition: function () {
     if (!Scroll.lastPosition) {
@@ -405,7 +405,7 @@ Mappings.actions = {
       ];
       window.scrollTo.apply(null, Scroll.positions[key]);
     } else {
-      Status.setMessage("Mark not set", 1, "error");
+      Status.setMessage('Mark not set', 1, 'error');
     }
   },
   setMark: function () {
@@ -418,43 +418,43 @@ Mappings.actions = {
     Hints.create();
   },
   createTabbedHint: function () {
-    Hints.create("tabbed");
+    Hints.create('tabbed');
   },
   createActiveTabbedHint: function () {
-    Hints.create("tabbedActive");
+    Hints.create('tabbedActive');
   },
   createMultiHint: function () {
-    Hints.create("multi");
+    Hints.create('multi');
   },
   createHintWindow: function () {
-    Hints.create("window");
+    Hints.create('window');
   },
   createEditHint: function () {
-    Hints.create("edit");
+    Hints.create('edit');
   },
   createHoverHint: function () {
-    Hints.create("hover");
+    Hints.create('hover');
   },
   createUnhoverHint: function () {
-    Hints.create("unhover");
+    Hints.create('unhover');
   },
   createScriptHint: function (repeats, scriptName) {
     Hints.scriptFunction = scriptName;
     if (settings.FUNCTIONS.hasOwnProperty(scriptName)) {
-      Hints.create("script");
+      Hints.create('script');
     }
   },
   yankUrl: function () {
-    Hints.create("yank");
+    Hints.create('yank');
   },
   multiYankUrl: function () {
-    Hints.create("multiyank");
+    Hints.create('multiyank');
   },
   fullImageHint: function () {
-    Hints.create("fullimage");
+    Hints.create('fullimage');
   },
   yankDocumentUrl: function () {
-    RUNTIME("getRootUrl", function (url) {
+    RUNTIME('getRootUrl', function (url) {
       Clipboard.copy(url);
       Status.setMessage(url, 2);
     });
@@ -464,11 +464,11 @@ Mappings.actions = {
     Status.setMessage(document.URL, 2);
   },
   yankWindowUrls: function () {
-    PORT("yankWindowUrls");
+    PORT('yankWindowUrls');
   },
   yankHighlight: function () {
     var selection = document.getSelection();
-    if (selection.type === "Range" && selection.toString() !== "") {
+    if (selection.type === 'Range' && selection.toString() !== '') {
       Clipboard.copy(selection.toString());
       return;
     }
@@ -523,61 +523,61 @@ Mappings.actions = {
   },
   insertMode: function () {
     Command.callOnCvimLoad(function () {
-      HUD.display(" -- INSERT -- ");
+      HUD.display(' -- INSERT -- ');
     });
     insertMode = true;
   },
   reloadTab: function () {
-    RUNTIME("reloadTab", { nocache: false });
+    RUNTIME('reloadTab', { nocache: false });
   },
   reloadTabUncached: function () {
-    RUNTIME("reloadTab", { nocache: true });
+    RUNTIME('reloadTab', { nocache: true });
   },
   reloadAllButCurrent: function () {
-    RUNTIME("reloadAllTabs", { nocache: false, current: false });
+    RUNTIME('reloadAllTabs', { nocache: false, current: false });
   },
   reloadAllTabs: function () {
-    RUNTIME("reloadAllTabs", { nocache: false, current: true });
+    RUNTIME('reloadAllTabs', { nocache: false, current: true });
   },
   nextSearchResult: function (repeats) {
     if (Find.matches.length) {
-      Find.search(Find.mode || "/", repeats);
+      Find.search(Find.mode || '/', repeats);
     } else if (
       Find.lastSearch !== void 0 &&
-      typeof Find.lastSearch === "string"
+      typeof Find.lastSearch === 'string'
     ) {
       Find.highlight({
         base: document.body,
-        mode: Find.mode || "/",
+        mode: Find.mode || '/',
         search: Find.lastSearch,
         setIndex: true,
         executeSearch: false,
       });
-      Find.search(Find.mode || "/", +(Find.mode === "?"));
+      Find.search(Find.mode || '/', +(Find.mode === '?'));
     }
   },
   previousSearchResult: function (repeats) {
     if (Find.matches.length) {
-      Find.search(Find.mode || "?", -repeats);
+      Find.search(Find.mode || '?', -repeats);
     } else if (
       Find.lastSearch !== void 0 &&
-      typeof Find.lastSearch === "string"
+      typeof Find.lastSearch === 'string'
     ) {
       Find.highlight({
         base: document.body,
-        mode: Find.mode || "?",
+        mode: Find.mode || '?',
         search: Find.lastSearch,
         setIndex: true,
         executeSearch: false,
       });
-      Find.search(Find.mode || "?", -(Find.mode !== "?"));
+      Find.search(Find.mode || '?', -(Find.mode !== '?'));
     }
   },
   nextTab: function (r) {
-    RUNTIME("nextTab", { repeats: r });
+    RUNTIME('nextTab', { repeats: r });
   },
   previousTab: function (r) {
-    RUNTIME("previousTab", { repeats: r });
+    RUNTIME('previousTab', { repeats: r });
   },
   goBack: function (repeats) {
     history.go(-1 * repeats);
@@ -587,7 +587,7 @@ Mappings.actions = {
   },
 
   _switchDomain: function (direction, repeats) {
-    RUNTIME("getHistoryStates", null, function (response) {
+    RUNTIME('getHistoryStates', null, function (response) {
       if (response.links.length === 0) return;
 
       var curDomain = new URL(response.links[response.state]).hostname;
@@ -623,13 +623,13 @@ Mappings.actions = {
   goToInput: function (repeats) {
     this.inputElements = [];
     var allInput = document.querySelectorAll(
-      "input,textarea,*[contenteditable]"
+      'input,textarea,*[contenteditable]'
     );
     for (var i = 0, l = allInput.length; i < l; i++) {
       if (
         DOM.isEditable(allInput[i]) &&
         DOM.isVisible(allInput[i]) &&
-        allInput[i].id !== "cVim-command-bar-input"
+        allInput[i].id !== 'cVim-command-bar-input'
       ) {
         this.inputElements.push(allInput[i]);
       }
@@ -658,17 +658,17 @@ Mappings.actions = {
     if (document.activeElement.select) {
       document.activeElement.select();
     }
-    if (!document.activeElement.hasAttribute("readonly")) {
-      document.getSelection().modify("move", "right", "lineboundary");
+    if (!document.activeElement.hasAttribute('readonly')) {
+      document.getSelection().modify('move', 'right', 'lineboundary');
     }
   },
   shortCuts: function (command, repeats) {
     commandMode = true;
-    if (command.indexOf("@%") !== -1) {
+    if (command.indexOf('@%') !== -1) {
       RUNTIME(
-        "getRootUrl",
+        'getRootUrl',
         function (url) {
-          this.shortCuts(command.split("@%").join(url), repeats);
+          this.shortCuts(command.split('@%').join(url), repeats);
         }.bind(this)
       );
       return;
@@ -676,57 +676,57 @@ Mappings.actions = {
     return window.setTimeout(function () {
       var shouldComplete = !/<cr>(\s+)?$/i.test(command);
       command = command
-        .replace(/^:/, "")
-        .replace(/<cr>(\s+)?$/i, "")
-        .replace(/<space>/gi, " ");
+        .replace(/^:/, '')
+        .replace(/<cr>(\s+)?$/i, '')
+        .replace(/<space>/gi, ' ');
       if (!shouldComplete) {
         Command.execute(command, repeats);
         return;
       }
       Command.show(false, command, shouldComplete);
-      this.queue = "";
-      this.repeats = "";
+      this.queue = '';
+      this.repeats = '';
     }, 0);
   },
   openSearchBar: function () {
     Find.lastIndex = Find.index;
     if (
-      document.readyState === "interactive" ||
-      document.readyState === "complete"
+      document.readyState === 'interactive' ||
+      document.readyState === 'complete'
     ) {
       Command.lastScrollTop = document.scrollingElement.scrollTop;
     }
     commandMode = true;
     Find.previousMatches = Find.matches.length > 0;
-    return Command.show("/");
+    return Command.show('/');
   },
   openSearchBarReverse: function () {
     Find.lastIndex = Find.index;
     commandMode = true;
     if (
-      document.readyState === "interactive" ||
-      document.readyState === "complete"
+      document.readyState === 'interactive' ||
+      document.readyState === 'complete'
     ) {
       Command.lastScrollTop = document.scrollingElement.scrollTop;
     }
     Find.previousMatches = Find.matches.length > 0;
-    return Command.show("?");
+    return Command.show('?');
   },
   openLinkSearchBar: function () {
     Find.lastIndex = Find.index;
     if (
-      document.readyState === "interactive" ||
-      document.readyState === "complete"
+      document.readyState === 'interactive' ||
+      document.readyState === 'complete'
     ) {
       Command.lastScrollTop = document.scrollingElement.scrollTop;
     }
     commandMode = true;
     Find.previousMatches = Find.matches.length > 0;
-    return Command.show("$");
+    return Command.show('$');
   },
   openCommandBar: function () {
     commandMode = true;
-    return Command.show(false, "", settings.completeonopen);
+    return Command.show(false, '', settings.completeonopen);
   },
   repeatCommand: function (repeats) {
     if (this.hasOwnProperty(Mappings.lastCommand.fn)) {
@@ -738,13 +738,13 @@ Mappings.actions = {
     }
   },
   createBookmark: function () {
-    PORT("createBookmark", {
+    PORT('createBookmark', {
       url: document.URL,
       title: document.title,
     });
   },
   quitChrome: function () {
-    PORT("quitChrome");
+    PORT('quitChrome');
   },
   passKeys: function (repeats) {
     Mappings.keyPassesLeft = repeats;
@@ -757,17 +757,17 @@ Mappings.actions = {
     HUD.hide();
   },
   muteTab: function () {
-    RUNTIME("muteTab");
+    RUNTIME('muteTab');
   },
   showHatebComment: function () {
     Hateb.showComment();
   },
   sendToChatGPT: function () {
-    var prompt = (settings && settings.prompt) || "summarize";
-    var q = prompt + "\n" + location.href;
-    var u = new URL("https://chatgpt.com/");
-    u.searchParams.set("q", q);
-    RUNTIME("openLink", {
+    var prompt = (settings && settings.prompt) || 'summarize';
+    var q = prompt + '\n' + location.href;
+    var u = new URL('https://chatgpt.com/');
+    u.searchParams.set('q', q);
+    RUNTIME('openLink', {
       url: u.toString(),
       tab: { tabbed: true, active: true },
     });
@@ -778,7 +778,7 @@ Mappings.actions = {
   var replaceURLNumber = function (callback) {
     var url = document.URL.replace(/\b\d+\b/, callback);
     if (url !== document.URL)
-      RUNTIME("openLink", { url: url, tab: { tabbed: false } });
+      RUNTIME('openLink', { url: url, tab: { tabbed: false } });
   };
   Mappings.actions.incrementURLPath = function (repeats) {
     replaceURLNumber(function (e) {
@@ -793,18 +793,18 @@ Mappings.actions = {
 })();
 
 Mappings.insertDefaults = [
-  ["<C-y>", "deleteWord"],
-  ["<C-p>", "deleteForwardWord"],
-  ["<C-i>", "beginningOfLine"],
-  ["<C-e>", "endOfLine"],
-  ["<C-u>", "deleteToBeginning"],
-  ["<C-o>", "deleteToEnd"],
-  ["<C-f>", "forwardChar"],
-  ["<C-b>", "backwardChar"],
-  ["<C-j>", "forwardLine"],
-  ["<C-k>", "backwardLine"],
-  ["<C-l>", "forwardWord"],
-  ["<C-h>", "backwardWord"],
+  ['<C-y>', 'deleteWord'],
+  ['<C-p>', 'deleteForwardWord'],
+  ['<C-i>', 'beginningOfLine'],
+  ['<C-e>', 'endOfLine'],
+  ['<C-u>', 'deleteToBeginning'],
+  ['<C-o>', 'deleteToEnd'],
+  ['<C-f>', 'forwardChar'],
+  ['<C-b>', 'backwardChar'],
+  ['<C-j>', 'forwardLine'],
+  ['<C-k>', 'backwardLine'],
+  ['<C-l>', 'forwardWord'],
+  ['<C-h>', 'backwardWord'],
 ];
 
 Mappings.insertFunctions = (function () {
@@ -816,13 +816,13 @@ Mappings.insertFunctions = (function () {
       return;
     }
     selection.modify
-      .bind(selection, selection.type === "Range" ? "extend" : "move")
+      .bind(selection, selection.type === 'Range' ? 'extend' : 'move')
       .apply(null, arguments);
   }
 
   function deleteSelection() {
-    if (selection.type === "Range" && selection.toString().length !== 0) {
-      document.execCommand("delete", false, 0);
+    if (selection.type === 'Range' && selection.toString().length !== 0) {
+      document.execCommand('delete', false, 0);
       return true;
     }
     return false;
@@ -836,15 +836,15 @@ Mappings.insertFunctions = (function () {
       return element;
     },
     editWithVim: function () {
-      PORT("editWithVim", {
+      PORT('editWithVim', {
         text: element.value || element.innerHTML,
       });
     },
-    forwardChar: modify.bind(null, "right", "character"),
-    backwardChar: modify.bind(null, "left", "character"),
+    forwardChar: modify.bind(null, 'right', 'character'),
+    backwardChar: modify.bind(null, 'left', 'character'),
     backwardWord: function () {
       if (element.value !== void 0) {
-        var text = element.value.split("").reverse().join("");
+        var text = element.value.split('').reverse().join('');
         var len = text.length;
         var start = len - element.selectionStart;
         var end = text
@@ -855,7 +855,7 @@ Mappings.insertFunctions = (function () {
         element.selectionEnd = len - end;
         return;
       }
-      modify("left", "word");
+      modify('left', 'word');
     },
     forwardWord: function () {
       if (element.value !== void 0) {
@@ -868,29 +868,29 @@ Mappings.insertFunctions = (function () {
         element.selectionEnd = end;
         return;
       }
-      modify("right", "word");
+      modify('right', 'word');
     },
     deleteToBeginning: function () {
-      modify("extend", "left", "lineboundary");
+      modify('extend', 'left', 'lineboundary');
       if (!deleteSelection()) {
-        modify("extend", "left", "character");
+        modify('extend', 'left', 'character');
         deleteSelection();
       }
     },
     deleteToEnd: function () {
-      modify("extend", "right", "lineboundary");
+      modify('extend', 'right', 'lineboundary');
       Clipboard.copy(selection.toString());
       deleteSelection();
-      modify("move", "right", "lineboundary");
+      modify('move', 'right', 'lineboundary');
     },
     beginningOfLine: function () {
-      modify("left", "lineboundary");
+      modify('left', 'lineboundary');
     },
     endOfLine: function () {
-      modify("right", "lineboundary");
+      modify('right', 'lineboundary');
     },
     deleteWord: function () {
-      modify("extend", "left", "word");
+      modify('extend', 'left', 'word');
       deleteSelection();
     },
     deleteForwardWord: function () {
@@ -903,23 +903,23 @@ Mappings.insertFunctions = (function () {
         element.selectionStart = start;
         element.selectionEnd = end;
       } else {
-        modify("extend", "right", "word");
+        modify('extend', 'right', 'word');
       }
       deleteSelection();
     },
     deleteChar: function () {
-      modify("extend", "left", "character");
+      modify('extend', 'left', 'character');
       deleteSelection();
     },
     deleteForwardChar: function () {
-      modify("extend", "right", "character");
+      modify('extend', 'right', 'character');
       deleteSelection();
     },
     forwardLine: function () {
-      modify("move", "right", "line");
+      modify('move', 'right', 'line');
     },
     backwardLine: function () {
-      modify("move", "left", "line");
+      modify('move', 'left', 'line');
     },
     selectAll: function () {
       if (element.select) {
@@ -960,23 +960,23 @@ Mappings.parseLine = function (line) {
   var map = Utils.compressArray(line.split(/ +/));
   if (map.length) {
     switch (map[0]) {
-      case "unmapAll":
+      case 'unmapAll':
         mappingTrie.children = {};
         return;
-      case "iunmapAll":
+      case 'iunmapAll':
         insertMappings.children = {};
         return;
-      case "map":
-      case "remap":
+      case 'map':
+      case 'remap':
         if (map[1] === map[2]) {
           return;
         }
         map[1] = map[1].replace(/<leader>/gi, settings.mapleader);
         mappingTrie.removeByKey(this.splitMapping(map[1]));
-        mappingTrie.insert(this.splitMapping(map[1]), map.slice(2).join(" "));
+        mappingTrie.insert(this.splitMapping(map[1]), map.slice(2).join(' '));
         return;
-      case "imap":
-      case "iremap":
+      case 'imap':
+      case 'iremap':
         if (map[1] === map[2]) {
           return;
         }
@@ -986,36 +986,36 @@ Mappings.parseLine = function (line) {
           insertMappings.findValue(this.splitMapping(map[2])) ||
             map
               .slice(2)
-              .join(" ")
-              .replace(/\s+".*/, "")
+              .join(' ')
+              .replace(/\s+".*/, '')
         );
-      case "iunmap":
+      case 'iunmap':
         map.slice(1).forEach(
           function (unmap) {
             insertMappings.removeByKey(this.splitMapping(unmap));
           }.bind(this)
         );
         return;
-      case "unmap":
+      case 'unmap':
         map.slice(1).forEach(
           function (unmap) {
             mappingTrie.removeByKey(this.splitMapping(unmap));
           }.bind(this)
         );
         return;
-      case "call":
+      case 'call':
         waitForLoad(function () {
-          map = Utils.trim(map.slice(1).join(" "));
-          if (map[0] === ":") {
-            Command.execute(map.slice(1).replace(/<CR>/i, ""), 1);
+          map = Utils.trim(map.slice(1).join(' '));
+          if (map[0] === ':') {
+            Command.execute(map.slice(1).replace(/<CR>/i, ''), 1);
           } else if (Mappings.actions[map]) {
-            ECHO("callMapFunction", {
+            ECHO('callMapFunction', {
               name: map,
             });
           } else {
-            ECHO("eval", {
-              name: map.replace(/\(.*/, ""),
-              args: map.replace(/[^(]+/, "") || "()",
+            ECHO('eval', {
+              name: map.replace(/\(.*/, ''),
+              args: map.replace(/[^(]+/, '') || '()',
             });
           }
         });
@@ -1031,7 +1031,7 @@ Mappings.parseCustom = function (config, updateSiteMappings) {
   this.insertDefaults.forEach(function (e) {
     insertMappings.insert(Mappings.splitMapping(e[0]), e[1]);
   });
-  Utils.split(config, "\n").forEach(function (e) {
+  Utils.split(config, '\n').forEach(function (e) {
     Mappings.parseLine(e);
   });
 
@@ -1050,7 +1050,7 @@ Mappings.executeSequence = function (c, r) {
   }
   if (/^\d+/.test(c)) {
     r = c.match(/^\d+/)[0];
-    c = c.replace(/^\d+/, "");
+    c = c.replace(/^\d+/, '');
     this.repeats = r;
     if (!c.length) {
       return;
@@ -1078,13 +1078,13 @@ Mappings.executeSequence = function (c, r) {
 };
 
 Mappings.handleEscapeKey = function () {
-  this.queue = "";
-  this.repeats = "";
+  this.queue = '';
+  this.repeats = '';
   currentTrieNode = mappingTrie;
 
   if (commandMode) {
-    if (Command.type === "search") {
-      PORT("cancelIncSearch", {
+    if (Command.type === 'search') {
+      PORT('cancelIncSearch', {
         search: Command.input.value,
       });
     }
@@ -1094,7 +1094,7 @@ Mappings.handleEscapeKey = function () {
   }
 
   if (DOM.isEditable(document.activeElement)) {
-    if (document.getSelection().type === "Range") {
+    if (document.getSelection().type === 'Range') {
       document.getSelection().collapseToEnd();
       return;
     }
@@ -1114,7 +1114,7 @@ Mappings.handleEscapeKey = function () {
   }
 
   if (Hints.lastHover) {
-    DOM.mouseEvent("unhover", Hints.lastHover);
+    DOM.mouseEvent('unhover', Hints.lastHover);
     Hints.lastHover = null;
     return;
   }
@@ -1134,23 +1134,23 @@ Mappings.nonRepeatableCommands = [];
 
 Mappings.clearQueue = function () {
   currentTrieNode = mappingTrie;
-  this.queue = this.repeats = "";
+  this.queue = this.repeats = '';
   this.validMatch = false;
 };
 
 Mappings.shouldPrevent = function (key) {
-  if (key === "<Esc>" || key === "<C-[>" || Hints.active) {
+  if (key === '<Esc>' || key === '<C-[>' || Hints.active) {
     return true;
   }
   if (
     /^[0-9]$/.test(key) &&
-    !(currentTrieNode.hasKey(key) && this.repeats === "") &&
-    !(key === "0" && this.repeats === "")
+    !(currentTrieNode.hasKey(key) && this.repeats === '') &&
+    !(key === '0' && this.repeats === '')
   ) {
     return true;
   }
   if (!currentTrieNode.hasKey(key)) {
-    if (currentTrieNode.getKey("*")) {
+    if (currentTrieNode.getKey('*')) {
       return true;
     }
   } else {
@@ -1160,7 +1160,7 @@ Mappings.shouldPrevent = function (key) {
 };
 
 Mappings.convertToAction = function (key) {
-  if (key === "<Esc>" || key === "<C-[>") {
+  if (key === '<Esc>' || key === '<C-[>') {
     this.handleEscapeKey();
     return false;
   }
@@ -1171,8 +1171,8 @@ Mappings.convertToAction = function (key) {
 
   if (
     /^[0-9]$/.test(key) &&
-    !(currentTrieNode.hasKey(key) && this.repeats === "") &&
-    !(key === "0" && this.repeats === "")
+    !(currentTrieNode.hasKey(key) && this.repeats === '') &&
+    !(key === '0' && this.repeats === '')
   ) {
     this.repeats += key;
     return;
@@ -1180,8 +1180,8 @@ Mappings.convertToAction = function (key) {
 
   this.queue += key;
   if (!currentTrieNode.hasKey(key)) {
-    if (currentTrieNode.getKey("*")) {
-      currentTrieNode = currentTrieNode.getKey("*");
+    if (currentTrieNode.getKey('*')) {
+      currentTrieNode = currentTrieNode.getKey('*');
     } else {
       this.clearQueue();
       return false;
@@ -1191,25 +1191,25 @@ Mappings.convertToAction = function (key) {
     this.validMatch = true;
   }
 
-  var mapVal = currentTrieNode.value || "";
+  var mapVal = currentTrieNode.value || '';
   var actionParams;
   (function () {
-    if (mapVal.charAt(0) !== ":") {
+    if (mapVal.charAt(0) !== ':') {
       mapVal = mapVal.replace(/\([^)]+\)/, function (e) {
         actionParams = e.slice(1, -1);
-        return "";
+        return '';
       });
     }
   })();
 
   if (mapVal) {
     if (/^\d+\D/.test(mapVal)) {
-      this.repeats = +mapVal.replace(/\D.*/g, "") || 1;
-      mapVal = mapVal.replace(/^\d+/, "");
+      this.repeats = +mapVal.replace(/\D.*/g, '') || 1;
+      mapVal = mapVal.replace(/^\d+/, '');
     }
     for (
       var mapLinks = [mapVal];
-      !this.actions[mapVal] && mapVal.charAt(0) !== ":";
+      !this.actions[mapVal] && mapVal.charAt(0) !== ':';
       mapLinks.push(mapVal)
     ) {
       mapVal = mappingTrie.findValue(this.splitMapping(mapVal));
@@ -1218,13 +1218,13 @@ Mappings.convertToAction = function (key) {
         return false;
       }
       if (~mapLinks.indexOf(mapVal)) {
-        Status.setMessage("recursive mapping detected", void 0, "error");
+        Status.setMessage('recursive mapping detected', void 0, 'error');
         this.clearQueue();
         return false;
       }
     }
     if (
-      mapVal !== "repeatCommand" &&
+      mapVal !== 'repeatCommand' &&
       this.nonRepeatableCommands.indexOf(mapVal) === -1
     ) {
       this.lastCommand.queue = this.queue;
@@ -1233,12 +1233,12 @@ Mappings.convertToAction = function (key) {
       this.lastCommand.params = actionParams;
       this.lastCommand.repeatStr = this.repeats;
     }
-    if (mapVal.charAt(0) === ":") {
+    if (mapVal.charAt(0) === ':') {
       this.actions.shortCuts(mapVal, this.lastCommand.repeats);
     } else {
-      if (mapVal !== "repeatCommand") {
+      if (mapVal !== 'repeatCommand') {
         this.actions[mapVal](+this.repeats || 1, actionParams);
-        RUNTIME("updateLastCommand", {
+        RUNTIME('updateLastCommand', {
           data: JSON.stringify(this.lastCommand),
         });
       } else {

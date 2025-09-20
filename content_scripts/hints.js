@@ -1,31 +1,29 @@
 var Hints = {};
 
 Hints.tryGooglePattern = function (forward) {
-  if (location.hostname.indexOf("www.google.")) return false;
-  var target = document.getElementById(forward ? "pnnext" : "pnprev");
+  if (location.hostname.indexOf('www.google.')) return false;
+  var target = document.getElementById(forward ? 'pnnext' : 'pnprev');
   if (target) target.click();
   return !!target;
 };
 
 Hints.matchPatternFilters = {
-  "*://*.ebay.com/*": {
-    next: "td a.next",
-    prev: "td a.prev",
+  '*://*.ebay.com/*': {
+    next: 'td a.next',
+    prev: 'td a.prev',
   },
-  "*://mail.google.com/*": {
-    next:
-      'div[role="button"][data-tooltip="Older"]:not([aria-disabled="true"])',
-    prev:
-      'div[role="button"][data-tooltip="Newer"]:not([aria-disabled="true"])',
+  '*://mail.google.com/*': {
+    next: 'div[role="button"][data-tooltip="Older"]:not([aria-disabled="true"])',
+    prev: 'div[role="button"][data-tooltip="Newer"]:not([aria-disabled="true"])',
   },
-  "*://*.reddit.com/*": {
+  '*://*.reddit.com/*': {
     next: 'a[rel$="next"]',
     prev: 'a[rel$="prev"]',
   },
 };
 
 Hints.matchPatterns = function (pattern) {
-  var direction = pattern === settings.nextmatchpattern ? "next" : "prev";
+  var direction = pattern === settings.nextmatchpattern ? 'next' : 'prev';
   var applicableFilters = Object.keys(this.matchPatternFilters)
     .filter(function (key) {
       return matchLocation(document.URL, key);
@@ -47,46 +45,46 @@ Hints.matchPatterns = function (pattern) {
   }
   if (link === null) {
     if (this.tryGooglePattern(pattern === settings.nextmatchpattern)) return;
-    if (typeof pattern === "string")
-      pattern = new RegExp("^" + pattern + "$", "i");
+    if (typeof pattern === 'string')
+      pattern = new RegExp('^' + pattern + '$', 'i');
     link = findFirstOf(getLinkableElements(), function (e) {
       return (
         e.textContent.trim() &&
-        (pattern.test(e.textContent) || pattern.test(e.getAttribute("value")))
+        (pattern.test(e.textContent) || pattern.test(e.getAttribute('value')))
       );
     });
   }
   if (link) {
-    DOM.mouseEvent("hover", link);
-    DOM.mouseEvent("click", link);
+    DOM.mouseEvent('hover', link);
+    DOM.mouseEvent('click', link);
   }
 };
 
 Hints.hideHints = function (reset, multi, useKeyDelay) {
-  if (reset && document.getElementById("cVim-link-container") !== null) {
+  if (reset && document.getElementById('cVim-link-container') !== null) {
     document
-      .getElementById("cVim-link-container")
-      .parentNode.removeChild(document.getElementById("cVim-link-container"));
-  } else if (document.getElementById("cVim-link-container") !== null) {
+      .getElementById('cVim-link-container')
+      .parentNode.removeChild(document.getElementById('cVim-link-container'));
+  } else if (document.getElementById('cVim-link-container') !== null) {
     if (!multi) HUD.hide();
     if (settings.linkanimations) {
-      Hints.shadowDOM.addEventListener("transitionend", function () {
-        var m = document.getElementById("cVim-link-container");
+      Hints.shadowDOM.addEventListener('transitionend', function () {
+        var m = document.getElementById('cVim-link-container');
         if (m !== null) {
           m.parentNode.removeChild(m);
         }
       });
-      Hints.shadowDOM.host.style.opacity = "0";
+      Hints.shadowDOM.host.style.opacity = '0';
     } else {
       document
-        .getElementById("cVim-link-container")
-        .parentNode.removeChild(document.getElementById("cVim-link-container"));
+        .getElementById('cVim-link-container')
+        .parentNode.removeChild(document.getElementById('cVim-link-container'));
     }
   }
   this.numericMatch = void 0;
   this.shouldShowLinkInfo = false;
   this.active = reset;
-  this.currentString = "";
+  this.currentString = '';
   this.linkArr = [];
   this.linkHints = [];
   this.permutations = [];
@@ -110,7 +108,7 @@ Hints.changeFocus = function () {
 };
 
 Hints.removeContainer = function () {
-  var hintContainer = document.getElementById("cVim-link-container");
+  var hintContainer = document.getElementById('cVim-link-container');
   if (hintContainer !== null)
     hintContainer.parentNode.removeChild(hintContainer);
 };
@@ -130,72 +128,72 @@ Hints.dispatchAction = function (link, shift) {
   if (shift || KeyHandler.shiftKey) {
     switch (this.type) {
       case void 0:
-        this.type = "tabbed";
+        this.type = 'tabbed';
         break;
     }
   }
 
   switch (this.type) {
-    case "yank":
-    case "multiyank":
-      var text = link.href || link.value || link.getAttribute("placeholder");
+    case 'yank':
+    case 'multiyank':
+      var text = link.href || link.value || link.getAttribute('placeholder');
       if (text) {
         Clipboard.copy(text, this.multi);
         Status.setMessage(text, 2);
       }
       break;
-    case "fullimage":
-      RUNTIME("openLinkTab", { active: false, url: link.src, noconvert: true });
+    case 'fullimage':
+      RUNTIME('openLinkTab', { active: false, url: link.src, noconvert: true });
       break;
-    case "image":
-    case "multiimage":
-      var url = "https://www.google.com/searchbyimage?image_url=" + link.src;
+    case 'image':
+    case 'multiimage':
+      var url = 'https://www.google.com/searchbyimage?image_url=' + link.src;
       if (url) {
-        RUNTIME("openLinkTab", { active: false, url: url, noconvert: true });
+        RUNTIME('openLinkTab', { active: false, url: url, noconvert: true });
       }
       break;
-    case "hover":
+    case 'hover':
       if (Hints.lastHover) {
-        DOM.mouseEvent("unhover", Hints.lastHover);
+        DOM.mouseEvent('unhover', Hints.lastHover);
         if (Hints.lastHover === link) {
           Hints.lastHover = null;
           break;
         }
       }
-      DOM.mouseEvent("hover", link);
+      DOM.mouseEvent('hover', link);
       Hints.lastHover = link;
       break;
-    case "edit":
+    case 'edit':
       Mappings.insertFunctions.__setElement__(link);
       link.focus();
-      PORT("editWithVim", {
+      PORT('editWithVim', {
         text: link.value || link.textContent,
       });
       break;
-    case "unhover":
-      DOM.mouseEvent("unhover", link);
+    case 'unhover':
+      DOM.mouseEvent('unhover', link);
       break;
-    case "window":
-      RUNTIME("openLinkWindow", {
+    case 'window':
+      RUNTIME('openLinkWindow', {
         focused: true,
         url: link.href,
         noconvert: true,
       });
       break;
-    case "script":
+    case 'script':
       eval(settings.FUNCTIONS[this.scriptFunction])(link);
       break;
     default:
       if (
-        node === "textarea" ||
-        (node === "input" &&
+        node === 'textarea' ||
+        (node === 'input' &&
           /^(text|password|email|search)$/i.test(link.type)) ||
-        link.hasAttribute("contenteditable")
+        link.hasAttribute('contenteditable')
       ) {
         setTimeout(
           function () {
             link.focus();
-            if (link.hasAttribute("readonly")) {
+            if (link.hasAttribute('readonly')) {
               link.select();
             }
           }.bind(this),
@@ -203,32 +201,32 @@ Hints.dispatchAction = function (link, shift) {
         );
         break;
       }
-      if (node === "select") {
+      if (node === 'select') {
         link.focus();
         break;
       }
       if (
-        node === "input" ||
-        /^(checkbox|menu)$/.test(link.getAttribute("role"))
+        node === 'input' ||
+        /^(checkbox|menu)$/.test(link.getAttribute('role'))
       ) {
         window.setTimeout(function () {
-          DOM.mouseEvent("click", link);
+          DOM.mouseEvent('click', link);
         }, 0);
         break;
       }
-      if ((/tabbed/.test(this.type) || this.type === "multi") && link.href) {
-        RUNTIME("openLinkTab", {
-          active: this.type === "tabbedActive",
+      if ((/tabbed/.test(this.type) || this.type === 'multi') && link.href) {
+        RUNTIME('openLinkTab', {
+          active: this.type === 'tabbedActive',
           url: link.href,
           noconvert: true,
         });
       } else {
-        if (link.hasAttribute("tabindex")) link.focus();
-        DOM.mouseEvent("hover", link);
-        if (link.hasAttribute("href")) {
+        if (link.hasAttribute('tabindex')) link.focus();
+        DOM.mouseEvent('hover', link);
+        if (link.hasAttribute('href')) {
           link.click();
         } else {
-          DOM.mouseEvent("click", link);
+          DOM.mouseEvent('click', link);
         }
       }
       break;
@@ -272,9 +270,9 @@ Hints.handleHintFeedback = function () {
           link.normalize();
         }
         if (settings.dimhintcharacters) {
-          span = document.createElement("span");
-          span.setAttribute("cVim", true);
-          span.className = "cVim-link-hint_match";
+          span = document.createElement('span');
+          span.setAttribute('cVim', true);
+          span.className = 'cVim-link-hint_match';
           link.firstChild.splitText(this.currentString.length);
           span.appendChild(link.firstChild.cloneNode(true));
           link.replaceChild(span, link.firstChild);
@@ -284,7 +282,7 @@ Hints.handleHintFeedback = function () {
         index = i.toString();
         linksFound++;
       } else if (link.parentNode) {
-        link.style.opacity = "0";
+        link.style.opacity = '0';
       }
     }
   } else {
@@ -302,7 +300,7 @@ Hints.handleHintFeedback = function () {
     for (i = 0, l = this.linkArr.length; i < l; ++i) {
       link = this.linkArr[i][0];
 
-      if (link.style.opacity === "0") {
+      if (link.style.opacity === '0') {
         continue;
       }
       validMatch = false;
@@ -314,7 +312,7 @@ Hints.handleHintFeedback = function () {
           !containsNumber &&
           this.linkArr[i][2]
             .toLowerCase()
-            .indexOf(string.replace(/.*\d/g, "")) !== -1
+            .indexOf(string.replace(/.*\d/g, '')) !== -1
         ) {
           validMatch = true;
         }
@@ -330,10 +328,10 @@ Hints.handleHintFeedback = function () {
         if (settings.typelinkhints && !containsNumber) {
           var c = 0;
           for (var j = 0; j < this.linkArr.length; ++j) {
-            if (this.linkArr[j][0].style.opacity !== "0") {
+            if (this.linkArr[j][0].style.opacity !== '0') {
               this.linkArr[j][0].textContent =
                 (c + 1).toString() +
-                (this.linkArr[j][3] ? ": " + this.linkArr[j][3] : "");
+                (this.linkArr[j][3] ? ': ' + this.linkArr[j][3] : '');
               c++;
             }
           }
@@ -343,16 +341,16 @@ Hints.handleHintFeedback = function () {
         }
         if (containsNumber) {
           if (settings.dimhintcharacters) {
-            span = document.createElement("span");
-            span.setAttribute("cVim", true);
-            span.className = "cVim-link-hint_match";
+            span = document.createElement('span');
+            span.setAttribute('cVim', true);
+            span.className = 'cVim-link-hint_match';
             link.firstChild.splitText(stringNum.length);
             span.appendChild(link.firstChild.cloneNode(true));
             link.replaceChild(span, link.firstChild);
           } else if (link.textContent.length !== 1) {
-            span = document.createElement("span");
-            span.setAttribute("cVim", true);
-            span.className = "cVim-link-hint_match_hidden";
+            span = document.createElement('span');
+            span.setAttribute('cVim', true);
+            span.className = 'cVim-link-hint_match_hidden';
             link.firstChild.splitText(stringNum.length);
             span.appendChild(link.firstChild.cloneNode(true));
             link.replaceChild(span, link.firstChild);
@@ -361,7 +359,7 @@ Hints.handleHintFeedback = function () {
         index = i.toString();
         linksFound++;
       } else if (link.parentNode) {
-        link.style.opacity = "0";
+        link.style.opacity = '0';
       }
     }
   }
@@ -384,23 +382,23 @@ Hints.handleHintFeedback = function () {
 };
 
 Hints.handleHint = function (key) {
-  key = key.replace("<Space>", " ");
+  key = key.replace('<Space>', ' ');
   switch (key) {
-    case "/":
-      return (document.getElementById("cVim-link-container").style.opacity =
-        "0");
-    case "<Tab>":
+    case '/':
+      return (document.getElementById('cVim-link-container').style.opacity =
+        '0');
+    case '<Tab>':
       Hints.shouldShowLinkInfo = !Hints.shouldShowLinkInfo;
       return;
   }
-  if (settings.numerichints && key === "<Enter>") {
+  if (settings.numerichints && key === '<Enter>') {
     return this.numericMatch
       ? this.dispatchAction(this.numericMatch)
       : this.hideHints(false);
   }
   if (
     settings.numerichints ||
-    ~settings.hintcharacters.split("").indexOf(key.toLowerCase())
+    ~settings.hintcharacters.split('').indexOf(key.toLowerCase())
   ) {
     this.currentString += key.toLowerCase();
     this.handleHintFeedback(this.currentString);
@@ -417,8 +415,8 @@ Hints.evaluateLink = function (item) {
   var hint = this.linkElementBase.cloneNode(false);
   var style = hint.style;
   style.zIndex = this.linkIndex;
-  style.top = document.scrollingElement.scrollTop + rect.top + "px";
-  style.left = document.scrollingElement.scrollLeft + rect.left + "px";
+  style.top = document.scrollingElement.scrollTop + rect.top + 'px';
+  style.left = document.scrollingElement.scrollLeft + rect.left + 'px';
 
   item.hint = hint; // TODO: get rid of linkArr
 
@@ -426,13 +424,13 @@ Hints.evaluateLink = function (item) {
     if (!settings.typelinkhints) {
       this.linkArr.push([hint, node]);
     } else {
-      var textValue = "";
-      var alt = "";
+      var textValue = '';
+      var alt = '';
       if (node.firstElementChild && node.firstElementChild.alt) {
         textValue = node.firstElementChild.alt;
         alt = textValue;
       } else {
-        textValue = node.textContent || node.value || node.alt || "";
+        textValue = node.textContent || node.value || node.alt || '';
       }
       item.text = textValue;
       this.linkArr.push([hint, node, textValue, alt]);
@@ -443,33 +441,33 @@ Hints.evaluateLink = function (item) {
 };
 
 Hints.siteFilters = {
-  "*://*.reddit.com/*": {
-    reject: ["a:not([href])", "*[onclick^=click_thing]"],
-    accept: [".grippy"],
+  '*://*.reddit.com/*': {
+    reject: ['a:not([href])', '*[onclick^=click_thing]'],
+    accept: ['.grippy'],
   },
-  "*://*.google.*/*": {
+  '*://*.google.*/*': {
     reject: [
-      "div",
+      'div',
       'li[class$="_dropdownitem"]',
       'div[class$="_dropdown"]',
       'div[aria-label="Apps"]',
-      ".hdtbna.notl",
-      ".irc_rit",
+      '.hdtbna.notl',
+      '.irc_rit',
       'a[href^="imgres"]',
-      "div[id=hdtbMenus]",
+      'div[id=hdtbMenus]',
       'div[aria-label="Account Information"]',
       'img[jsaction^="load:"]',
     ],
   },
-  "*://github.com/*": {
-    reject: [".select-menu-modal-holder.js-menu-content"],
-    accept: [".js-menu-close"],
+  '*://github.com/*': {
+    reject: ['.select-menu-modal-holder.js-menu-content'],
+    accept: ['.js-menu-close'],
   },
-  "*://twitter.com/*": {
-    accept: [".new-tweets-bar.js-new-tweets-bar"],
+  '*://twitter.com/*': {
+    accept: ['.new-tweets-bar.js-new-tweets-bar'],
   },
-  "*://imgur.com/*": {
-    accept: [".thumb-title", ".carousel-button"],
+  '*://imgur.com/*': {
+    accept: ['.thumb-title', '.carousel-button'],
   },
 };
 
@@ -507,63 +505,63 @@ Hints.INPUT_LINK = 8;
 Hints.getLinkType = function (node) {
   if (node.nodeType !== Node.ELEMENT_NODE) return Hints.NON_LINK_TYPE;
 
-  if (node.getAttribute("aria-hidden") === "true") return Hints.NON_LINK_TYPE;
+  if (node.getAttribute('aria-hidden') === 'true') return Hints.NON_LINK_TYPE;
 
   var name = node.localName.toLowerCase();
 
   if (Hints.type) {
-    if (Hints.type.indexOf("yank") !== -1) {
-      if (name === "a") return Hints.LINK_TYPE;
-      if (name === "textarea" || name === "input")
+    if (Hints.type.indexOf('yank') !== -1) {
+      if (name === 'a') return Hints.LINK_TYPE;
+      if (name === 'textarea' || name === 'input')
         return Hints.LINK_TYPE | Hints.INPUT_LINK;
       return Hints.NON_LINK_TYPE;
-    } else if (Hints.type.indexOf("image") !== -1) {
-      if (name === "img") return Hints.LINK_TYPE;
+    } else if (Hints.type.indexOf('image') !== -1) {
+      if (name === 'img') return Hints.LINK_TYPE;
       return Hints.NON_LINK_TYPE;
-    } else if (Hints.type === "edit") {
+    } else if (Hints.type === 'edit') {
       if (DOM.isEditable(node)) return Hints.LINK_TYPE | Hints.INPUT_LINK;
       return Hints.NON_LINK_TYPE;
     }
   }
 
   switch (name) {
-    case "a":
-    case "button":
-    case "area":
+    case 'a':
+    case 'button':
+    case 'area':
       return Hints.LINK_TYPE;
-    case "select":
-    case "textarea":
-    case "input":
+    case 'select':
+    case 'textarea':
+    case 'input':
       return Hints.LINK_TYPE | Hints.INPUT_LINK;
   }
 
   switch (true) {
-    case node.hasAttribute("contenteditable"):
+    case node.hasAttribute('contenteditable'):
       return Hints.LINK_TYPE | Hints.INPUT_LINK;
-    case node.hasAttribute("tabindex"):
-    case node.hasAttribute("onclick"):
+    case node.hasAttribute('tabindex'):
+    case node.hasAttribute('onclick'):
       return Hints.LINK_TYPE;
-    case node.hasAttribute("aria-haspopup"):
-    case node.hasAttribute("data-cmd"):
-    case node.hasAttribute("jsaction"):
-    case node.hasAttribute("data-ga-click"):
-    case node.hasAttribute("aria-selected"):
+    case node.hasAttribute('aria-haspopup'):
+    case node.hasAttribute('data-cmd'):
+    case node.hasAttribute('jsaction'):
+    case node.hasAttribute('data-ga-click'):
+    case node.hasAttribute('aria-selected'):
       return Hints.WEAK_LINK_TYPE;
   }
 
-  var role = node.getAttribute("role");
+  var role = node.getAttribute('role');
   if (role) {
     if (
-      role === "button" ||
-      role === "option" ||
-      role === "checkbox" ||
-      role.indexOf("menuitem") !== -1
+      role === 'button' ||
+      role === 'option' ||
+      role === 'checkbox' ||
+      role.indexOf('menuitem') !== -1
     ) {
       return Hints.LINK_TYPE;
     }
   }
 
-  if ((node.getAttribute("class") || "").indexOf("button") !== -1) {
+  if ((node.getAttribute('class') || '').indexOf('button') !== -1) {
     return Hints.WEAK_LINK_TYPE;
   }
 
@@ -603,7 +601,7 @@ Hints.getLinkInfo = Utils.cacheFunction(function (node) {
 
   if (info.linkType === Hints.NON_LINK_TYPE) return null;
 
-  if (node.localName.toLowerCase() === "area") {
+  if (node.localName.toLowerCase() === 'area') {
     info.rect = DOM.getVisibleBoundingAreaRect(node);
   } else {
     info.rect = DOM.getVisibleBoundingRect(node);
@@ -658,14 +656,14 @@ Hints.getLinks = function () {
 Hints.genHints = function (M) {
   var base = settings.hintcharacters.length;
   if (M <= base) {
-    return settings.hintcharacters.slice(0, M).split("");
+    return settings.hintcharacters.slice(0, M).split('');
   }
   var codeWord = function (n, b) {
     for (var i = 0, word = []; i < b; i++) {
       word.push(settings.hintcharacters.charAt(n % base));
       n = ~~(n / base);
     }
-    return word.reverse().join("");
+    return word.reverse().join('');
   };
 
   var b = Math.ceil(Math.log(M) / Math.log(base));
@@ -703,16 +701,16 @@ Hints.create = function (type, multi) {
     } else {
       Hints.documentZoom = 1;
     }
-    Hints.linkElementBase = document.createElement("div");
+    Hints.linkElementBase = document.createElement('div');
     Hints.linkElementBase.cVim = true;
-    Hints.linkElementBase.className = "cVim-link-hint";
+    Hints.linkElementBase.className = 'cVim-link-hint';
     if (settings.scalehints) {
-      Hints.linkElementBase.className += " cVim-hint-scale";
+      Hints.linkElementBase.className += ' cVim-hint-scale';
     }
     self.getLinks().forEach(function (link) {
       self.evaluateLink(link);
     });
-    if (type && type.indexOf("multi") !== -1) {
+    if (type && type.indexOf('multi') !== -1) {
       self.multi = true;
     } else {
       self.multi = false;
@@ -721,17 +719,17 @@ Hints.create = function (type, multi) {
       return self.hideHints();
     }
 
-    main = document.createElement("div");
+    main = document.createElement('div');
     if (settings && settings.linkanimations) {
-      main.style.opacity = "0";
+      main.style.opacity = '0';
     }
     main.cVim = true;
     frag = document.createDocumentFragment();
 
-    main.id = "cVim-link-container";
-    main.top = document.scrollingElement.scrollTop + "px";
-    main.left = document.scrollingElement.scrollLeft + "px";
-    Hints.shadowDOM = main.attachShadow({ mode: "closed" });
+    main.id = 'cVim-link-container';
+    main.top = document.scrollingElement.scrollTop + 'px';
+    main.left = document.scrollingElement.scrollLeft + 'px';
+    Hints.shadowDOM = main.attachShadow({ mode: 'closed' });
 
     try {
       document.lastChild.appendChild(main);
@@ -741,23 +739,23 @@ Hints.create = function (type, multi) {
 
     if (!multi && settings && settings.hud) {
       HUD.display(
-        "Follow link " +
+        'Follow link ' +
           (function () {
             return (
               {
-                yank: "(yank)",
-                multiyank: "(multi-yank)",
-                image: "(reverse-image)",
-                fullimage: "(full image)",
-                tabbed: "(tabbed)",
-                tabbedActive: "(tabbed)",
-                window: "(window)",
-                edit: "(edit)",
-                hover: "(hover)",
-                unhover: "(unhover)",
-                multi: "(multi)",
+                yank: '(yank)',
+                multiyank: '(multi-yank)',
+                image: '(reverse-image)',
+                fullimage: '(full image)',
+                tabbed: '(tabbed)',
+                tabbedActive: '(tabbed)',
+                window: '(window)',
+                edit: '(edit)',
+                hover: '(hover)',
+                unhover: '(unhover)',
+                multi: '(multi)',
                 script: '(script: "' + self.scriptFunction + '")',
-              }[type] || ""
+              }[type] || ''
             );
           })()
       );
@@ -773,29 +771,29 @@ Hints.create = function (type, multi) {
       for (i = 0, l = self.linkArr.length; i < l; ++i) {
         self.linkArr[i][0].textContent =
           (i + 1).toString() +
-          (self.linkArr[i][3] ? ": " + self.linkArr[i][3] : "");
+          (self.linkArr[i][3] ? ': ' + self.linkArr[i][3] : '');
         frag.appendChild(self.linkArr[i][0]);
       }
     }
 
-    [].forEach.call(document.querySelectorAll("style"), function (e) {
-      if (e.textContent.indexOf("cVim") !== -1) {
+    [].forEach.call(document.querySelectorAll('style'), function (e) {
+      if (e.textContent.indexOf('cVim') !== -1) {
         Hints.shadowDOM.appendChild(e.cloneNode(true));
       }
     });
 
     var create = function () {
       Hints.shadowDOM.appendChild(frag);
-      var style = document.createElement("style");
+      var style = document.createElement('style');
       style.textContent = Command.mainCSS;
       Hints.shadowDOM.appendChild(style);
-      main.style.opacity = "1";
+      main.style.opacity = '1';
     };
 
     if (Command.mainCSS === undefined) {
       httpRequest(
         {
-          url: chrome.runtime.getURL("content_scripts/main.css"),
+          url: chrome.runtime.getURL('content_scripts/main.css'),
         },
         function (data) {
           Command.mainCSS = data;

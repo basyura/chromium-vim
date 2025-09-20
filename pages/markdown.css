@@ -1,5 +1,7 @@
 body {
-  font-family: "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family:
+    'Helvetica Neue', Helvetica, 'Segoe UI', Arial, freesans, sans-serif,
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
   font-size: 14px;
   line-height: 1.6;
   padding-top: 10px;
@@ -10,7 +12,8 @@ body {
   min-width: 1000px;
   max-width: 1280px;
   position: absolute;
-  left: 0; right: 0;
+  left: 0;
+  right: 0;
   margin: 0 auto;
 }
 
@@ -25,7 +28,7 @@ body > *:last-child {
 }
 
 a {
-  color: #4183C4;
+  color: #4183c4;
   text-decoration: none;
 }
 
@@ -44,7 +47,12 @@ a.anchor {
   bottom: 0;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   margin: 20px 0 10px;
   padding: 0;
   font-weight: bold;
@@ -53,23 +61,35 @@ h1, h2, h3, h4, h5, h6 {
   position: relative;
 }
 
-h2:first-child, h1:first-child, h1:first-child + h2, h3:first-child, h4:first-child, h5:first-child, h6:first-child {
+h2:first-child,
+h1:first-child,
+h1:first-child + h2,
+h3:first-child,
+h4:first-child,
+h5:first-child,
+h6:first-child {
   margin-top: 0;
   padding-top: 0;
 }
 
-h1:hover a.anchor, h2:hover a.anchor, h3:hover a.anchor, h4:hover a.anchor, h5:hover a.anchor, h6:hover a.anchor {
+h1:hover a.anchor,
+h2:hover a.anchor,
+h3:hover a.anchor,
+h4:hover a.anchor,
+h5:hover a.anchor,
+h6:hover a.anchor {
   text-decoration: none;
 }
 
-code, tt {
-    padding: 0;
-    padding-top: 0.2em;
-    padding-bottom: 0.2em;
-    margin: 0;
-    font-size: 85%;
-    background-color: rgba(0,0,0,0.04);
-    border-radius: 3px
+code,
+tt {
+  padding: 0;
+  padding-top: 0.2em;
+  padding-bottom: 0.2em;
+  margin: 0;
+  font-size: 85%;
+  background-color: rgba(0, 0, 0, 0.04);
+  border-radius: 3px;
 }
 
 h1 {
@@ -100,14 +120,21 @@ h6 {
   font-size: 14px;
 }
 
-p, blockquote, ul, ol, dl, li, table, pre {
+p,
+blockquote,
+ul,
+ol,
+dl,
+li,
+table,
+pre {
   margin: 15px 0;
   box-sizing: border-box;
   width: 100%;
 }
 
 hr {
-  background: transparent url("http://tinyurl.com/bq5kskr") repeat-x 0 0;
+  background: transparent url('http://tinyurl.com/bq5kskr') repeat-x 0 0;
   border: 0 none;
   color: #cccccc;
   height: 4px;
@@ -129,17 +156,30 @@ body > h1:first-child + h2 {
   padding-top: 0;
 }
 
-body > h3:first-child, body > h4:first-child, body > h5:first-child, body > h6:first-child {
+body > h3:first-child,
+body > h4:first-child,
+body > h5:first-child,
+body > h6:first-child {
   margin-top: 0;
   padding-top: 0;
 }
 
-a:first-child h1, a:first-child h2, a:first-child h3, a:first-child h4, a:first-child h5, a:first-child h6 {
+a:first-child h1,
+a:first-child h2,
+a:first-child h3,
+a:first-child h4,
+a:first-child h5,
+a:first-child h6 {
   margin-top: 0;
   padding-top: 0;
 }
 
-h1 p, h2 p, h3 p, h4 p, h5 p, h6 p {
+h1 p,
+h2 p,
+h3 p,
+h4 p,
+h5 p,
+h6 p {
   margin-top: 0;
 }
 
@@ -147,15 +187,18 @@ li p.first {
   display: inline-block;
 }
 
-ul, ol {
+ul,
+ol {
   padding-left: 30px;
 }
 
-ul :first-child, ol :first-child {
+ul :first-child,
+ol :first-child {
   margin-top: 0;
 }
 
-ul :last-child, ol :last-child {
+ul :last-child,
+ol :last-child {
   margin-bottom: 0;
 }
 
@@ -252,11 +295,13 @@ table tr td {
   padding: 6px 13px;
 }
 
-table tr th :first-child, table tr td :first-child {
+table tr th :first-child,
+table tr td :first-child {
   margin-top: 0;
 }
 
-table tr th :last-child, table tr td :last-child {
+table tr th :last-child,
+table tr td :last-child {
   margin-bottom: 0;
 }
 
@@ -372,7 +417,8 @@ pre {
   border-radius: 3px;
 }
 
-code, tt {
+code,
+tt {
   font-family: monospace;
   font-size: inherit;
   margin: 0 2px;
@@ -391,7 +437,8 @@ pre code {
   background: transparent;
 }
 
-pre code, pre tt {
+pre code,
+pre tt {
   background-color: transparent;
   border: none;
 }

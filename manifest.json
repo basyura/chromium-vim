@@ -6,8 +6,8 @@
   "update_url": "https://clients2.google.com/service/update2/crx",
   "icons": {
     "128": "icons/128.png",
-    "48":  "icons/48.png",
-    "16":  "icons/16.png"
+    "48": "icons/48.png",
+    "16": "icons/16.png"
   },
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'self'"
@@ -108,8 +108,10 @@
     }
   ],
   "options_page": "pages/options.html",
-  "web_accessible_resources": [{
-    "resources": ["cmdline_frame.html"],
-    "matches": ["<all_urls>"]
-  }]
+  "web_accessible_resources": [
+    {
+      "resources": ["cmdline_frame.html"],
+      "matches": ["<all_urls>"]
+    }
+  ]
 }

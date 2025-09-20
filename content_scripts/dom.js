@@ -3,10 +3,10 @@ window.DOM = {
     if (!element) {
       return false;
     }
-    if (element.localName !== "input") return false;
-    if (element.hasAttribute("submit")) return true;
+    if (element.localName !== 'input') return false;
+    if (element.hasAttribute('submit')) return true;
     while ((element = element.parentElement)) {
-      if (element.localName === "form") return true;
+      if (element.localName === 'form') return true;
     }
     return false;
   },
@@ -16,24 +16,24 @@ window.DOM = {
       return false;
     }
     if (
-      element.localName === "textarea" ||
-      element.localName === "select" ||
-      element.hasAttribute("contenteditable")
+      element.localName === 'textarea' ||
+      element.localName === 'select' ||
+      element.hasAttribute('contenteditable')
     )
       return true;
-    if (element.localName !== "input") return false;
-    var type = element.getAttribute("type");
+    if (element.localName !== 'input') return false;
+    var type = element.getAttribute('type');
     switch (type) {
-      case "button":
-      case "checkbox":
-      case "color":
-      case "file":
-      case "hidden":
-      case "image":
-      case "radio":
-      case "reset":
-      case "submit":
-      case "week":
+      case 'button':
+      case 'checkbox':
+      case 'color':
+      case 'file':
+      case 'hidden':
+      case 'image':
+      case 'radio':
+      case 'reset':
+      case 'submit':
+      case 'week':
         return false;
     }
     return true;
@@ -43,7 +43,7 @@ window.DOM = {
     if (!element) {
       return false;
     }
-    if (element.localName === "input" || element.localName === "textarea") {
+    if (element.localName === 'input' || element.localName === 'textarea') {
       return true;
     }
     while (element) {
@@ -57,7 +57,7 @@ window.DOM = {
 
   onTitleChange: function (callback) {
     waitForLoad(function () {
-      var title = (document.getElementsByTagName("title") || [])[0];
+      var title = (document.getElementsByTagName('title') || [])[0];
       if (!title) {
         return;
       }
@@ -75,7 +75,7 @@ window.DOM = {
    */
   getVisibleBoundingRect: function (node) {
     var style = getComputedStyle(node, null);
-    if (style.visibility !== "visible" || style.display === "none") {
+    if (style.visibility !== 'visible' || style.display === 'none') {
       return null;
     }
 
@@ -130,14 +130,14 @@ window.DOM = {
 
   getVisibleBoundingAreaRect: function (node) {
     var map = node.parentElement;
-    if (!map || map.localName.toLowerCase() !== "map") return null;
-    var mapName = map.getAttribute("name");
+    if (!map || map.localName.toLowerCase() !== 'map') return null;
+    var mapName = map.getAttribute('name');
     if (!mapName) return null;
     var mapImg = document.querySelector('*[usemap="#' + mapName + '"]');
     if (!mapImg) return null;
     var mapImgRect = DOM.getVisibleBoundingRect(mapImg);
     if (mapImgRect === null) return null;
-    var coords = node.coords.split(",").map(function (coord) {
+    var coords = node.coords.split(',').map(function (coord) {
       return parseInt(coord, 10);
     });
     return {
@@ -158,27 +158,27 @@ window.DOM = {
     return (
       element.offsetParent &&
       !element.disabled &&
-      element.getAttribute("type") !== "hidden" &&
-      getComputedStyle(element).visibility !== "hidden" &&
-      element.getAttribute("display") !== "none"
+      element.getAttribute('type') !== 'hidden' &&
+      getComputedStyle(element).visibility !== 'hidden' &&
+      element.getAttribute('display') !== 'none'
     );
   },
 
   mouseEvent: function (type, element) {
     var events;
     switch (type) {
-      case "hover":
-        events = ["mouseover", "mouseenter"];
+      case 'hover':
+        events = ['mouseover', 'mouseenter'];
         break;
-      case "unhover":
-        events = ["mouseout", "mouseleave"];
+      case 'unhover':
+        events = ['mouseout', 'mouseleave'];
         break;
-      case "click":
-        events = ["mouseover", "mousedown", "mouseup", "click"];
+      case 'click':
+        events = ['mouseover', 'mousedown', 'mouseup', 'click'];
         break;
     }
     events.forEach(function (eventName) {
-      var event = document.createEvent("MouseEvents");
+      var event = document.createEvent('MouseEvents');
       event.initMouseEvent(
         eventName,
         true,

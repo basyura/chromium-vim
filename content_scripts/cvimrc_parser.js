@@ -4,7 +4,7 @@
  * http://pegjs.org/
  */
 (function (root) {
-  "use strict";
+  'use strict';
 
   function peg$subclass(child, parent) {
     function ctor() {
@@ -19,9 +19,9 @@
     this.expected = expected;
     this.found = found;
     this.location = location;
-    this.name = "SyntaxError";
+    this.name = 'SyntaxError';
 
-    if (typeof Error.captureStackTrace === "function") {
+    if (typeof Error.captureStackTrace === 'function') {
       Error.captureStackTrace(this, peg$SyntaxError);
     }
   }
@@ -35,27 +35,27 @@
       },
 
       class: function (expectation) {
-        var escapedParts = "",
+        var escapedParts = '',
           i;
 
         for (i = 0; i < expectation.parts.length; i++) {
           escapedParts +=
             expectation.parts[i] instanceof Array
               ? classEscape(expectation.parts[i][0]) +
-                "-" +
+                '-' +
                 classEscape(expectation.parts[i][1])
               : classEscape(expectation.parts[i]);
         }
 
-        return "[" + (expectation.inverted ? "^" : "") + escapedParts + "]";
+        return '[' + (expectation.inverted ? '^' : '') + escapedParts + ']';
       },
 
       any: function (expectation) {
-        return "any character";
+        return 'any character';
       },
 
       end: function (expectation) {
-        return "end of input";
+        return 'end of input';
       },
 
       other: function (expectation) {
@@ -69,35 +69,35 @@
 
     function literalEscape(s) {
       return s
-        .replace(/\\/g, "\\\\")
+        .replace(/\\/g, '\\\\')
         .replace(/"/g, '\\"')
-        .replace(/\0/g, "\\0")
-        .replace(/\t/g, "\\t")
-        .replace(/\n/g, "\\n")
-        .replace(/\r/g, "\\r")
+        .replace(/\0/g, '\\0')
+        .replace(/\t/g, '\\t')
+        .replace(/\n/g, '\\n')
+        .replace(/\r/g, '\\r')
         .replace(/[\x00-\x0F]/g, function (ch) {
-          return "\\x0" + hex(ch);
+          return '\\x0' + hex(ch);
         })
         .replace(/[\x10-\x1F\x7F-\x9F]/g, function (ch) {
-          return "\\x" + hex(ch);
+          return '\\x' + hex(ch);
         });
     }
 
     function classEscape(s) {
       return s
-        .replace(/\\/g, "\\\\")
-        .replace(/\]/g, "\\]")
-        .replace(/\^/g, "\\^")
-        .replace(/-/g, "\\-")
-        .replace(/\0/g, "\\0")
-        .replace(/\t/g, "\\t")
-        .replace(/\n/g, "\\n")
-        .replace(/\r/g, "\\r")
+        .replace(/\\/g, '\\\\')
+        .replace(/\]/g, '\\]')
+        .replace(/\^/g, '\\^')
+        .replace(/-/g, '\\-')
+        .replace(/\0/g, '\\0')
+        .replace(/\t/g, '\\t')
+        .replace(/\n/g, '\\n')
+        .replace(/\r/g, '\\r')
         .replace(/[\x00-\x0F]/g, function (ch) {
-          return "\\x0" + hex(ch);
+          return '\\x0' + hex(ch);
         })
         .replace(/[\x10-\x1F\x7F-\x9F]/g, function (ch) {
-          return "\\x" + hex(ch);
+          return '\\x' + hex(ch);
         });
     }
 
@@ -131,27 +131,27 @@
           return descriptions[0];
 
         case 2:
-          return descriptions[0] + " or " + descriptions[1];
+          return descriptions[0] + ' or ' + descriptions[1];
 
         default:
           return (
-            descriptions.slice(0, -1).join(", ") +
-            ", or " +
+            descriptions.slice(0, -1).join(', ') +
+            ', or ' +
             descriptions[descriptions.length - 1]
           );
       }
     }
 
     function describeFound(found) {
-      return found ? '"' + literalEscape(found) + '"' : "end of input";
+      return found ? '"' + literalEscape(found) + '"' : 'end of input';
     }
 
     return (
-      "Expected " +
+      'Expected ' +
       describeExpected(expected) +
-      " but " +
+      ' but ' +
       describeFound(found) +
-      " found."
+      ' found.'
     );
   };
 
@@ -163,71 +163,71 @@
       peg$startRuleFunction = peg$parseStart,
       peg$c0 = peg$anyExpectation(),
       peg$c1 = /^[\n\r]/,
-      peg$c2 = peg$classExpectation(["\n", "\r"], false, false),
+      peg$c2 = peg$classExpectation(['\n', '\r'], false, false),
       peg$c3 = /^[ \t]/,
-      peg$c4 = peg$classExpectation([" ", "\t"], false, false),
+      peg$c4 = peg$classExpectation([' ', '\t'], false, false),
       peg$c5 = function (a) {
         return text();
       },
-      peg$c6 = "\\",
-      peg$c7 = peg$literalExpectation("\\", false),
+      peg$c6 = '\\',
+      peg$c7 = peg$literalExpectation('\\', false),
       peg$c8 = function () {
         return null;
       },
       peg$c9 = /^[@]/,
-      peg$c10 = peg$classExpectation(["@"], false, false),
+      peg$c10 = peg$classExpectation(['@'], false, false),
       peg$c11 = /^[a-zA-Z_$]/,
       peg$c12 = peg$classExpectation(
-        [["a", "z"], ["A", "Z"], "_", "$"],
+        [['a', 'z'], ['A', 'Z'], '_', '$'],
         false,
         false
       ),
       peg$c13 = /^[a-zA-Z_$0-9]/,
       peg$c14 = peg$classExpectation(
-        [["a", "z"], ["A", "Z"], "_", "$", ["0", "9"]],
+        [['a', 'z'], ['A', 'Z'], '_', '$', ['0', '9']],
         false,
         false
       ),
       peg$c15 = function () {
         return text();
       },
-      peg$c16 = "let",
-      peg$c17 = peg$literalExpectation("let", false),
-      peg$c18 = "set",
-      peg$c19 = peg$literalExpectation("set", false),
-      peg$c20 = "site",
-      peg$c21 = peg$literalExpectation("site", false),
-      peg$c22 = "call",
-      peg$c23 = peg$literalExpectation("call", false),
-      peg$c24 = "map",
-      peg$c25 = peg$literalExpectation("map", false),
-      peg$c26 = "imap",
-      peg$c27 = peg$literalExpectation("imap", false),
-      peg$c28 = "unmap",
-      peg$c29 = peg$literalExpectation("unmap", false),
-      peg$c30 = "iunmap",
-      peg$c31 = peg$literalExpectation("iunmap", false),
-      peg$c32 = "command",
-      peg$c33 = peg$literalExpectation("command", false),
+      peg$c16 = 'let',
+      peg$c17 = peg$literalExpectation('let', false),
+      peg$c18 = 'set',
+      peg$c19 = peg$literalExpectation('set', false),
+      peg$c20 = 'site',
+      peg$c21 = peg$literalExpectation('site', false),
+      peg$c22 = 'call',
+      peg$c23 = peg$literalExpectation('call', false),
+      peg$c24 = 'map',
+      peg$c25 = peg$literalExpectation('map', false),
+      peg$c26 = 'imap',
+      peg$c27 = peg$literalExpectation('imap', false),
+      peg$c28 = 'unmap',
+      peg$c29 = peg$literalExpectation('unmap', false),
+      peg$c30 = 'iunmap',
+      peg$c31 = peg$literalExpectation('iunmap', false),
+      peg$c32 = 'command',
+      peg$c33 = peg$literalExpectation('command', false),
       peg$c34 = '"',
       peg$c35 = peg$literalExpectation('"', false),
       peg$c36 = /^[^\n]/,
-      peg$c37 = peg$classExpectation(["\n"], true, false),
+      peg$c37 = peg$classExpectation(['\n'], true, false),
       peg$c38 = function (a) {
         return a;
       },
       peg$c39 = function () {
-        return "";
+        return '';
       },
       peg$c40 = "'",
       peg$c41 = peg$literalExpectation("'", false),
       peg$c42 = function (a) {
-        return a.join("");
+        return a.join('');
       },
-      peg$c43 = ".",
-      peg$c44 = peg$literalExpectation(".", false),
-      peg$c45 = "0",
-      peg$c46 = peg$literalExpectation("0", false),
+      peg$c43 = '.',
+      peg$c44 = peg$literalExpectation('.', false),
+      peg$c45 = '0',
+      peg$c46 = peg$literalExpectation('0', false),
       peg$c47 = function () {
         return parseFloat(text());
       },
@@ -238,27 +238,27 @@
         return 0;
       },
       peg$c50 = /^[1-9]/,
-      peg$c51 = peg$classExpectation([["1", "9"]], false, false),
+      peg$c51 = peg$classExpectation([['1', '9']], false, false),
       peg$c52 = /^[0-9]/,
-      peg$c53 = peg$classExpectation([["0", "9"]], false, false),
+      peg$c53 = peg$classExpectation([['0', '9']], false, false),
       peg$c54 = function () {
         return parseInt(text(), 10);
       },
       peg$c55 = function (expr) {
         return expr;
       },
-      peg$c56 = ",",
-      peg$c57 = peg$literalExpectation(",", false),
+      peg$c56 = ',',
+      peg$c57 = peg$literalExpectation(',', false),
       peg$c58 = function (head, expr) {
         return expr;
       },
       peg$c59 = function (head, tail) {
         return [head].concat(tail);
       },
-      peg$c60 = "[",
-      peg$c61 = peg$literalExpectation("[", false),
-      peg$c62 = "]",
-      peg$c63 = peg$literalExpectation("]", false),
+      peg$c60 = '[',
+      peg$c61 = peg$literalExpectation('[', false),
+      peg$c62 = ']',
+      peg$c63 = peg$literalExpectation(']', false),
       peg$c64 = function () {
         return [];
       },
@@ -273,8 +273,8 @@
         tail.forEach((e) => (result = result[e]));
         return result;
       },
-      peg$c68 = "=",
-      peg$c69 = peg$literalExpectation("=", false),
+      peg$c68 = '=',
+      peg$c69 = peg$literalExpectation('=', false),
       peg$c70 = function (a, b) {
         scopeIdentifiers[a] = b;
         var r = {};
@@ -289,8 +289,8 @@
         r[a][b] = c;
         return r;
       },
-      peg$c72 = "no",
-      peg$c73 = peg$literalExpectation("no", false),
+      peg$c72 = 'no',
+      peg$c73 = peg$literalExpectation('no', false),
       peg$c74 = function (a) {
         var r = {};
         r[a] = false;
@@ -301,10 +301,10 @@
         r[a] = true;
         return r;
       },
-      peg$c76 = "{",
-      peg$c77 = peg$literalExpectation("{", false),
-      peg$c78 = "}",
-      peg$c79 = peg$literalExpectation("}", false),
+      peg$c76 = '{',
+      peg$c77 = peg$literalExpectation('{', false),
+      peg$c78 = '}',
+      peg$c79 = peg$literalExpectation('}', false),
       peg$c80 = function (a, b) {
         var r = { sites: {} };
         r.sites[a] = b;
@@ -317,47 +317,47 @@
         return [a];
       },
       peg$c83 = function (a, b) {
-        return { MAPPINGS: a + " " + b.join(" ") };
+        return { MAPPINGS: a + ' ' + b.join(' ') };
       },
       peg$c84 = function (a, b, c) {
-        return { MAPPINGS: [a, b, c.join("")].join(" ") };
+        return { MAPPINGS: [a, b, c.join('')].join(' ') };
       },
       peg$c85 = function (a) {
-        return { MAPPINGS: "call " + a.join("") };
+        return { MAPPINGS: 'call ' + a.join('') };
       },
       peg$c86 = /^[a-zA-Z]/,
       peg$c87 = peg$classExpectation(
         [
-          ["a", "z"],
-          ["A", "Z"],
+          ['a', 'z'],
+          ['A', 'Z'],
         ],
         false,
         false
       ),
       peg$c88 = function (a, b) {
         var r = { COMMANDS: {} };
-        r.COMMANDS[a.join("")] = b.join("");
+        r.COMMANDS[a.join('')] = b.join('');
         return r;
       },
-      peg$c89 = "}}",
-      peg$c90 = peg$literalExpectation("}}", false),
+      peg$c89 = '}}',
+      peg$c90 = peg$literalExpectation('}}', false),
       peg$c91 = function (a, b) {
         return [a].concat(b);
       },
-      peg$c92 = "(",
-      peg$c93 = peg$literalExpectation("(", false),
-      peg$c94 = ")",
-      peg$c95 = peg$literalExpectation(")", false),
+      peg$c92 = '(',
+      peg$c93 = peg$literalExpectation('(', false),
+      peg$c94 = ')',
+      peg$c95 = peg$literalExpectation(')', false),
       peg$c96 = function (a) {
         return a || [];
       },
-      peg$c97 = "{{",
-      peg$c98 = peg$literalExpectation("{{", false),
+      peg$c97 = '{{',
+      peg$c98 = peg$literalExpectation('{{', false),
       peg$c99 = function (a) {
-        return a.join("");
+        return a.join('');
       },
-      peg$c100 = "->",
-      peg$c101 = peg$literalExpectation("->", false),
+      peg$c100 = '->',
+      peg$c101 = peg$literalExpectation('->', false),
       peg$c102 = function (a) {
         var result = {
           AUTOFUNCTIONS: {},
@@ -371,13 +371,13 @@
           FUNCTIONS: {},
         };
         result.FUNCTIONS[a] =
-          "(function(" + (b || []).join(",") + ")" + "{" + c + "})";
+          '(function(' + (b || []).join(',') + ')' + '{' + c + '})';
         return result;
       },
-      peg$c104 = "unmapAll",
-      peg$c105 = peg$literalExpectation("unmapAll", false),
-      peg$c106 = "iunmapAll",
-      peg$c107 = peg$literalExpectation("iunmapAll", false),
+      peg$c104 = 'unmapAll',
+      peg$c105 = peg$literalExpectation('unmapAll', false),
+      peg$c106 = 'iunmapAll',
+      peg$c107 = peg$literalExpectation('iunmapAll', false),
       peg$c108 = function () {
         return { MAPPINGS: text() };
       },
@@ -395,10 +395,10 @@
       peg$silentFails = 0,
       peg$result;
 
-    if ("startRule" in options) {
+    if ('startRule' in options) {
       if (!(options.startRule in peg$startRuleFunctions)) {
         throw new Error(
-          "Can't start parsing from rule \"" + options.startRule + '".'
+          'Can\'t start parsing from rule "' + options.startRule + '".'
         );
       }
 
@@ -436,12 +436,12 @@
     }
 
     function peg$literalExpectation(text, ignoreCase) {
-      return { type: "literal", text: text, ignoreCase: ignoreCase };
+      return { type: 'literal', text: text, ignoreCase: ignoreCase };
     }
 
     function peg$classExpectation(parts, inverted, ignoreCase) {
       return {
-        type: "class",
+        type: 'class',
         parts: parts,
         inverted: inverted,
         ignoreCase: ignoreCase,
@@ -449,15 +449,15 @@
     }
 
     function peg$anyExpectation() {
-      return { type: "any" };
+      return { type: 'any' };
     }
 
     function peg$endExpectation() {
-      return { type: "end" };
+      return { type: 'end' };
     }
 
     function peg$otherExpectation(description) {
-      return { type: "other", description: description };
+      return { type: 'other', description: description };
     }
 
     function peg$computePosDetails(pos) {
@@ -3115,7 +3115,7 @@
     var autoJsLength = 0;
     function merge(a, b) {
       for (var p in b) {
-        if (typeof b[p] === "object" && !Array.isArray(b[p])) {
+        if (typeof b[p] === 'object' && !Array.isArray(b[p])) {
           if (!a.hasOwnProperty(p)) {
             a[p] = {};
           }
@@ -3135,14 +3135,14 @@
           merge(result, e);
         }
       });
-      result.MAPPINGS = result.MAPPINGS.join("\n");
+      result.MAPPINGS = result.MAPPINGS.join('\n');
       return result;
     }
     function objectPlural(key) {
       var replacements = {
-        qmark: "s",
-        searchengine: "s",
-        searchalias: "es",
+        qmark: 's',
+        searchengine: 's',
+        searchalias: 'es',
       };
       if (replacements.hasOwnProperty(key)) key += replacements[key];
       return key;

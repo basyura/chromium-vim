@@ -1,18 +1,18 @@
-importScripts("../content_scripts/utils.js");
-importScripts("../content_scripts/cvimrc_parser.js");
-importScripts("clipboard.js");
-importScripts("bookmarks.js");
-importScripts("sites.js");
-importScripts("files.js");
-importScripts("links.js");
-importScripts("history.js");
-importScripts("actions.js");
-importScripts("options.js");
-importScripts("sessions.js");
-importScripts("popup.js");
-importScripts("update.js");
-importScripts("tab_creation_order.js");
-importScripts("frames.js");
+importScripts('../content_scripts/utils.js');
+importScripts('../content_scripts/cvimrc_parser.js');
+importScripts('clipboard.js');
+importScripts('bookmarks.js');
+importScripts('sites.js');
+importScripts('files.js');
+importScripts('links.js');
+importScripts('history.js');
+importScripts('actions.js');
+importScripts('options.js');
+importScripts('sessions.js');
+importScripts('popup.js');
+importScripts('update.js');
+importScripts('tab_creation_order.js');
+importScripts('frames.js');
 
 var sessions = {},
   ActiveTabs = {},
@@ -34,7 +34,7 @@ function updateTabIndices() {
     chrome.tabs.query({ currentWindow: true }, function (tabs) {
       tabs.forEach(function (tab) {
         chrome.tabs.sendMessage(tab.id, {
-          action: "displayTabIndices",
+          action: 'displayTabIndices',
           index: tab.index + 1,
         });
       });
@@ -42,7 +42,7 @@ function updateTabIndices() {
   }
 }
 
-chrome.storage.local.get("sessions", function (e) {
+chrome.storage.local.get('sessions', function (e) {
   if (e.sessions === void 0) {
     chrome.storage.local.set({ sessions: {} });
   } else {
@@ -70,7 +70,7 @@ var Listeners = {
   tabs: {
     onUpdated: function (id, changeInfo) {
       updateTabIndices();
-      if (changeInfo.hasOwnProperty("url")) {
+      if (changeInfo.hasOwnProperty('url')) {
         History.shouldRefresh = true;
         if (TabHistory.hasOwnProperty(id)) {
           if (TabHistory[id].links.indexOf(changeInfo.url) === -1) {
@@ -133,8 +133,8 @@ var Listeners = {
     onConnect: function (port) {
       if (activePorts.indexOf(port) !== -1) return;
       var frameId = port.sender.frameId;
-      port.postMessage({ type: "hello" });
-      port.postMessage({ type: "addFrame", frameId: frameId });
+      port.postMessage({ type: 'hello' });
+      port.postMessage({ type: 'addFrame', frameId: frameId });
       activePorts.push(port);
       port.onMessage.addListener(function (request) {
         return Actions(request, port.sender, port.postMessage.bind(port), port);
@@ -156,10 +156,10 @@ var Listeners = {
   commands: {
     onCommand: function (command) {
       switch (command) {
-        case "togglecVim":
+        case 'togglecVim':
           Popup.toggleEnabled({});
           break;
-        case "toggleBlacklisted":
+        case 'toggleBlacklisted':
           Popup.toggleBlacklisted();
           Popup.toggleEnabled({
             request: {
@@ -167,57 +167,57 @@ var Listeners = {
             },
           });
           break;
-        case "nextTab":
-        case "previousTab":
+        case 'nextTab':
+        case 'previousTab':
           chrome.tabs.query(
             { active: true, currentWindow: true },
             function (e) {
               return getTab(
                 e[0],
                 false,
-                command === "nextTab" ? 1 : -1,
+                command === 'nextTab' ? 1 : -1,
                 false,
                 false
               );
             }
           );
           break;
-        case "viewSource":
+        case 'viewSource':
           chrome.tabs.query(
             { active: true, currentWindow: true },
             function (e) {
               chrome.tabs.create({
-                url: "view-source:" + e[0].url,
+                url: 'view-source:' + e[0].url,
                 index: e[0].index + 1,
               });
             }
           );
           break;
-        case "nextCompletionResult":
+        case 'nextCompletionResult':
           chrome.tabs.query(
             { active: true, currentWindow: true },
             function (tab) {
               chrome.tabs.sendMessage(
                 tab[0].id,
                 {
-                  action: "nextCompletionResult",
+                  action: 'nextCompletionResult',
                 },
                 function () {
-                  chrome.windows.create({ url: "chrome://newtab" });
+                  chrome.windows.create({ url: 'chrome://newtab' });
                 }
               );
             }
           );
           break;
-        case "deleteBackWord":
+        case 'deleteBackWord':
           chrome.tabs.query(
             { active: true, currentWindow: true },
             function (tab) {
-              chrome.tabs.sendMessage(tab[0].id, { action: "deleteBackWord" });
+              chrome.tabs.sendMessage(tab[0].id, { action: 'deleteBackWord' });
             }
           );
           break;
-        case "closeTab":
+        case 'closeTab':
           chrome.tabs.query(
             { active: true, currentWindow: true },
             function (tab) {
@@ -227,7 +227,7 @@ var Listeners = {
             }
           );
           break;
-        case "reloadTab":
+        case 'reloadTab':
           chrome.tabs.query(
             { active: true, currentWindow: true },
             function (tab) {
@@ -235,12 +235,12 @@ var Listeners = {
             }
           );
           break;
-        case "newTab":
+        case 'newTab':
           chrome.tabs.create({
-            url: chrome.runtime.getURL("pages/blank.html"),
+            url: chrome.runtime.getURL('pages/blank.html'),
           });
           break;
-        case "restartcVim":
+        case 'restartcVim':
           chrome.runtime.reload();
           break;
         default:
