@@ -932,7 +932,7 @@ var KeyHandler = {
                 });
               }
             }
-          }, 0);
+          }, 100);
           break;
       }
     }
