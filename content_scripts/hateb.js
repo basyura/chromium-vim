@@ -56,6 +56,7 @@ Hateb.createTableFromBookmarks = function (data) {
     th.style.padding = '8px';
     th.style.backgroundColor = '#f2f2f2';
     th.textContent = headerText;
+    th.className = headerText;
     headerRow.appendChild(th);
   });
 
