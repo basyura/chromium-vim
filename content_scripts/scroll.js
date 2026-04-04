@@ -33,7 +33,6 @@ var scrollingElement = (function () {
     }
     if (
       cs.overflowY !== 'hidden' &&
-      elem.offsetWidth > elem.clientWidth &&
       elem.scrollHeight > elem.clientHeight
     ) {
       if (elem.scrollTop > 0) st |= SCROLLABLE_Y_UP;
