@@ -18,7 +18,7 @@ const NON_SCROLLABLE = 0,
 //       SCROLLABLE_X = SCROLLABLE_X_LEFT | SCROLLABLE_X_RIGHT;
 
 var scrollingElement = (function () {
-  function getScrollType(elem) {
+  function getScrollType(elem, relaxedY) {
     var cs = getComputedStyle(elem);
     var st = NON_SCROLLABLE;
     if (cs.overflow === 'hidden') return st;
@@ -33,6 +33,7 @@ var scrollingElement = (function () {
     }
     if (
       cs.overflowY !== 'hidden' &&
+      (relaxedY || elem.offsetWidth > elem.clientWidth) &&
       elem.scrollHeight > elem.clientHeight
     ) {
       if (elem.scrollTop > 0) st |= SCROLLABLE_Y_UP;
@@ -56,9 +57,9 @@ var scrollingElement = (function () {
     lastActiveElem = event.srcElement;
   });
 
-  return function scrollingElement(dir) {
+  return function scrollingElement(dir, ignoreClickFocus, relaxedY) {
     var elem;
-    if (clickFocus) {
+    if (!ignoreClickFocus && clickFocus) {
       elem = lastActiveElem;
     } else {
       elem = lastActiveElem = document.activeElement;
@@ -66,9 +67,16 @@ var scrollingElement = (function () {
     if (elem === null) return null;
     return (function climb(elem) {
       if (elem === null) return lastScrollElem || document.scrollingElement;
-      if (elem === document.scrollingElement) return elem;
-      var st = getScrollType(elem);
-      return st & dir ? elem : climb(elem.parentElement);
+      if (elem === document.scrollingElement) {
+        lastScrollElem = elem;
+        return elem;
+      }
+      var st = getScrollType(elem, relaxedY);
+      if (st & dir) {
+        lastScrollElem = elem;
+        return elem;
+      }
+      return climb(elem.parentElement);
     })(elem);
   };
 })();
@@ -302,6 +310,7 @@ Scroll.addHistoryState = function () {
 
 Scroll.scroll = function (type, repeats) {
   var stepSize = settings ? settings.scrollstep : 60;
+  repeats = repeats || 1;
 
   var shouldLogPosition = !/^(up|down|left|right|pageUp|pageDown)$/.test(type);
   if (document.body && shouldLogPosition) {
@@ -330,54 +339,91 @@ Scroll.scroll = function (type, repeats) {
     }
   })();
 
-  var scrollElem = scrollingElement(direction),
-    hy = scrollElem === document.body ? innerHeight : scrollElem.clientHeight,
-    hw = scrollElem === document.body ? innerWidth : scrollElem.clientWidth,
-    x = 0,
-    y = 0;
+  function getScrollDelta(scrollElem) {
+    var hy = scrollElem === document.body ? innerHeight : scrollElem.clientHeight,
+      hw = scrollElem === document.body ? innerWidth : scrollElem.clientWidth,
+      x = 0,
+      y = 0;
 
-  switch (type) {
-    case 'down':
-      y = repeats * stepSize;
-      break;
-    case 'up':
-      y -= repeats * stepSize;
-      break;
-    case 'pageDown':
-      y = (repeats * hy) >> 1;
-      break;
-    case 'fullPageDown':
-      y = repeats * hy * (settings.fullpagescrollpercent / 100 || 1);
-      break;
-    case 'pageUp':
-      y -= (repeats * hy) >> 1;
-      break;
-    case 'fullPageUp':
-      y -= repeats * hy * (settings.fullpagescrollpercent / 100 || 1);
-      break;
-    case 'top':
-      y -= scrollElem.scrollTop;
-      break;
-    case 'bottom':
-      y = scrollElem.scrollHeight - scrollElem.scrollTop - hy + 20;
-      break;
-    case 'left':
-      x -= (repeats * stepSize) >> 1;
-      break;
-    case 'right':
-      x = (repeats * stepSize) >> 1;
-      break;
-    case 'leftmost':
-      x -= scrollElem.scrollLeft;
-      break;
-    case 'rightmost':
-      x = scrollElem.scrollWidth - scrollElem.scrollLeft - hw + 20;
-      break;
+    switch (type) {
+      case 'down':
+        y = repeats * stepSize;
+        break;
+      case 'up':
+        y -= repeats * stepSize;
+        break;
+      case 'pageDown':
+        y = (repeats * hy) >> 1;
+        break;
+      case 'fullPageDown':
+        y = repeats * hy * (settings.fullpagescrollpercent / 100 || 1);
+        break;
+      case 'pageUp':
+        y -= (repeats * hy) >> 1;
+        break;
+      case 'fullPageUp':
+        y -= repeats * hy * (settings.fullpagescrollpercent / 100 || 1);
+        break;
+      case 'top':
+        y -= scrollElem.scrollTop;
+        break;
+      case 'bottom':
+        y = scrollElem.scrollHeight - scrollElem.scrollTop - hy + 20;
+        break;
+      case 'left':
+        x -= (repeats * stepSize) >> 1;
+        break;
+      case 'right':
+        x = (repeats * stepSize) >> 1;
+        break;
+      case 'leftmost':
+        x -= scrollElem.scrollLeft;
+        break;
+      case 'rightmost':
+        x = scrollElem.scrollWidth - scrollElem.scrollLeft - hw + 20;
+        break;
+    }
+
+    return [x, y];
   }
 
-  if (settings && settings.smoothscroll) {
-    window.smoothScrollBy(scrollElem, x, y, settings.scrollduration);
-  } else {
+  function didScroll(scrollElem, position) {
+    return (
+      scrollElem.scrollLeft !== position[0] || scrollElem.scrollTop !== position[1]
+    );
+  }
+
+  function scrollElement(scrollElem, ignoreClickFocus) {
+    if (!scrollElem) return;
+    var delta = getScrollDelta(scrollElem);
+    var x = delta[0];
+    var y = delta[1];
+    var position = [scrollElem.scrollLeft, scrollElem.scrollTop];
+
+    if (settings && settings.smoothscroll) {
+      window.smoothScrollBy(
+        scrollElem,
+        x,
+        y,
+        settings.scrollduration,
+        function () {
+          if (didScroll(scrollElem, position) || ignoreClickFocus) return;
+          var retryElem = scrollingElement(direction, true, true);
+          if (retryElem && retryElem !== scrollElem) {
+            scrollElement(retryElem, true);
+          }
+        }
+      );
+      return;
+    }
+
     $scrollBy(scrollElem, x, y);
+    if (didScroll(scrollElem, position) || ignoreClickFocus) return;
+    var retryElem = scrollingElement(direction, true, true);
+    if (retryElem && retryElem !== scrollElem) {
+      scrollElement(retryElem, true);
+    }
   }
+
+  scrollElement(scrollingElement(direction), false);
 };
