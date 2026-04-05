@@ -2,3 +2,4 @@
 release/
 release.zip
 .claude/settings.local.json
+.serena/cache

@@ -1,0 +1,1 @@
+Chromium Vim is a Chrome extension that adds Vim-style keybindings and navigation. Main areas: background_scripts for lifecycle and messaging, content_scripts for DOM interaction and key handling, pages for extension UI pages, icons for assets, and cvimrc_parser for config parsing. Entry point is manifest.json.

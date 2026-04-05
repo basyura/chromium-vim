@@ -1,0 +1,1 @@
+Development commands: `npm test` to run Jest once, `npm run test:watch` for watch mode, `npm run test:coverage` for coverage, `npm run format` to format JS/JSON/CSS. Load the extension in Chrome via chrome://extensions with Developer Mode and Load unpacked on the repo root containing manifest.json.

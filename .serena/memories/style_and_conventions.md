@@ -1,0 +1,1 @@
+JavaScript project using 2-space indentation, single quotes, and semicolons. Prefer small helpers, avoid global leaks in content scripts, and add brief intent comments only when logic is non-obvious. Naming: camelCase for functions/props, lowerCamelCase filenames, UPPER_CASE constants.

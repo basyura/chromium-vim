@@ -1,0 +1,1 @@
+After changes, run relevant Jest tests at minimum and prefer `npm test` before finishing. For parser, keymap, or scroll behavior changes, add/update tests covering success and edge cases. Keep manifest permissions minimal and mention user-impacting parser or keymap changes in reviews/PRs.
